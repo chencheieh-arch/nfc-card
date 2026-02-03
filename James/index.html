@@ -6,12 +6,62 @@
 <title>王居仁 James</title>
 <style>
 
-body{margin:0;font-family:sans-serif;background:#f5f6f8;color:#111}
-.card{background:#fff;border-radius:20px;padding:26px;max-width:420px;margin:auto;box-shadow:0 20px 40px rgba(0,0,0,.08);text-align:center}
-.name{font-size:28px}
-.company{font-size:16px;color:#555}
-.title{font-size:14px;color:#777}
-.info{font-size:14px;color:#666}
+body{
+  margin:0;
+  font-family:sans-serif;
+  background:#f5f6f8;
+  color:#111;
+}
+
+.card{
+  background:#fff;
+  border-radius:20px;
+  padding:26px;
+  max-width:420px;
+  margin:auto;
+  box-shadow:0 20px 40px rgba(0,0,0,.08);
+  text-align:center;
+}
+
+/* ===== 文字區塊間距調整 ===== */
+
+.name{
+  font-size:28px;
+  margin-bottom:10px;
+}
+
+.company{
+  font-size:16px;
+  color:#555;
+  margin-bottom:10px;
+}
+
+.company div{
+  line-height:1.4;
+}
+
+.title{
+  font-size:14px;
+  color:#777;
+  margin-bottom:14px;
+}
+
+.title div{
+  line-height:1.4;
+}
+
+.info{
+  font-size:14px;
+  color:#666;
+  margin-bottom:8px;
+}
+
+.address div{
+  line-height:1.5;
+}
+
+/* ===== 按鈕樣式 ===== */
+
 .contact{background:#111;color:#fff}
 .web{background:#e9ecf1}
 .line{background:#06C755;color:#fff}
@@ -21,20 +71,59 @@ body{margin:0;font-family:sans-serif;background:#f5f6f8;color:#111}
 .whatsapp{background:#25D366;color:#fff}
 .kakao{background:#FEE500;color:#000}
 
-.btn{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0;padding:14px;border-radius:12px;text-decoration:none;font-size:16px}
-.btn img{width:20px;height:20px}
+.btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin:10px 0;
+  padding:14px;
+  border-radius:12px;
+  text-decoration:none;
+  font-size:16px;
+}
+
+.btn img{
+  width:20px;
+  height:20px;
+}
+
 </style>
 </head>
 <body>
+
 <div class="card">
-  <div class="name">王居仁 James</div>
-  <div class="company">佳研國際股份有限公司</div>
-  <div class="title">總經理 Founder</div>
-  <div class="info">☎ (04)37020706#10 </div>
-  <div class="info">📱 +886916141710</div>
+
+  <div class="name">王居仁　James</div>
+
+  <div class="company">
+    <div>佳研國際股份有限公司</div>
+    <div>JIA YEN INTERNATIONAL CO., LTD</div>
+  </div>
+
+  <div class="title">
+    <div>總經理</div>
+    <div>Founder</div>
+  </div>
+
+  <div class="info">☎ (04) 3702-0706 #10</div>
+  <div class="info">📱 +886 916-141-710</div>
   <div class="info">✉ james@jia-yen.com</div>
-  <div class="info">📍 台中市烏日區高鐵一路268號5樓之8  5F.-8, No. 268, Gaotie 1st Rd.,Wuri Dist., Taichung City 414 ,Taiwan (R.O.C.)</div>
-  <a class="btn contact" href="James.vcf">➕ 加入聯絡人</a><a class="btn web" href="https://www.jia-yen.com" target="_blank">🌐 官方網站</a><a class="btn line" href="https://line.me/ti/p/SuecP2XXN8" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/line.svg">LINE</a><a class="btn wechat" href="https://u.wechat.com/kJF4THDMDY9s7edl1bXbb0c" target="_blank">WeChat</a><a class="btn whatsapp" href="https://wa.me/886916141710" target="_blank">WhatsApp</a>
+
+  <div class="info address">
+    <div>📍 台中市烏日區高鐵一路268號5樓之8</div>
+    <div>5F.-8, No. 268, Gaotie 1st Rd., Wuri Dist., Taichung City 414, Taiwan (R.O.C.)</div>
+  </div>
+
+  <a class="btn contact" href="James.vcf">➕ 加入聯絡人</a>
+  <a class="btn web" href="https://www.jia-yen.com" target="_blank">🌐 官方網站</a>
+  <a class="btn line" href="https://line.me/ti/p/SuecP2XXN8" target="_blank">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/line.svg">LINE
+  </a>
+  <a class="btn wechat" href="https://u.wechat.com/kJF4THDMDY9s7edl1bXbb0c" target="_blank">WeChat</a>
+  <a class="btn whatsapp" href="https://wa.me/886916141710" target="_blank">WhatsApp</a>
+
 </div>
+
 </body>
 </html>
