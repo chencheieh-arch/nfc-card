@@ -4,30 +4,159 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JAY</title>
+
 <style>
 
-body{margin:0;font-family:sans-serif;background:linear-gradient(180deg,#f9fafc,#eef1f5);color:#111}
-.card{background:#fff;border-radius:20px;padding:24px;max-width:420px;margin:auto;box-shadow:0 20px 40px rgba(0,0,0,.08);text-align:center}
+/************** 掃描動畫 **************/
+#loading{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+z-index:9999;
+color:#0ff;
+font-size:18px;
+letter-spacing:2px;
+}
+
+/* 掃描圈 */
+.scan{
+width:90px;
+height:90px;
+border:3px solid #0ff;
+border-radius:50%;
+position:relative;
+animation:rotate 1.2s linear infinite;
+margin-bottom:20px;
+}
+
+/* 掃描光條 */
+.scan::after{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+border-radius:50%;
+background:linear-gradient(90deg,transparent,#0ff,transparent);
+animation:scanline 1.2s linear infinite;
+}
+
+/* 動畫 */
+@keyframes rotate{
+0%{transform:rotate(0deg)}
+100%{transform:rotate(360deg)}
+}
+
+@keyframes scanline{
+0%{transform:rotate(0deg)}
+100%{transform:rotate(360deg)}
+}
+
+/************** 原本名片樣式 **************/
+body{
+margin:0;
+font-family:sans-serif;
+background:linear-gradient(180deg,#f9fafc,#eef1f5);
+color:#111;
+}
+
+.card{
+background:#fff;
+border-radius:20px;
+padding:24px;
+max-width:420px;
+margin:80px auto;
+box-shadow:0 20px 40px rgba(0,0,0,.08);
+text-align:center;
+opacity:0;
+transform:translateY(20px);
+transition:all .6s ease;
+}
+
+/* 動畫進場 */
+.card.show{
+opacity:1;
+transform:translateY(0);
+}
+
 h2{font-size:28px;color:#111}
 p{color:#666}
+
 .contact{background:#111;color:#fff}
 .web{background:#e9ecf1;color:#111}
 .line{background:#06C755;color:#fff}
 .fb{background:#1877F2;color:#fff}
 .ig{background:linear-gradient(45deg,#833AB4,#FD1D1D,#FDCB58);color:#fff}
 
-.btn{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0;padding:14px;border-radius:12px;text-decoration:none;font-size:16px}
+.btn{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+margin:10px 0;
+padding:14px;
+border-radius:12px;
+text-decoration:none;
+font-size:16px;
+}
+
 .btn img{width:20px;height:20px}
+
 </style>
 </head>
+
 <body>
-<div class="card">
+
+<!-- 🔥 掃描動畫 -->
+<div id="loading">
+  <div class="scan"></div>
+  <div>Scanning NFC...</div>
+</div>
+
+<!-- 名片 -->
+<div class="card" id="card">
 <h2>JAY</h2>
 <p>享刻畫</p>
 <p>小員工</p>
 <p>📞 +886981013575</p>
 <p>✉ i2114uoo@gmail.com</p>
-<a class="btn contact" href="JAY01.vcf">➕ 加入聯絡人</a><a class="btn line" href="https://lin.ee/IEJcfYm"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/line.svg"> LINE</a><a class="btn ig" href="https://www.instagram.com/i0709uoo?igsh=MXQ5OTF2cTF0OXoycw=="><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg"> Instagram</a>
+
+<a class="btn contact" href="JAY01.vcf">➕ 加入聯絡人</a>
+
+<a class="btn line" href="https://lin.ee/IEJcfYm">
+<img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/line.svg"> LINE
+</a>
+
+<a class="btn ig" href="https://www.instagram.com/i0709uoo?igsh=MXQ5OTF2cTF0OXoycw==">
+<img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg"> Instagram
+</a>
+
 </div>
+
+<!-- 🔥 控制動畫 -->
+<script>
+window.onload = function(){
+
+  setTimeout(()=>{
+    document.getElementById("loading").style.opacity = "0";
+    
+    setTimeout(()=>{
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("card").classList.add("show");
+    },500);
+
+  },1200); // 掃描顯示時間（可改）
+
+}
+</script>
+
 </body>
 </html>
