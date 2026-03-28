@@ -2,6 +2,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
+
+<!-- ✅ 關鍵：手機自適應 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Loading...</title>
 
 <style>
@@ -12,33 +16,44 @@ body{
   justify-content:center;
   align-items:center;
   background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-  font-family:sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
   color:#fff;
   text-align:center;
 }
 
-/* 外框 */
+/* 容器 */
 .container{
-  animation:fadeIn 1s ease;
+  width:90%;
+  max-width:400px;
+  animation:fadeIn 0.8s ease;
 }
 
-/* 轉圈動畫 */
+/* 轉圈 */
 .loader{
-  width:60px;
-  height:60px;
-  border:5px solid rgba(255,255,255,0.2);
-  border-top:5px solid #00eaff;
+  width:80px;
+  height:80px;
+  border:6px solid rgba(255,255,255,0.2);
+  border-top:6px solid #00eaff;
   border-radius:50%;
   animation:spin 1s linear infinite;
-  margin:0 auto 20px;
+  margin:0 auto 30px;
 }
 
-/* 文字動畫 */
+/* 文字（重點放大🔥） */
 .text{
-  font-size:18px;
+  font-size:22px;
+  font-weight:500;
   letter-spacing:1px;
+  line-height:1.6;
   opacity:0;
-  animation:fadeText 1.5s ease forwards;
+  animation:fadeText 1.2s ease forwards;
+}
+
+/* 小字 */
+.sub{
+  font-size:14px;
+  opacity:0.7;
+  margin-top:10px;
 }
 
 /* 動畫 */
@@ -61,7 +76,7 @@ body{
 window.onload = function() {
   setTimeout(function(){
     window.location.href = "Cindy.vcf";
-  }, 800); // 延遲0.8秒讓動畫顯示
+  }, 800);
 }
 </script>
 
@@ -71,7 +86,14 @@ window.onload = function() {
 
 <div class="container">
   <div class="loader"></div>
-  <div class="text">正在為您建立聯絡人...</div>
+
+  <div class="text">
+    正在為您建立聯絡人
+  </div>
+
+  <div class="sub">
+    請稍候...
+  </div>
 </div>
 
 </body>
