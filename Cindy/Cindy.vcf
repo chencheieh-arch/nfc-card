@@ -1,28 +1,19 @@
 BEGIN:VCARD
 VERSION:3.0
 PRODID:-//Apple Inc.//iPhone OS 18.6.2//EN
-
 N:LI;Cindy;;;
 FN:Cindy LI
 ORG:THANAKA Trading Co.\,Ltd （Thanaka Coffee);
-
-PHOTO:https://chencheieh-arch.github.io/nfc-card/images/Cindy.png
-
 item1.EMAIL;type=INTERNET;type=pref:lming731@gmail.com
 item1.X-ABLabel:個人
 EMAIL;type=INTERNET;type=WORK:thanaka.yiyu@gmail.com
-
 TEL;type=WORK;type=VOICE;type=pref:+886 3-4566688
 TEL;type=CELL;type=VOICE:+886 958-276-631
-
 X-SOCIALPROFILE;type=WHATSAPP;x-user=886958276631:x-apple:886958276631
 X-SOCIALPROFILE;type=WECHAT;x-user=LMING731:x-apple:lming731
-
 URL;TYPE=LINE:https://line.me/ti/p/rNOFhh6Xgt
 URL;TYPE=INSTAGRAM:https://www.instagram.com/lming731
 URL;TYPE=FACEBOOK:https://www.facebook.com/cindy.li.58726
 URL;TYPE=WEBSITE:https://www.thanakacoffee.com/
-
 NOTE:玬那卡咖啡創辦人\nThanaka Coffee |Founder& Estate Owner\n\nCore Business:\n楊家將過橋米線\n異域Mortar&Pestle\n玬那卡咖啡Thanaka Coffee\n雲南小館
-
 END:VCARD
