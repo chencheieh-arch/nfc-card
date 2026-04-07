@@ -108,8 +108,8 @@ font-size:16px;
 <a class="btn line" href="https://line.me/ti/p/VqDesvn3ys">
 <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/line.svg">LINE</a>
 
-<!-- ✅ 這裡已改成直接下載 -->
-<a class="btn ig" href="https://raw.githubusercontent.com/chencheieh-arch/nfc-card/main/images/Shih-Chang.png" download="王世昌-昌宏工程有限公司.png">
+<!-- ✅ 改成 JS 下載 -->
+<a class="btn ig" href="#" onclick="downloadImage(event)">
 🔗名片圖檔下載</a>
 
 </div>
@@ -121,6 +121,30 @@ setTimeout(()=>{
     document.getElementById("loading").style.display="none";
   },500);
 },1200);
+
+// ✅ 強制下載函式
+function downloadImage(e){
+  e.preventDefault();
+
+  const url = "https://raw.githubusercontent.com/chencheieh-arch/nfc-card/main/images/Shih-Chang.png";
+
+  fetch(url)
+    .then(res => res.blob())
+    .then(blob => {
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = "Shih-Chang.png";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(blobUrl);
+    })
+    .catch(err => {
+      alert("下載失敗，請稍後再試");
+      console.error(err);
+    });
+}
 </script>
 
 </body>
