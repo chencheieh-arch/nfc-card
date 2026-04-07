@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>名片下載中</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Segoe UI", sans-serif;
+    color: white;
+}
+
+/* 卡片 */
+.card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    width: 280px;
+}
+
+/* 轉圈圈 */
+.loader {
+    border: 5px solid rgba(255,255,255,0.2);
+    border-top: 5px solid #fff;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 文字 */
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 14px;
+    opacity: 0.8;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+    <div class="loader"></div>
+    <div class="title">正在下載名片中…</div>
+    <div class="subtitle">稍後為您提供 LINE 好友資訊</div>
+</div>
+
+<script>
+// 強制下載
+function forceDownload(url, filename) {
+    fetch(url)
+        .then(res => res.blob())
+        .then(blob => {
+            const blobUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(blobUrl);
+        })
+        .catch(err => console.error('下載失敗:', err));
+}
+
+// 觸發下載
+forceDownload(
+    "https://raw.githubusercontent.com/chencheieh-arch/nfc-card/main/images/Shih-Chang.png",
+    "Shih-Chang.png"
+);
+
+// 3秒後跳轉 LINE
+setTimeout(() => {
+    window.location.href = "https://line.me/ti/p/VqDesvn3ys";
+}, 3000);
+</script>
+
+</body>
+</html>
