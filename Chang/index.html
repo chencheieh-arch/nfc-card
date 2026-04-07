@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>領取電子名片</title>
+
 <style>
 body{
     margin:0;
@@ -12,18 +14,36 @@ body{
     justify-content:center;
     align-items:center;
     background:linear-gradient(135deg,#1e3c72,#2a5298);
-    font-family:sans-serif;
+    font-family:"Segoe UI",sans-serif;
     color:#fff;
 }
 
+/* 卡片 */
 .card{
+    width:300px;
     text-align:center;
     background:rgba(255,255,255,0.1);
-    padding:40px;
+    padding:40px 30px;
     border-radius:20px;
-    backdrop-filter:blur(10px);
+    backdrop-filter:blur(15px);
+    box-shadow:0 10px 40px rgba(0,0,0,0.3);
 }
 
+/* 按鈕 */
+.btn{
+    margin-top:20px;
+    padding:14px;
+    width:100%;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:bold;
+    background:#00c300;
+    color:#fff;
+    cursor:pointer;
+}
+
+/* Loading */
 .loader{
     border:5px solid rgba(255,255,255,0.2);
     border-top:5px solid #fff;
@@ -31,6 +51,7 @@ body{
     width:60px;
     height:60px;
     margin:0 auto 20px;
+    display:none;
     animation:spin 1s linear infinite;
 }
 
@@ -38,37 +59,38 @@ body{
     100%{transform:rotate(360deg);}
 }
 
-button{
-    margin-top:20px;
-    padding:12px 20px;
-    border:none;
-    border-radius:10px;
-    background:#00c300;
-    color:#fff;
-    font-size:16px;
-    cursor:pointer;
+.hidden{
+    display:none;
 }
 </style>
+
 </head>
 
 <body>
 
 <div class="card">
-    <div class="loader"></div>
-    <h2>正在下載名片中…</h2>
-    <p>稍後為您提供 LINE 好友資訊</p>
 
-    <button onclick="manualStart()">若未自動下載，點我繼續</button>
+    <div id="startUI">
+        <h2>領取電子名片</h2>
+        <p>點擊下方按鈕下載名片並加入 LINE 好友</p>
+        <button class="btn" onclick="startProcess()">立即領取</button>
+    </div>
+
+    <div id="loadingUI" class="hidden">
+        <div class="loader" style="display:block;"></div>
+        <h2>正在下載名片中…</h2>
+        <p>稍後為您開啟 LINE 好友</p>
+    </div>
+
 </div>
 
 <script>
 
-let downloaded = false;
-
+// 強制下載
 function forceDownload(url, filename){
     fetch(url)
-    .then(res=>res.blob())
-    .then(blob=>{
+    .then(res => res.blob())
+    .then(blob => {
         const blobUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = blobUrl;
@@ -77,28 +99,27 @@ function forceDownload(url, filename){
         a.click();
         a.remove();
         URL.revokeObjectURL(blobUrl);
-
-        downloaded = true;
     })
-    .catch(()=>{});
+    .catch(err => console.log("下載失敗", err));
 }
 
-// 自動流程
-forceDownload("https://raw.githubusercontent.com/chencheieh-arch/nfc-card/main/images/Shih-Chang.png","Shih-Chang.png");
+// 點擊後執行
+function startProcess(){
 
-// 延長等待時間（避免太快跳走）
-setTimeout(()=>{
-    window.location.href = "https://line.me/ti/p/VqDesvn3ys";
-}, 5000);
+    // UI切換
+    document.getElementById("startUI").classList.add("hidden");
+    document.getElementById("loadingUI").classList.remove("hidden");
 
+    // 下載
+    forceDownload(
+        "https://raw.githubusercontent.com/chencheieh-arch/nfc-card/main/images/Shih-Chang.png",
+        "Shih-Chang.png"
+    );
 
-// 手動觸發（100%成功）
-function manualStart(){
-    forceDownload("https://raw.githubusercontent.com/chencheieh-arch/nfc-card/main/images/Shih-Chang.png","Shih-Chang.png");
-
+    // 3秒後跳LINE
     setTimeout(()=>{
         window.location.href = "https://line.me/ti/p/VqDesvn3ys";
-    }, 1500);
+    },3000);
 }
 
 </script>
