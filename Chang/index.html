@@ -13,7 +13,7 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    background:linear-gradient(135deg,#1e3c72,#2a5298);
+    background: radial-gradient(circle at top, #1a1a1a, #000);
     font-family:"Segoe UI",sans-serif;
     color:#fff;
 }
@@ -22,14 +22,20 @@ body{
 .card{
     width:300px;
     text-align:center;
-    background:rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
     padding:40px 30px;
     border-radius:20px;
-    backdrop-filter:blur(15px);
-    box-shadow:0 10px 40px rgba(0,0,0,0.3);
+    backdrop-filter:blur(20px);
+    box-shadow:0 10px 50px rgba(0,0,0,0.8);
+    border:1px solid rgba(255,215,0,0.2);
 }
 
-/* 按鈕 */
+/* 標題 */
+h2{
+    margin-bottom:10px;
+}
+
+/* 按鈕（金色漸層） */
 .btn{
     margin-top:20px;
     padding:14px;
@@ -38,15 +44,22 @@ body{
     border-radius:12px;
     font-size:16px;
     font-weight:bold;
-    background:#00c300;
-    color:#fff;
+    background: linear-gradient(135deg,#FFD700,#C9A000);
+    color:#000;
     cursor:pointer;
+    box-shadow:0 0 15px rgba(255,215,0,0.5);
+    transition:0.3s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 0 25px rgba(255,215,0,0.8);
 }
 
 /* Loading */
 .loader{
-    border:5px solid rgba(255,255,255,0.2);
-    border-top:5px solid #fff;
+    border:5px solid rgba(255,215,0,0.2);
+    border-top:5px solid #FFD700;
     border-radius:50%;
     width:60px;
     height:60px;
@@ -59,8 +72,15 @@ body{
     100%{transform:rotate(360deg);}
 }
 
+/* 隱藏 */
 .hidden{
     display:none;
+}
+
+/* 副文字 */
+p{
+    font-size:14px;
+    opacity:0.8;
 }
 </style>
 
@@ -70,12 +90,14 @@ body{
 
 <div class="card">
 
+    <!-- 初始畫面 -->
     <div id="startUI">
         <h2>領取電子名片</h2>
         <p>點擊下方按鈕下載名片並加入 LINE 好友</p>
         <button class="btn" onclick="startProcess()">立即領取</button>
     </div>
 
+    <!-- Loading畫面 -->
     <div id="loadingUI" class="hidden">
         <div class="loader" style="display:block;"></div>
         <h2>正在下載名片中…</h2>
@@ -103,7 +125,7 @@ function forceDownload(url, filename){
     .catch(err => console.log("下載失敗", err));
 }
 
-// 點擊後執行
+// 點擊流程
 function startProcess(){
 
     // UI切換
