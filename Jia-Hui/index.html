@@ -20,6 +20,58 @@ box-shadow:0 20px 40px rgba(0,0,0,.1);text-align:center}
 .line{background:#06C755;color:#fff}
 .fb{background:#1877F2;color:#fff}
 .ig{background:linear-gradient(45deg,#833AB4,#FD1D1D,#FDCB58);color:#fff}
+.WhatsApp{background:#25D366;color:#fff}
+
+
+/************** 掃描動畫 **************/
+#loading{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:radial-gradient(circle,#0a0a0a,#000);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+z-index:9999;
+color:#d4af37;
+font-size:14px;
+letter-spacing:2px;
+}
+
+.scan-ring{
+width:90px;
+height:90px;
+border-radius:50%;
+border:2px solid rgba(212,175,55,.3);
+position:relative;
+animation:pulse 1.5s infinite;
+}
+
+.scan-ring::after{
+content:'';
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+border-radius:50%;
+border-top:2px solid #d4af37;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg)}
+100%{transform:rotate(360deg)}
+}
+
+@keyframes pulse{
+0%{transform:scale(.9);opacity:.5}
+50%{transform:scale(1.1);opacity:1}
+100%{transform:scale(.9);opacity:.5}
+}
 
 .btn{
 display:flex;
@@ -39,6 +91,11 @@ font-size:16px;
 
 <body>
 
+<div id="loading">
+  <div class="scan-ring"></div>
+  <div style="margin-top:20px;">NFC 掃描中</div>
+</div>
+
 <div class="card">
 
 <div class="name">林佳慧</div>
@@ -46,15 +103,25 @@ font-size:16px;
 <div class="company">京佳國際商務</div>
 <div class="title">專屬接待服務，細節決定尊榮</div>
 <div class="info">商務接送｜企業接待｜機場接送｜包車服務</a></div>
-<div class="info">📱 <a href="tel:0906669292">0906669292</a></div>
+<div class="info">📱 <a href="tel:+886906669292">+886906669292</a></div>
 <div class="info">✉ <a href="mailto:una851117@gmail.com">una851117@gmail.com</a></div>
 
 
-<a class="btn contact" href="Jia-Hui.vcf">➕ 加入聯絡人</a><a class="btn line" href="https://lin.ee/zGyrHh7">
-      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/line.svg">LINE</a><a class="btn ig" href="https://www.instagram.com/jingjia_airporttransfer?igsh=a2FhcXBpamZjODVk&utm_source=qr">
-      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg">Instagram</a>
+<a class="btn line" href="https://lin.ee/zGyrHh7">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/line.svg">LINE</a><a class="btn WhatsApp" href="https://wa.me/message/MYZII6SXDVHOH1"><img src="https://cdn.jsdelivr.net/npm/simple-icons@9.21.0/icons/whatsapp.svg">WhatsApp</a><a class="btn web" href="https://jingjia-airporttransfer.mystrikingly.com/">🌐 官方網站</a><a class="btn ig" href="https://www.instagram.com/jingjia_airporttransfer?igsh=a2FhcXBpamZjODVk&utm_source=qr">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg">Instagram</a><a class="btn fb" href="https://www.facebook.com/share/1ERyh7ik5G/?mibextid=wwXIfr">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg">Facebook</a><a class="btn contact" href="Jia-Hui.vcf">➕ 加入聯絡人</a>
 
 </div>
+
+<script>
+setTimeout(()=>{
+  document.getElementById("loading").style.opacity="0";
+  setTimeout(()=>{
+    document.getElementById("loading").style.display="none";
+  },500);
+},1200);
+</script>
 
 </body>
 </html>
