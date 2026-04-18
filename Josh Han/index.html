@@ -11,6 +11,18 @@
 body{margin:0;font-family:sans-serif;background:#000;color:#fff}
 .card{background:#111;border-radius:22px;padding:32px;max-width:420px;margin:auto;
 box-shadow:0 30px 60px rgba(0,0,0,.8);text-align:center}
+
+/* 🔥 LOGO改為長方形 + 加大 */
+.logo{
+width:100%;
+max-width:320px;
+height:130px;
+object-fit:cover;
+border-radius:12px;
+margin-bottom:16px;
+box-shadow:0 8px 20px rgba(0,0,0,.6);
+}
+  
 .name{font-size:28px;color:#d4af37;margin-top:6px}
 .company{margin-top:14px;color:#ccc}
 .title{margin-top:6px;color:#aaa}
@@ -97,9 +109,12 @@ font-size:16px;
 
 <div class="card">
 
+  <!-- 🔥 長方形LOGO -->
+<img class="logo" src="https://raw.githubusercontent.com/chencheieh-arch/nfc-card/main/images/Josh Han.png">
+
 <div class="name">韓佳勳 (Josh Han )</div>
 
-<div class="company">馥和境居美學</div>
+<div class="company">馥和境 居美學</div>
 <div class="title">總經理</div>
 
 <div class="info">📱 <a href="tel:0986425858">0986425858</a></div>
