@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小葵🌻 | 專業主持 ‧ 平面模特</title>
+    <!-- 引入 Google 字體：思源宋體 (提升高級感) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- 引入 FontAwesome 圖示庫 (用於 LINE 和 IG icon) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #F9F8F6; /* 溫柔奶茶底色 */
+            --card-bg: #FFFFFF;
+            --text-main: #333333;
+            --text-sub: #777777;
+            --accent-color: #D4AF37; /* 香檳金點綴 */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Serif TC', serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 主容器：限制最大寬度，手機觀看最舒適 */
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        /* 大頭貼照 */
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #FFF;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        /* 姓名與職稱 */
+        .name {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-sub);
+            margin-bottom: 30px;
+            letter-spacing: 1.5px;
+        }
+
+        /* 營業項目區塊 */
+        .services-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .services-title::before,
+        .services-title::after {
+            content: '';
+            height: 1px;
+            width: 30px;
+            background-color: var(--accent-color);
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .tag {
+            background-color: #FDFBFA;
+            color: var(--text-main);
+            border: 1px solid #EBE5D9;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        /* 聯絡按鈕區塊 */
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn i {
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        /* LINE 按鈕風格 */
+        .btn-line {
+            background-color: #06C755;
+            color: white;
+        }
+
+        /* IG 按鈕風格 (使用官方漸層色) */
+        .btn-ig {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+        }
+
+        /* 頁腳 */
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #AAAAAA;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 照片替換區：請將 src 裡面的網址換成你自己的照片網址 -->
+        <img class="avatar" src="https://images.unsplash.com/photo-1541216970279-affbf182373a?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="小葵">
+        
+        <h1 class="name">小葵 🌻</h1>
+        <p class="subtitle">專業主持 ‧ 平面模特 ‧ 品牌合作</p>
+
+        <div class="services-title">營業項目</div>
+        <div class="tags">
+            <span class="tag">婚禮司儀</span>
+            <span class="tag">春酒尾牙</span>
+            <span class="tag">活動主持</span>
+            <span class="tag">平面模特</span>
+            <span class="tag">商業合作</span>
+            <span class="tag">經紀合作</span>
+        </div>
+
+        <div class="links">
+            <!-- LINE 連結 -->
+            <a href="https://line.me/ti/p/3-PyP33pps" target="_blank" class="btn btn-line">
+                <i class="fab fa-line"></i> LINE 諮詢與預約
+            </a>
+            
+            <!-- IG 連結 -->
+            <a href="https://www.instagram.com/b_k_9139?igsh=MW9ucHB5dHVmc2UzNQ==" target="_blank" class="btn btn-ig">
+                <i class="fab fa-instagram"></i> 前往 Instagram
+            </a>
+        </div>
+
+        <div class="footer">
+            &copy; 2024 小葵🌻 All Rights Reserved.
+        </div>
+    </div>
+
+</body>
+</html>
