@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>小葵🌻 | 專業主持 ‧ 平面模特</title>
-    <!-- 引入 Google 字體：思源宋體 (提升高級感) -->
+    <!-- 引入 Google 字體：思源宋體 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- 引入 FontAwesome 圖示庫 (用於 LINE 和 IG icon) -->
+    <!-- 引入 FontAwesome 圖示庫 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-color: #F9F8F6; /* 溫柔奶茶底色 */
+            --bg-color: #F4ECF7; /* 柔和淺紫底色 */
             --card-bg: #FFFFFF;
-            --text-main: #333333;
-            --text-sub: #777777;
-            --accent-color: #D4AF37; /* 香檳金點綴 */
+            --text-main: #4A4A4A;
+            --text-sub: #888888;
+            --accent-color: #B098D1; /* 優雅紫羅蘭點綴 */
         }
 
         * {
@@ -35,14 +35,14 @@
             padding: 20px;
         }
 
-        /* 主容器：限制最大寬度，手機觀看最舒適 */
+        /* 主容器 */
         .container {
             width: 100%;
             max-width: 480px;
             background: var(--card-bg);
             border-radius: 24px;
             padding: 40px 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(176, 152, 209, 0.15); /* 帶有一點紫色調的陰影 */
             text-align: center;
         }
 
@@ -63,12 +63,13 @@
             font-weight: 700;
             margin-bottom: 8px;
             letter-spacing: 2px;
+            color: #333;
         }
 
         .subtitle {
             font-size: 14px;
             color: var(--text-sub);
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             letter-spacing: 1.5px;
         }
 
@@ -96,13 +97,13 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 10px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .tag {
-            background-color: #FDFBFA;
+            background-color: #FDFBFF;
             color: var(--text-main);
-            border: 1px solid #EBE5D9;
+            border: 1px solid #EBE3F2;
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 14px;
@@ -114,7 +115,49 @@
             color: var(--accent-color);
         }
 
-        /* 聯絡按鈕區塊 */
+        /* 聯絡資訊明細區塊 */
+        .contact-info {
+            background-color: #FAFAFA;
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin-bottom: 30px;
+            text-align: left;
+            border: 1px solid #F0F0F0;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: var(--text-main);
+            font-family: sans-serif; /* 數字英文用黑體較清晰 */
+        }
+
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-item i {
+            width: 24px;
+            color: var(--accent-color);
+            margin-right: 12px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .contact-item a {
+            color: var(--text-main);
+            text-decoration: none;
+            transition: color 0.2s;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-item a:hover {
+            color: var(--accent-color);
+        }
+
+        /* 社群與聯絡按鈕區塊 */
         .links {
             display: flex;
             flex-direction: column;
@@ -133,6 +176,7 @@
             font-weight: 600;
             letter-spacing: 1px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-family: sans-serif;
         }
 
         .btn:hover {
@@ -145,15 +189,21 @@
             margin-right: 12px;
         }
 
-        /* LINE 按鈕風格 */
+        /* LINE 按鈕 */
         .btn-line {
             background-color: #06C755;
             color: white;
         }
 
-        /* IG 按鈕風格 (使用官方漸層色) */
+        /* IG 按鈕 */
         .btn-ig {
             background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+        }
+
+        /* FB 按鈕 */
+        .btn-fb {
+            background-color: #1877F2;
             color: white;
         }
 
@@ -162,6 +212,7 @@
             margin-top: 30px;
             font-size: 12px;
             color: #AAAAAA;
+            font-family: sans-serif;
         }
 
     </style>
@@ -175,6 +226,7 @@
         <h1 class="name">小葵 🌻</h1>
         <p class="subtitle">專業主持 ‧ 平面模特 ‧ 品牌合作</p>
 
+        <!-- 營業項目 -->
         <div class="services-title">營業項目</div>
         <div class="tags">
             <span class="tag">婚禮司儀</span>
@@ -185,15 +237,39 @@
             <span class="tag">經紀合作</span>
         </div>
 
+        <!-- 聯絡資訊明細 -->
+        <div class="contact-info">
+            <div class="contact-item">
+                <i class="fas fa-phone-alt"></i>
+                <!-- a href="tel:..." 讓手機點擊可以直接撥號 -->
+                <a href="tel:0980756252">0980-756-252</a>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <!-- a href="mailto:..." 讓手機點擊可以直接開信箱 -->
+                <a href="mailto:ckching122631@gmail.com">ckching122631@gmail.com</a>
+            </div>
+            <div class="contact-item">
+                <i class="fab fa-line"></i>
+                <span>LINE ID：money9139</span>
+            </div>
+        </div>
+
+        <!-- 按鈕連結 -->
         <div class="links">
             <!-- LINE 連結 -->
             <a href="https://line.me/ti/p/3-PyP33pps" target="_blank" class="btn btn-line">
-                <i class="fab fa-line"></i> LINE 諮詢與預約
+                <i class="fab fa-line"></i> LINE 快速諮詢
             </a>
             
             <!-- IG 連結 -->
             <a href="https://www.instagram.com/b_k_9139?igsh=MW9ucHB5dHVmc2UzNQ==" target="_blank" class="btn btn-ig">
-                <i class="fab fa-instagram"></i> 前往 Instagram
+                <i class="fab fa-instagram"></i> 追蹤 Instagram
+            </a>
+
+            <!-- FB 連結 -->
+            <a href="https://www.facebook.com/share/1E5sRV3KHL/" target="_blank" class="btn btn-fb">
+                <i class="fab fa-facebook-f"></i> 追蹤 Facebook
             </a>
         </div>
 
