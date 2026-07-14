@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>周郁馨 (花花) | 專業不動產租賃管理</title>
+    <!-- 引入 Google 字體：思源黑體 (適合企業、房地產專業感) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 引入 FontAwesome 圖示庫 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #F0F4F8; /* 專業質感的灰藍底色 */
+            --card-bg: #FFFFFF;
+            --primary-color: #1A365D; /* 企業深海藍，象徵信任與穩重 */
+            --accent-color: #C5A059; /* 質感香檳金，象徵財富與頂尖 */
+            --text-main: #2D3748;
+            --text-sub: #718096;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 主容器 */
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(26, 54, 93, 0.1);
+            text-align: center;
+            border-top: 6px solid var(--primary-color); /* 頂部深藍色飾條 */
+        }
+
+        /* 橫向 LOGO 圖片 (取代原本的圓形) */
+        .logo {
+            width: 100%; /* 與按鈕相同的 100% 寬度 */
+            height: auto; /* 高度依比例自動調整 */
+            max-height: 160px; /* 限制最高高度避免圖片過大佔用整個手機螢幕 */
+            object-fit: contain; /* 確保 LOGO 完整呈現不被裁切 */
+            border-radius: 12px; /* 圓角與按鈕保持一致 */
+            margin-bottom: 20px;
+        }
+
+        /* 姓名與暱稱 */
+        .name {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .nickname {
+            font-size: 20px;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        /* 職稱與公司區塊 (名片風格) */
+        .company-card {
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+            border: 1px solid #E2E8F0;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0 25px 0;
+            text-align: left;
+        }
+
+        .company-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .company-subtitle {
+            font-size: 13px;
+            color: var(--text-sub);
+            line-height: 1.4;
+        }
+
+        /* 聯絡資訊明細區塊 */
+        .contact-info {
+            background-color: #FFFFFF;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed #E2E8F0;
+            font-size: 16px;
+            color: var(--text-main);
+            font-family: sans-serif;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-icon-wrapper {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(197, 160, 89, 0.1);
+            color: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 16px;
+        }
+
+        .contact-item a {
+            color: var(--text-main);
+            text-decoration: none;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .contact-item a:hover {
+            color: var(--primary-color);
+        }
+        
+        .contact-label {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-bottom: 2px;
+        }
+
+        .contact-value {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 社群與聯絡按鈕區塊 */
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 12px; /* 這裡的圓角為12px，圖片也與其一致 */
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+            font-family: sans-serif;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .btn i {
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        /* 撥打電話按鈕 */
+        .btn-call {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 15px rgba(26, 54, 93, 0.2);
+        }
+
+        /* LINE 按鈕 */
+        .btn-line {
+            background-color: #06C755;
+            color: white;
+            box-shadow: 0 4px 15px rgba(6, 199, 85, 0.2);
+        }
+
+        /* IG 按鈕 */
+        .btn-ig {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(220, 39, 67, 0.2);
+        }
+
+        /* 頁腳 */
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #A0AEC0;
+            font-family: sans-serif;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 照片替換區：請將 src 裡面的網址換成你們公司的橫向 LOGO 網址 -->
+        <!-- 目前先放了一張深藍色的示意圖，方便你預覽效果 -->
+        <img class="logo" src="https://via.placeholder.com/600x200/1A365D/FFFFFF?text=TOP+LOGO" alt="TOP頂尖租賃管理團隊 LOGO">
+        
+        <h1 class="name">周郁馨 <span class="nickname">(花花)</span></h1>
+        
+        <!-- 公司名稱區塊 -->
+        <div class="company-card">
+            <div class="company-title">TOP頂尖租賃管理團隊</div>
+            <div class="company-subtitle">領先不動產管理顧問有限公司</div>
+        </div>
+
+        <!-- 聯絡資訊明細 -->
+        <div class="contact-info">
+            <div class="contact-item">
+                <div class="contact-icon-wrapper"><i class="fas fa-phone-alt"></i></div>
+                <div class="contact-value">
+                    <span class="contact-label">服務專線 (點擊撥打)</span>
+                    <a href="tel:0972599788">0972-599-788</a>
+                </div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon-wrapper"><i class="fab fa-line"></i></div>
+                <div class="contact-value">
+                    <span class="contact-label">LINE ID</span>
+                    <span>@344ntxiw</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 按鈕連結 -->
+        <div class="links">
+            <!-- 直接撥打電話連結 -->
+            <a href="tel:0972599788" class="btn btn-call">
+                <i class="fas fa-phone"></i> 立即來電諮詢
+            </a>
+
+            <!-- LINE 連結 -->
+            <a href="https://lin.ee/wsuR5DS" target="_blank" class="btn btn-line">
+                <i class="fab fa-line"></i> LINE 加好友 / 預約看屋
+            </a>
+            
+            <!-- IG 連結 (因未提供網址，目前為預設 #，請自行替換網址) -->
+            <a href="#" target="_blank" class="btn btn-ig">
+                <i class="fab fa-instagram"></i> 追蹤 Instagram
+            </a>
+        </div>
+
+        <div class="footer">
+            &copy; 2024 周郁馨(花花) All Rights Reserved.
+        </div>
+    </div>
+
+</body>
+</html>
