@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"/>
+<title>LEVEL +1｜Vertical Slice v1</title>
+<style>
+:root{
+  --bg:#080a0f; --panel:#10141d; --fg:#f6f7fb; --muted:#9aa3b2; --accent:#fff;
+  --danger:#ff4d57; --good:#7ef29a; --warn:#ffd166; --line:#222938;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#000;color:var(--fg);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;overflow:hidden}
+body{display:flex;justify-content:center;align-items:stretch}
+#game{position:relative;width:100%;max-width:540px;height:100dvh;min-height:560px;background:radial-gradient(circle at 50% 20%,#161b27 0%,#080a0f 48%,#030405 100%);overflow:hidden;border-left:1px solid #111;border-right:1px solid #111}
+.screen{position:absolute;inset:0;padding:calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom));display:none;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.screen.active{display:flex;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translate(0,0)}25%{transform:translate(-8px,3px)}50%{transform:translate(7px,-3px)}75%{transform:translate(-4px,-2px)}}
+@keyframes glitch{0%,100%{filter:none;transform:none}20%{filter:hue-rotate(35deg) contrast(1.8);transform:translateX(-3px)}40%{filter:hue-rotate(-25deg);transform:translateX(4px)}60%{filter:contrast(2);transform:translateY(-2px)}80%{filter:none;transform:translateX(2px)}}
+@keyframes pulse{50%{transform:scale(1.05);opacity:.75}}
+@keyframes floatUp{from{transform:translateY(10px);opacity:0}to{transform:translateY(-24px);opacity:1}}
+@keyframes bossDrop{0%{transform:translateY(-60px) scale(.8);opacity:0}70%{transform:translateY(8px) scale(1.04);opacity:1}100%{transform:none}}
+@keyframes flash{0%{opacity:0}10%{opacity:1}100%{opacity:0}}
+.small{font-size:13px;color:var(--muted);letter-spacing:.06em}
+.sys{font-size:12px;letter-spacing:.22em;color:#9db3d7;text-transform:uppercase}
+h1{font-size:clamp(34px,9vw,58px);margin:10px 0;line-height:1.02;letter-spacing:-.04em}
+h2{font-size:clamp(25px,7vw,38px);margin:8px 0 12px;line-height:1.1}
+p{font-size:17px;line-height:1.7;margin:8px 0;color:#e7ebf2}
+.big-number{font-size:clamp(52px,15vw,92px);font-weight:900;letter-spacing:-.07em}
+.btn{width:min(92%,420px);border:1px solid #30394b;background:linear-gradient(180deg,#1a2130,#0e1219);color:white;border-radius:16px;padding:16px 18px;font-size:17px;font-weight:800;margin-top:18px;box-shadow:0 12px 35px rgba(0,0,0,.35);touch-action:manipulation}
+.btn:active{transform:scale(.985);background:#222a39}
+.btn.secondary{background:#0a0d12;color:#cbd3df}
+.tag{display:inline-flex;gap:7px;align-items:center;border:1px solid #30394b;border-radius:999px;padding:8px 12px;font-size:13px;color:#d8deea;background:#0a0d12}
+.topbar{position:absolute;top:calc(10px + env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between;align-items:center;z-index:30;pointer-events:none}
+.topbar button{pointer-events:auto;background:#111722;border:1px solid #2a3344;color:white;border-radius:12px;padding:9px 11px}
+#flash{position:absolute;inset:0;background:white;opacity:0;pointer-events:none;z-index:100}
+#toast{position:absolute;left:50%;top:18%;transform:translateX(-50%);background:rgba(0,0,0,.75);border:1px solid #354157;color:#fff;padding:10px 14px;border-radius:12px;z-index:80;opacity:0;pointer-events:none;max-width:88%;font-size:14px}
+#toast.show{animation:toast 1.8s ease}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,8px)}10%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+.glitch{animation:glitch .35s steps(2,end) 2}
+.shake{animation:shake .3s linear}
+.warning{color:var(--danger);font-weight:900;letter-spacing:.12em;text-shadow:0 0 20px rgba(255,77,87,.5)}
+.hpwrap{width:min(88%,430px);margin:12px 0;background:#151b25;border:1px solid #2b3444;height:18px;border-radius:999px;overflow:hidden}
+.hp{height:100%;width:100%;background:linear-gradient(90deg,#55e277,#9cffad);transition:width .35s ease}
+.enemy{font-size:84px;filter:drop-shadow(0 12px 28px rgba(0,0,0,.35));animation:bossDrop .5s ease both}
+.tapTarget{width:180px;height:180px;border-radius:50%;display:grid;place-items:center;border:2px solid #3a465c;background:radial-gradient(circle at 35% 30%,#29364b,#111722 55%,#090c11 100%);font-size:70px;user-select:none;touch-action:manipulation;box-shadow:0 0 0 0 rgba(255,255,255,.08)}
+.tapTarget:active{transform:scale(.96)}
+.damage{position:absolute;font-weight:1000;font-size:28px;color:#fff;text-shadow:0 2px 10px #000;animation:floatUp .7s ease forwards;pointer-events:none}
+.meter{width:min(88%,430px);height:30px;border-radius:999px;overflow:hidden;border:1px solid #394357;position:relative;background:#111722;margin:20px auto}
+.meter .zones{position:absolute;inset:0;display:flex}.zone{height:100%}.z1{width:22%;background:#344054}.z2{width:25%;background:#2b6c46}.z3{width:28%;background:#557d2a}.z4{width:25%;background:#7b3b2c}
+.meter .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(255,255,255,.72);mix-blend-mode:overlay}
+.meter .needle{position:absolute;top:-3px;bottom:-3px;width:4px;background:white;left:0;box-shadow:0 0 14px #fff}
+.hold{width:170px;height:170px;border-radius:50%;border:2px solid #41506b;background:radial-gradient(circle,#2e1f16,#17110d 65%,#0d0b09);display:grid;place-items:center;font-size:62px;touch-action:none;user-select:none}
+.arena{position:relative;width:100%;height:52vh;max-height:470px;border:1px solid #252e3d;border-radius:22px;background:linear-gradient(180deg,#101622,#080c12);overflow:hidden;margin-top:10px}
+.player{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);width:64px;height:64px;border-radius:18px;background:#e8eefb;color:#111;display:grid;place-items:center;font-size:34px;box-shadow:0 8px 28px rgba(0,0,0,.45);touch-action:none;user-select:none}
+.drop{position:absolute;top:-50px;font-size:34px;will-change:transform}
+.wallet{font-size:16px;font-weight:800;margin-top:8px}
+.chest{font-size:110px;cursor:pointer;filter:drop-shadow(0 15px 25px rgba(0,0,0,.45));user-select:none}.chest.pulse{animation:pulse .8s ease infinite}
+.card{width:min(88%,400px);border-radius:22px;border:1px solid #38445a;background:linear-gradient(145deg,#1d2636,#0e121a);padding:24px 20px;box-shadow:0 25px 70px rgba(0,0,0,.45)}
+.photo-placeholder{height:210px;border-radius:17px;background:linear-gradient(135deg,#252d3e,#141923);display:grid;place-items:center;font-size:56px;border:1px dashed #47526a;margin:12px 0}
+.party{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:18px 0}.member{width:56px;height:56px;border-radius:50%;background:#1b2230;border:1px solid #3a465c;display:grid;place-items:center;font-size:26px;animation:bossDrop .45s ease}
+.boss-time{font-size:clamp(70px,19vw,115px);font-weight:1000;letter-spacing:-.08em;text-shadow:0 0 32px rgba(255,255,255,.16)}
+.choiceRow{display:flex;flex-direction:column;gap:10px;width:min(92%,420px);margin-top:12px}.choiceRow .btn{width:100%;margin-top:0}
+.ending{background:radial-gradient(circle at 50% 38%,#263149 0%,#0b0f17 45%,#030405 100%)}
+.footer-note{position:absolute;bottom:calc(12px + env(safe-area-inset-bottom));font-size:11px;color:#667084;left:0;right:0}
+</style>
+</head>
+<body>
+<div id="game">
+  <div class="topbar"><span class="tag">VERTICAL SLICE v1</span><button id="soundBtn">🔊</button></div>
+  <div id="flash"></div><div id="toast"></div>
+
+  <section class="screen active" id="s0">
+    <div class="sys">LEVEL +1 SYSTEM</div>
+    <h1>生日事件<br>已偵測</h1>
+    <p>玩家資料讀取中……</p>
+    <div class="card" style="margin-top:14px">
+      <div class="small">PLAYER</div><h2 style="margin:4px 0">測試壽星</h2>
+      <div class="small">CURRENT LEVEL</div><div class="big-number">32</div>
+    </div>
+    <button class="btn" id="bootBtn">🎧 開始 LEVEL +1</button>
+    <div class="footer-note">第一版以操作、節奏、音效與轉場測試為主。</div>
+  </section>
+
+  <section class="screen" id="s1">
+    <div class="sys">SYSTEM UPDATE</div>
+    <h2>正在升級角色……</h2>
+    <div class="big-number" id="levelAnim">LV.32 → LV.33</div>
+    <div id="failMsg" style="display:none">
+      <h2 class="warning">⚠ LEVEL UP FAILED</h2>
+      <p>偵測到上一年度仍有<br><b>未完成事件</b>。</p>
+      <button class="btn" id="toAlarm">蛤？開始處理</button>
+    </div>
+  </section>
+
+  <section class="screen" id="s2">
+    <div class="sys">STAGE 01 · TUTORIAL</div>
+    <h2>LV.10 鬧鐘怪</h2>
+    <div class="hpwrap"><div class="hp" id="alarmHp"></div></div>
+    <div class="tapTarget" id="alarm">⏰</div>
+    <p id="alarmText"><b>3 秒內狂點它！</b><br><span class="small">TAP TAP TAP</span></p>
+  </section>
+
+  <section class="screen" id="s3">
+    <div class="sys">MINI GAME · HOLD</div>
+    <h2>咖啡蓄能</h2>
+    <p>長按咖啡，放開時停在 <b>PERFECT</b>。</p>
+    <div class="meter"><div class="zones"><div class="zone z1"></div><div class="zone z2"></div><div class="zone z3"></div><div class="zone z4"></div></div><div class="fill" id="fill"></div><div class="needle" id="needle"></div></div>
+    <div class="small">LOW　 GOOD　 PERFECT　 OVERDOSE</div>
+    <div class="hold" id="coffee">☕</div>
+    <p id="coffeeText">按住不要放。</p>
+  </section>
+
+  <section class="screen" id="s4" style="justify-content:flex-start;padding-top:calc(62px + env(safe-area-inset-top))">
+    <div class="sys">BOSS BATTLE · DRAG</div>
+    <h2 class="warning">WARNING</h2>
+    <div class="enemy" style="font-size:58px">💸</div>
+    <h2 style="margin-top:0">BOSS：月底</h2>
+    <div class="wallet" id="wallet">錢包：$8,720</div>
+    <div class="arena" id="arena"><div class="player" id="player">🧍</div></div>
+    <div class="small">拖動角色：接 💰，閃避 💳 🛍️ 🍜</div>
+  </section>
+
+  <section class="screen" id="s5">
+    <div class="sys">DROP ITEM</div>
+    <h2>Boss 掉落神秘寶箱</h2>
+    <div class="chest pulse" id="chest">🎁</div>
+    <p>點開看看。</p>
+  </section>
+
+  <section class="screen" id="s6">
+    <div class="sys">LEGENDARY ITEM</div>
+    <div class="card">
+      <div class="small">★★★★★</div>
+      <h2>本人不願面對的照片</h2>
+      <div class="photo-placeholder">📸</div>
+      <p><b>精神傷害：9999</b></p>
+      <p class="small">正式版會替換成客戶提供的趣味照片。</p>
+    </div>
+    <button class="btn" id="toTime">收下道具</button>
+  </section>
+
+  <section class="screen" id="s7">
+    <div class="sys">UNKNOWN AREA</div>
+    <h2>前方偵測到未知生命體</h2>
+    <p>資料庫查無此敵人。</p>
+    <div class="warning" style="font-size:22px;margin-top:18px">WARNING</div>
+  </section>
+
+  <section class="screen" id="s8">
+    <div class="sys">FINAL BOSS</div>
+    <div class="boss-time">TIME</div>
+    <div class="small">HP</div><div class="big-number" style="font-size:58px">∞</div>
+    <div class="hpwrap"><div class="hp" id="playerHp"></div></div>
+    <div class="small">YOUR HP · <span id="hpNum">100</span></div>
+    <button class="btn" id="attackTime">⚔️ 攻擊「時間」</button>
+    <p id="timeText">擊敗它，完成 LEVEL UP。</p>
+    <div class="party" id="party"></div>
+  </section>
+
+  <section class="screen" id="s9">
+    <div class="sys">SYSTEM MESSAGE</div>
+    <h2>時間仍然沒有被打敗。</h2>
+    <p>也許你本來就不需要打敗它。</p>
+    <p style="margin-top:26px">有些日子過去了。<br>有些事情也改變了。</p>
+    <p><b>但你不是一個人走到這裡。</b></p>
+    <div class="choiceRow">
+      <button class="btn" id="continueBtn">繼續前往下一個 LEVEL</button>
+      <button class="btn secondary" id="oldBtn">我還不想變老</button>
+    </div>
+  </section>
+
+  <section class="screen ending" id="s10">
+    <div class="sys">LEVEL UP COMPLETE</div>
+    <h1>LV.32 → LV.33</h1>
+    <p>🎂 新的一歲 ×1<br>📸 回憶 ×很多<br>❤️ 陪伴 ×∞</p>
+    <div style="height:18px"></div>
+    <div class="small">NEW QUEST UNLOCKED</div>
+    <h2>好好把下一歲活完。</h2>
+    <p>期限：下一次生日<br>獎勵：到時候再說。</p>
+    <h2 style="margin-top:24px">HAPPY BIRTHDAY</h2>
+    <p><b>遊戲還沒破關。</b></p>
+    <button class="btn secondary" id="restartBtn">↻ 重新試玩</button>
+  </section>
+</div>
+<script>
+const $=s=>document.querySelector(s); const screens=[...document.querySelectorAll('.screen')];
+let audioCtx=null, soundOn=true, currentBgm=null;
+function show(id){screens.forEach(s=>s.classList.remove('active')); $(id).classList.add('active');}
+function vibrate(p){try{if(navigator.vibrate)navigator.vibrate(p)}catch(e){}}
+function flash(){const f=$('#flash');f.style.animation='none';void f.offsetWidth;f.style.animation='flash .35s ease'}
+function shake(){const g=$('#game');g.classList.remove('shake');void g.offsetWidth;g.classList.add('shake');}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.remove('show');void e.offsetWidth;e.classList.add('show')}
+function ensureAudio(){if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==='suspended') audioCtx.resume();}
+function tone(freq=440,dur=.12,type='sine',vol=.08,delay=0){if(!soundOn)return;ensureAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(0.0001,audioCtx.currentTime+delay);g.gain.exponentialRampToValueAtTime(vol,audioCtx.currentTime+delay+.01);g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+delay+dur);o.connect(g);g.connect(audioCtx.destination);o.start(audioCtx.currentTime+delay);o.stop(audioCtx.currentTime+delay+dur+.03)}
+function clickS(){tone(660,.07,'square',.035)}
+function hitS(){tone(120,.12,'sawtooth',.08);tone(240,.07,'square',.04,.02)}
+function errorS(){tone(180,.2,'sawtooth',.07);tone(120,.3,'square',.05,.09)}
+function winS(){[523,659,784,1046].forEach((f,i)=>tone(f,.25,'triangle',.065,i*.09))}
+function bossS(){tone(72,.5,'sawtooth',.11);tone(52,.7,'square',.07,.08)}
+function chestS(){[392,523,659,784].forEach((f,i)=>tone(f,.18,'triangle',.05,i*.07))}
+function bgm(kind){if(!soundOn)return; ensureAudio(); if(currentBgm){clearInterval(currentBgm);currentBgm=null}
+  const seqs={
+    adventure:[220,277,330,277,247,294,370,294],
+    boss:[110,110,147,110,98,123,98,82],
+    emo:[262,330,392,330,294,370,440,370]
+  }; const seq=seqs[kind]||seqs.adventure; let i=0;
+  currentBgm=setInterval(()=>{tone(seq[i%seq.length],.34,'triangle',kind==='boss'?.018:.014);i++},380)
+}
+function stopBgm(){if(currentBgm){clearInterval(currentBgm);currentBgm=null}}
+$('#soundBtn').onclick=()=>{soundOn=!soundOn;$('#soundBtn').textContent=soundOn?'🔊':'🔇'; if(!soundOn)stopBgm(); else {ensureAudio();clickS()}}
+
+$('#bootBtn').onclick=()=>{ensureAudio();clickS();show('#s1');setTimeout(()=>{bossS();vibrate([40,50,90]);shake();$('#levelAnim').classList.add('glitch');setTimeout(()=>{$('#failMsg').style.display='block';errorS()},420)},900)};
+$('#toAlarm').onclick=()=>{clickS();show('#s2');bgm('adventure');startAlarm()};
+
+let alarmHp=100,alarmEnded=false,alarmTimer;
+function startAlarm(){alarmHp=100;alarmEnded=false;$('#alarmHp').style.width='100%';$('#alarmText').innerHTML='<b>3 秒內狂點它！</b><br><span class="small">TAP TAP TAP</span>';alarmTimer=setTimeout(()=>endAlarm(false),3000)}
+$('#alarm').addEventListener('pointerdown',e=>{if(alarmEnded)return;alarmHp=Math.max(0,alarmHp-17);$('#alarmHp').style.width=alarmHp+'%';hitS();vibrate(18);const d=document.createElement('div');d.className='damage';d.textContent='-17';d.style.left=(e.clientX-25)+'px';d.style.top=(e.clientY-35)+'px';$('#game').appendChild(d);setTimeout(()=>d.remove(),700);if(alarmHp<=0)endAlarm(true)});
+function endAlarm(win){if(alarmEnded)return;alarmEnded=true;clearTimeout(alarmTimer); if(win){winS();toast('鬧鐘怪受到 999 傷害！');$('#alarmText').innerHTML='✅ 擊敗成功。<br><b>……但你設定了 6 個鬧鐘。</b>'}else{errorS();$('#alarmText').innerHTML='❌ 你被鬧鐘怪擊敗。<br><b>這其實很正常。</b>'} setTimeout(()=>{show('#s3');startCoffee()},1900)}
+
+let holding=false,coffeeP=0,coffeeRaf,coffeeDir=1;
+function startCoffee(){coffeeP=0;$('#needle').style.left='0%';$('#fill').style.width='0%';$('#coffeeText').textContent='按住不要放。'}
+function coffLoop(){if(!holding)return;coffeeP+=0.7*coffeeDir;if(coffeeP>=100){coffeeP=100;coffeeDir=-1}else if(coffeeP<=0){coffeeP=0;coffeeDir=1}$('#needle').style.left=coffeeP+'%';$('#fill').style.width=coffeeP+'%';coffeeRaf=requestAnimationFrame(coffLoop)}
+function coffStart(e){e.preventDefault();if(holding)return;holding=true;ensureAudio();tone(180,.12,'triangle',.025);coffeeRaf=requestAnimationFrame(coffLoop)}
+function coffEnd(){if(!holding)return;holding=false;cancelAnimationFrame(coffeeRaf);let msg='';if(coffeeP<22){msg='LOW：今天可能撐不到下午。';errorS()}else if(coffeeP<47){msg='GOOD：能活。';tone(520,.14,'triangle',.05)}else if(coffeeP<75){msg='PERFECT！咖啡因 +80';winS();vibrate([25,35,45])}else{msg='⚠ OVERDOSE：你現在可以聽見自己的心跳。';errorS();vibrate([40,40,40]);shake()}$('#coffeeText').innerHTML='<b>'+msg+'</b>';setTimeout(()=>{show('#s4');startBoss()},1800)}
+$('#coffee').addEventListener('pointerdown',coffStart);window.addEventListener('pointerup',coffEnd);
+
+let drops=[],bossTimer,spawnTimer,wallet=8720,bossRunning=false,playerX=.5;
+function startBoss(){stopBgm();bossS();vibrate([80,60,120]);flash();setTimeout(()=>bgm('boss'),500);wallet=8720;bossRunning=true;drops=[];$('#wallet').textContent='錢包：$'+wallet.toLocaleString();const arena=$('#arena'),player=$('#player');player.style.left='50%';playerX=.5;
+  spawnTimer=setInterval(()=>spawnDrop(),380);bossTimer=setTimeout(endBoss,7200);requestAnimationFrame(dropLoop)}
+const types=[['💰',120,1],['💳',-800,-1],['🛍️',-300,-1],['🍜',-120,-1]];
+function spawnDrop(){if(!bossRunning)return;const arena=$('#arena'),el=document.createElement('div');const t=types[Math.floor(Math.random()*types.length)];el.className='drop';el.textContent=t[0];el.dataset.val=t[1];el.dataset.good=t[2];el.dataset.y=-40;el.style.left=(6+Math.random()*84)+'%';arena.appendChild(el);drops.push(el)}
+function dropLoop(){if(!bossRunning)return;const arena=$('#arena'),ar=arena.getBoundingClientRect(),pr=$('#player').getBoundingClientRect();drops=[...drops].filter(el=>{let y=parseFloat(el.dataset.y)+4.7;el.dataset.y=y;el.style.transform=`translateY(${y}px)`;const r=el.getBoundingClientRect();const hit=!(r.right<pr.left||r.left>pr.right||r.bottom<pr.top||r.top>pr.bottom);if(hit){const val=+el.dataset.val;wallet=Math.max(0,wallet+val);$('#wallet').textContent='錢包：$'+wallet.toLocaleString();if(val>0){tone(760,.08,'triangle',.04);vibrate(10)}else{hitS();shake();vibrate(28)}el.remove();return false}if(r.top>ar.bottom){el.remove();return false}return true});requestAnimationFrame(dropLoop)}
+function setPlayerFromX(clientX){const ar=$('#arena').getBoundingClientRect();playerX=Math.min(.94,Math.max(.06,(clientX-ar.left)/ar.width));$('#player').style.left=(playerX*100)+'%'}
+$('#arena').addEventListener('pointerdown',e=>{setPlayerFromX(e.clientX);$('#arena').setPointerCapture?.(e.pointerId)});$('#arena').addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='touch')setPlayerFromX(e.clientX)});
+function endBoss(){if(!bossRunning)return;bossRunning=false;clearInterval(spawnTimer);clearTimeout(bossTimer);drops.forEach(e=>e.remove());drops=[];stopBgm();wallet=Math.min(wallet,385);$('#wallet').textContent='錢包：$'+wallet.toLocaleString();errorS();toast('Boss 已撤退，但你的錢也一起走了。');setTimeout(()=>{show('#s5');bgm('adventure')},1800)}
+
+$('#chest').onclick=()=>{chestS();vibrate([25,30,60]);flash();$('#chest').classList.remove('pulse');setTimeout(()=>show('#s6'),650)};
+$('#toTime').onclick=()=>{clickS();stopBgm();show('#s7');setTimeout(()=>{bossS();vibrate([70,50,100]);shake();setTimeout(()=>show('#s8'),1200)},800)};
+
+let timeHits=0,hp=100,partyCount=0,timeLocked=false;
+$('#attackTime').onclick=()=>{if(timeLocked)return;timeHits++;hitS();vibrate(24);shake();$('#timeText').innerHTML='<b>0 DAMAGE</b><br>攻擊無效。';if(timeHits>=2){timeLocked=true;$('#attackTime').disabled=true;$('#attackTime').style.opacity=.4;startTimeAttack()}};
+function startTimeAttack(){let vals=[72,43,18,5],i=0;const step=()=>{if(i>=vals.length){joinParty();return}hp=vals[i++];$('#hpNum').textContent=hp;$('#playerHp').style.width=hp+'%';errorS();vibrate(35);shake();setTimeout(step,650)};setTimeout(step,650)}
+function joinParty(){const icons=['🧑‍🤝‍🧑','📸','❤️'];let i=0;const next=()=>{if(i>=icons.length){$('#hpNum').textContent='999+';$('#playerHp').style.width='100%';$('#timeText').innerHTML='<b>時間仍然沒有被打敗。</b>';setTimeout(()=>{show('#s9');bgm('emo')},1400);return}const m=document.createElement('div');m.className='member';m.textContent=icons[i++];$('#party').appendChild(m);tone(523+(i*80),.22,'triangle',.05);vibrate([20,30,35]);hp=Math.min(100,hp+30);$('#hpNum').textContent=hp;$('#playerHp').style.width=hp+'%';setTimeout(next,700)};next()}
+
+$('#oldBtn').onclick=()=>{clickS();toast('系統理解您的感受……但沒有這個功能。');vibrate(20)};
+$('#continueBtn').onclick=()=>levelUp();
+function levelUp(){stopBgm();winS();vibrate([40,50,40,60,120]);flash();shake();setTimeout(()=>{show('#s10');bgm('emo')},600)}
+$('#restartBtn').onclick=()=>{stopBgm();location.reload()};
+</script>
+</body></html>
