@@ -1,252 +1,155 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"/>
-<title>LEVEL +1｜Vertical Slice v1</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+<title>LEVEL +1｜Adventure Prototype v3</title>
 <style>
-:root{
-  --bg:#080a0f; --panel:#10141d; --fg:#f6f7fb; --muted:#9aa3b2; --accent:#fff;
-  --danger:#ff4d57; --good:#7ef29a; --warn:#ffd166; --line:#222938;
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:#000;color:var(--fg);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;overflow:hidden}
-body{display:flex;justify-content:center;align-items:stretch}
-#game{position:relative;width:100%;max-width:540px;height:100dvh;min-height:560px;background:radial-gradient(circle at 50% 20%,#161b27 0%,#080a0f 48%,#030405 100%);overflow:hidden;border-left:1px solid #111;border-right:1px solid #111}
-.screen{position:absolute;inset:0;padding:calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom));display:none;flex-direction:column;justify-content:center;align-items:center;text-align:center}
-.screen.active{display:flex;animation:fadeIn .35s ease}
-@keyframes fadeIn{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
-@keyframes shake{0%,100%{transform:translate(0,0)}25%{transform:translate(-8px,3px)}50%{transform:translate(7px,-3px)}75%{transform:translate(-4px,-2px)}}
-@keyframes glitch{0%,100%{filter:none;transform:none}20%{filter:hue-rotate(35deg) contrast(1.8);transform:translateX(-3px)}40%{filter:hue-rotate(-25deg);transform:translateX(4px)}60%{filter:contrast(2);transform:translateY(-2px)}80%{filter:none;transform:translateX(2px)}}
-@keyframes pulse{50%{transform:scale(1.05);opacity:.75}}
-@keyframes floatUp{from{transform:translateY(10px);opacity:0}to{transform:translateY(-24px);opacity:1}}
-@keyframes bossDrop{0%{transform:translateY(-60px) scale(.8);opacity:0}70%{transform:translateY(8px) scale(1.04);opacity:1}100%{transform:none}}
-@keyframes flash{0%{opacity:0}10%{opacity:1}100%{opacity:0}}
-.small{font-size:13px;color:var(--muted);letter-spacing:.06em}
-.sys{font-size:12px;letter-spacing:.22em;color:#9db3d7;text-transform:uppercase}
-h1{font-size:clamp(34px,9vw,58px);margin:10px 0;line-height:1.02;letter-spacing:-.04em}
-h2{font-size:clamp(25px,7vw,38px);margin:8px 0 12px;line-height:1.1}
-p{font-size:17px;line-height:1.7;margin:8px 0;color:#e7ebf2}
-.big-number{font-size:clamp(52px,15vw,92px);font-weight:900;letter-spacing:-.07em}
-.btn{width:min(92%,420px);border:1px solid #30394b;background:linear-gradient(180deg,#1a2130,#0e1219);color:white;border-radius:16px;padding:16px 18px;font-size:17px;font-weight:800;margin-top:18px;box-shadow:0 12px 35px rgba(0,0,0,.35);touch-action:manipulation}
-.btn:active{transform:scale(.985);background:#222a39}
-.btn.secondary{background:#0a0d12;color:#cbd3df}
-.tag{display:inline-flex;gap:7px;align-items:center;border:1px solid #30394b;border-radius:999px;padding:8px 12px;font-size:13px;color:#d8deea;background:#0a0d12}
-.topbar{position:absolute;top:calc(10px + env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between;align-items:center;z-index:30;pointer-events:none}
-.topbar button{pointer-events:auto;background:#111722;border:1px solid #2a3344;color:white;border-radius:12px;padding:9px 11px}
-#flash{position:absolute;inset:0;background:white;opacity:0;pointer-events:none;z-index:100}
-#toast{position:absolute;left:50%;top:18%;transform:translateX(-50%);background:rgba(0,0,0,.75);border:1px solid #354157;color:#fff;padding:10px 14px;border-radius:12px;z-index:80;opacity:0;pointer-events:none;max-width:88%;font-size:14px}
-#toast.show{animation:toast 1.8s ease}
-@keyframes toast{0%{opacity:0;transform:translate(-50%,8px)}10%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
-.glitch{animation:glitch .35s steps(2,end) 2}
-.shake{animation:shake .3s linear}
-.warning{color:var(--danger);font-weight:900;letter-spacing:.12em;text-shadow:0 0 20px rgba(255,77,87,.5)}
-.hpwrap{width:min(88%,430px);margin:12px 0;background:#151b25;border:1px solid #2b3444;height:18px;border-radius:999px;overflow:hidden}
-.hp{height:100%;width:100%;background:linear-gradient(90deg,#55e277,#9cffad);transition:width .35s ease}
-.enemy{font-size:84px;filter:drop-shadow(0 12px 28px rgba(0,0,0,.35));animation:bossDrop .5s ease both}
-.tapTarget{width:180px;height:180px;border-radius:50%;display:grid;place-items:center;border:2px solid #3a465c;background:radial-gradient(circle at 35% 30%,#29364b,#111722 55%,#090c11 100%);font-size:70px;user-select:none;touch-action:manipulation;box-shadow:0 0 0 0 rgba(255,255,255,.08)}
-.tapTarget:active{transform:scale(.96)}
-.damage{position:absolute;font-weight:1000;font-size:28px;color:#fff;text-shadow:0 2px 10px #000;animation:floatUp .7s ease forwards;pointer-events:none}
-.meter{width:min(88%,430px);height:30px;border-radius:999px;overflow:hidden;border:1px solid #394357;position:relative;background:#111722;margin:20px auto}
-.meter .zones{position:absolute;inset:0;display:flex}.zone{height:100%}.z1{width:22%;background:#344054}.z2{width:25%;background:#2b6c46}.z3{width:28%;background:#557d2a}.z4{width:25%;background:#7b3b2c}
-.meter .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(255,255,255,.72);mix-blend-mode:overlay}
-.meter .needle{position:absolute;top:-3px;bottom:-3px;width:4px;background:white;left:0;box-shadow:0 0 14px #fff}
-.hold{width:170px;height:170px;border-radius:50%;border:2px solid #41506b;background:radial-gradient(circle,#2e1f16,#17110d 65%,#0d0b09);display:grid;place-items:center;font-size:62px;touch-action:none;user-select:none}
-.arena{position:relative;width:100%;height:52vh;max-height:470px;border:1px solid #252e3d;border-radius:22px;background:linear-gradient(180deg,#101622,#080c12);overflow:hidden;margin-top:10px}
-.player{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);width:64px;height:64px;border-radius:18px;background:#e8eefb;color:#111;display:grid;place-items:center;font-size:34px;box-shadow:0 8px 28px rgba(0,0,0,.45);touch-action:none;user-select:none}
-.drop{position:absolute;top:-50px;font-size:34px;will-change:transform}
-.wallet{font-size:16px;font-weight:800;margin-top:8px}
-.chest{font-size:110px;cursor:pointer;filter:drop-shadow(0 15px 25px rgba(0,0,0,.45));user-select:none}.chest.pulse{animation:pulse .8s ease infinite}
-.card{width:min(88%,400px);border-radius:22px;border:1px solid #38445a;background:linear-gradient(145deg,#1d2636,#0e121a);padding:24px 20px;box-shadow:0 25px 70px rgba(0,0,0,.45)}
-.photo-placeholder{height:210px;border-radius:17px;background:linear-gradient(135deg,#252d3e,#141923);display:grid;place-items:center;font-size:56px;border:1px dashed #47526a;margin:12px 0}
-.party{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:18px 0}.member{width:56px;height:56px;border-radius:50%;background:#1b2230;border:1px solid #3a465c;display:grid;place-items:center;font-size:26px;animation:bossDrop .45s ease}
-.boss-time{font-size:clamp(70px,19vw,115px);font-weight:1000;letter-spacing:-.08em;text-shadow:0 0 32px rgba(255,255,255,.16)}
-.choiceRow{display:flex;flex-direction:column;gap:10px;width:min(92%,420px);margin-top:12px}.choiceRow .btn{width:100%;margin-top:0}
-.ending{background:radial-gradient(circle at 50% 38%,#263149 0%,#0b0f17 45%,#030405 100%)}
-.footer-note{position:absolute;bottom:calc(12px + env(safe-area-inset-bottom));font-size:11px;color:#667084;left:0;right:0}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:none}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#0a0c12;color:#fff;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif}
+  #wrap{position:relative;width:100%;height:100%;display:grid;place-items:center;background:radial-gradient(circle at 50% 20%,#182036,#07090f 72%)}
+  canvas{width:min(100vw,480px);height:100vh;max-height:900px;background:#10151e;display:block;box-shadow:0 0 50px #0008}
+  .ui{position:absolute;inset:0;pointer-events:none;display:flex;justify-content:center}
+  .uiframe{position:relative;width:min(100vw,480px);height:100vh;max-height:900px}
+  .top{position:absolute;top:max(10px,env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .panel{background:#05070dcc;border:1px solid #ffffff20;backdrop-filter:blur(10px);border-radius:16px;padding:9px 12px;box-shadow:0 8px 24px #0007}
+  .hp{font-weight:900;letter-spacing:.04em}.small{font-size:12px;opacity:.72}.obj{max-width:235px;text-align:right;font-size:12px;line-height:1.45}
+  .banner{position:absolute;top:20%;left:50%;transform:translate(-50%,-50%) scale(.92);text-align:center;opacity:0;transition:.22s;filter:drop-shadow(0 8px 20px #000)}
+  .banner.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  .banner .k{font-size:12px;letter-spacing:.25em;opacity:.75}.banner .t{font-size:34px;font-weight:1000;white-space:nowrap}.banner .s{font-size:13px;opacity:.82;margin-top:3px}
+  .toast{position:absolute;bottom:190px;left:50%;transform:translateX(-50%) translateY(10px);background:#06080edc;border:1px solid #ffffff20;padding:10px 14px;border-radius:14px;opacity:0;transition:.18s;font-size:13px;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .controls{pointer-events:auto;position:absolute;left:0;right:0;bottom:max(14px,env(safe-area-inset-bottom));height:160px}
+  #stickBase{position:absolute;left:24px;bottom:18px;width:126px;height:126px;border-radius:50%;background:#ffffff0c;border:1px solid #ffffff20;box-shadow:inset 0 0 24px #0008}
+  #stick{position:absolute;left:39px;top:39px;width:48px;height:48px;border-radius:50%;background:#ffffff28;border:1px solid #ffffff4a;box-shadow:0 6px 18px #0008}
+  .btn{position:absolute;border-radius:50%;display:grid;place-items:center;font-weight:1000;color:#fff;user-select:none;box-shadow:0 10px 26px #0008,inset 0 0 18px #ffffff10;border:1px solid #ffffff35}
+  #attack{right:25px;bottom:24px;width:86px;height:86px;background:#ff566f33;font-size:13px}
+  #dash{right:105px;bottom:91px;width:58px;height:58px;background:#62b7ff2e;font-size:11px}
+  .btn.active{transform:scale(.94);filter:brightness(1.35)}
+  #start,#end{position:absolute;inset:0;pointer-events:auto;background:linear-gradient(#080b12e8,#05070df4);display:grid;place-items:center;padding:28px;text-align:center;z-index:5}
+  #end{display:none}
+  .card{width:min(390px,92vw);border:1px solid #ffffff20;background:#0a0e18de;border-radius:26px;padding:28px 22px;box-shadow:0 30px 80px #000b}
+  h1{font-size:42px;margin:8px 0 2px}.lead{opacity:.78;line-height:1.7;font-size:14px}.startbtn{margin-top:20px;width:100%;border:0;border-radius:18px;padding:16px 18px;background:#fff;color:#0b0d12;font-weight:1000;font-size:16px}.hint{margin-top:12px;font-size:12px;opacity:.6;line-height:1.5}
+  .grade{font-size:62px;font-weight:1000;margin:8px 0}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.stat{background:#ffffff0b;border:1px solid #ffffff12;border-radius:14px;padding:10px}
 </style>
 </head>
 <body>
-<div id="game">
-  <div class="topbar"><span class="tag">VERTICAL SLICE v1</span><button id="soundBtn">🔊</button></div>
-  <div id="flash"></div><div id="toast"></div>
-
-  <section class="screen active" id="s0">
-    <div class="sys">LEVEL +1 SYSTEM</div>
-    <h1>生日事件<br>已偵測</h1>
-    <p>玩家資料讀取中……</p>
-    <div class="card" style="margin-top:14px">
-      <div class="small">PLAYER</div><h2 style="margin:4px 0">測試壽星</h2>
-      <div class="small">CURRENT LEVEL</div><div class="big-number">32</div>
+<div id="wrap">
+  <canvas id="game" width="480" height="900"></canvas>
+  <div class="ui"><div class="uiframe">
+    <div class="top">
+      <div class="panel"><div class="hp" id="hp">❤️❤️❤️❤️</div><div class="small">LV.32｜EXP <span id="xp">0</span>/100</div></div>
+      <div class="panel obj"><b id="zoneName">勇者宿舍</b><br><span id="objective">摧毀 3 個鬧鐘怪</span></div>
     </div>
-    <button class="btn" id="bootBtn">🎧 開始 LEVEL +1</button>
-    <div class="footer-note">第一版以操作、節奏、音效與轉場測試為主。</div>
-  </section>
-
-  <section class="screen" id="s1">
-    <div class="sys">SYSTEM UPDATE</div>
-    <h2>正在升級角色……</h2>
-    <div class="big-number" id="levelAnim">LV.32 → LV.33</div>
-    <div id="failMsg" style="display:none">
-      <h2 class="warning">⚠ LEVEL UP FAILED</h2>
-      <p>偵測到上一年度仍有<br><b>未完成事件</b>。</p>
-      <button class="btn" id="toAlarm">蛤？開始處理</button>
+    <div class="banner" id="banner"><div class="k" id="bannerK">STAGE 01</div><div class="t" id="bannerT">勇者宿舍</div><div class="s" id="bannerS">終於不是按下一頁了</div></div>
+    <div class="toast" id="toast">取得道具</div>
+    <div class="controls">
+      <div id="stickBase"><div id="stick"></div></div>
+      <div class="btn" id="dash">DASH</div>
+      <div class="btn" id="attack">ATTACK</div>
     </div>
-  </section>
-
-  <section class="screen" id="s2">
-    <div class="sys">STAGE 01 · TUTORIAL</div>
-    <h2>LV.10 鬧鐘怪</h2>
-    <div class="hpwrap"><div class="hp" id="alarmHp"></div></div>
-    <div class="tapTarget" id="alarm">⏰</div>
-    <p id="alarmText"><b>3 秒內狂點它！</b><br><span class="small">TAP TAP TAP</span></p>
-  </section>
-
-  <section class="screen" id="s3">
-    <div class="sys">MINI GAME · HOLD</div>
-    <h2>咖啡蓄能</h2>
-    <p>長按咖啡，放開時停在 <b>PERFECT</b>。</p>
-    <div class="meter"><div class="zones"><div class="zone z1"></div><div class="zone z2"></div><div class="zone z3"></div><div class="zone z4"></div></div><div class="fill" id="fill"></div><div class="needle" id="needle"></div></div>
-    <div class="small">LOW　 GOOD　 PERFECT　 OVERDOSE</div>
-    <div class="hold" id="coffee">☕</div>
-    <p id="coffeeText">按住不要放。</p>
-  </section>
-
-  <section class="screen" id="s4" style="justify-content:flex-start;padding-top:calc(62px + env(safe-area-inset-top))">
-    <div class="sys">BOSS BATTLE · DRAG</div>
-    <h2 class="warning">WARNING</h2>
-    <div class="enemy" style="font-size:58px">💸</div>
-    <h2 style="margin-top:0">BOSS：月底</h2>
-    <div class="wallet" id="wallet">錢包：$8,720</div>
-    <div class="arena" id="arena"><div class="player" id="player">🧍</div></div>
-    <div class="small">拖動角色：接 💰，閃避 💳 🛍️ 🍜</div>
-  </section>
-
-  <section class="screen" id="s5">
-    <div class="sys">DROP ITEM</div>
-    <h2>Boss 掉落神秘寶箱</h2>
-    <div class="chest pulse" id="chest">🎁</div>
-    <p>點開看看。</p>
-  </section>
-
-  <section class="screen" id="s6">
-    <div class="sys">LEGENDARY ITEM</div>
-    <div class="card">
-      <div class="small">★★★★★</div>
-      <h2>本人不願面對的照片</h2>
-      <div class="photo-placeholder">📸</div>
-      <p><b>精神傷害：9999</b></p>
-      <p class="small">正式版會替換成客戶提供的趣味照片。</p>
-    </div>
-    <button class="btn" id="toTime">收下道具</button>
-  </section>
-
-  <section class="screen" id="s7">
-    <div class="sys">UNKNOWN AREA</div>
-    <h2>前方偵測到未知生命體</h2>
-    <p>資料庫查無此敵人。</p>
-    <div class="warning" style="font-size:22px;margin-top:18px">WARNING</div>
-  </section>
-
-  <section class="screen" id="s8">
-    <div class="sys">FINAL BOSS</div>
-    <div class="boss-time">TIME</div>
-    <div class="small">HP</div><div class="big-number" style="font-size:58px">∞</div>
-    <div class="hpwrap"><div class="hp" id="playerHp"></div></div>
-    <div class="small">YOUR HP · <span id="hpNum">100</span></div>
-    <button class="btn" id="attackTime">⚔️ 攻擊「時間」</button>
-    <p id="timeText">擊敗它，完成 LEVEL UP。</p>
-    <div class="party" id="party"></div>
-  </section>
-
-  <section class="screen" id="s9">
-    <div class="sys">SYSTEM MESSAGE</div>
-    <h2>時間仍然沒有被打敗。</h2>
-    <p>也許你本來就不需要打敗它。</p>
-    <p style="margin-top:26px">有些日子過去了。<br>有些事情也改變了。</p>
-    <p><b>但你不是一個人走到這裡。</b></p>
-    <div class="choiceRow">
-      <button class="btn" id="continueBtn">繼續前往下一個 LEVEL</button>
-      <button class="btn secondary" id="oldBtn">我還不想變老</button>
-    </div>
-  </section>
-
-  <section class="screen ending" id="s10">
-    <div class="sys">LEVEL UP COMPLETE</div>
-    <h1>LV.32 → LV.33</h1>
-    <p>🎂 新的一歲 ×1<br>📸 回憶 ×很多<br>❤️ 陪伴 ×∞</p>
-    <div style="height:18px"></div>
-    <div class="small">NEW QUEST UNLOCKED</div>
-    <h2>好好把下一歲活完。</h2>
-    <p>期限：下一次生日<br>獎勵：到時候再說。</p>
-    <h2 style="margin-top:24px">HAPPY BIRTHDAY</h2>
-    <p><b>遊戲還沒破關。</b></p>
-    <button class="btn secondary" id="restartBtn">↻ 重新試玩</button>
-  </section>
+    <div id="start"><div class="card">
+      <div style="font-size:12px;letter-spacing:.28em;opacity:.7">LEVEL +1 SYSTEM</div>
+      <h1>角色冒險版</h1>
+      <div class="lead">這版核心不是「點怪」。<br>你要自己控制角色走地圖、找目標、閃攻擊、開門、進 Boss 房，最後走到出口才算破關。</div>
+      <button class="startbtn" id="startBtn">🎧 開始冒險</button>
+      <div class="hint">手機：左邊搖桿移動｜ATTACK 攻擊｜DASH 衝刺<br>電腦：WASD / 方向鍵｜Space 攻擊｜Shift 衝刺</div>
+    </div></div>
+    <div id="end"><div class="card">
+      <div style="font-size:12px;letter-spacing:.24em;opacity:.7">STAGE CLEAR</div>
+      <div class="grade" id="grade">A</div>
+      <h2 style="margin:0 0 8px">真的走完一關了。</h2>
+      <div class="lead">這個版本是用來驗證「角色破關感」：移動、探索、打怪、解鎖門、Boss 房、出口，而不是單純點擊。</div>
+      <div class="stats">
+        <div class="stat">擊倒<br><b id="kills">0</b></div>
+        <div class="stat">受傷<br><b id="hits">0</b></div>
+        <div class="stat">咖啡豆<br><b id="beans">0</b>/3</div>
+        <div class="stat">破關時間<br><b id="time">0</b>s</div>
+      </div>
+      <button class="startbtn" onclick="location.reload()">再玩一次</button>
+    </div></div>
+  </div></div>
 </div>
 <script>
-const $=s=>document.querySelector(s); const screens=[...document.querySelectorAll('.screen')];
-let audioCtx=null, soundOn=true, currentBgm=null;
-function show(id){screens.forEach(s=>s.classList.remove('active')); $(id).classList.add('active');}
-function vibrate(p){try{if(navigator.vibrate)navigator.vibrate(p)}catch(e){}}
-function flash(){const f=$('#flash');f.style.animation='none';void f.offsetWidth;f.style.animation='flash .35s ease'}
-function shake(){const g=$('#game');g.classList.remove('shake');void g.offsetWidth;g.classList.add('shake');}
-function toast(t){const e=$('#toast');e.textContent=t;e.classList.remove('show');void e.offsetWidth;e.classList.add('show')}
-function ensureAudio(){if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==='suspended') audioCtx.resume();}
-function tone(freq=440,dur=.12,type='sine',vol=.08,delay=0){if(!soundOn)return;ensureAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(0.0001,audioCtx.currentTime+delay);g.gain.exponentialRampToValueAtTime(vol,audioCtx.currentTime+delay+.01);g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+delay+dur);o.connect(g);g.connect(audioCtx.destination);o.start(audioCtx.currentTime+delay);o.stop(audioCtx.currentTime+delay+dur+.03)}
-function clickS(){tone(660,.07,'square',.035)}
-function hitS(){tone(120,.12,'sawtooth',.08);tone(240,.07,'square',.04,.02)}
-function errorS(){tone(180,.2,'sawtooth',.07);tone(120,.3,'square',.05,.09)}
-function winS(){[523,659,784,1046].forEach((f,i)=>tone(f,.25,'triangle',.065,i*.09))}
-function bossS(){tone(72,.5,'sawtooth',.11);tone(52,.7,'square',.07,.08)}
-function chestS(){[392,523,659,784].forEach((f,i)=>tone(f,.18,'triangle',.05,i*.07))}
-function bgm(kind){if(!soundOn)return; ensureAudio(); if(currentBgm){clearInterval(currentBgm);currentBgm=null}
-  const seqs={
-    adventure:[220,277,330,277,247,294,370,294],
-    boss:[110,110,147,110,98,123,98,82],
-    emo:[262,330,392,330,294,370,440,370]
-  }; const seq=seqs[kind]||seqs.adventure; let i=0;
-  currentBgm=setInterval(()=>{tone(seq[i%seq.length],.34,'triangle',kind==='boss'?.018:.014);i++},380)
+const C=document.getElementById('game'),ctx=C.getContext('2d');
+const W=C.width,H=C.height;
+let audioCtx=null, started=false, t0=0;
+function sfx(type){ if(!audioCtx)return; const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination); let f=220,d=.09,vol=.035; if(type==='hit'){f=105;d=.05;vol=.06}else if(type==='slash'){f=380;d=.06}else if(type==='coin'){f=720;d=.12}else if(type==='door'){f=150;d=.25;vol=.05}else if(type==='boss'){f=70;d=.55;vol=.08}else if(type==='clear'){f=520;d=.5;vol=.05} o.frequency.value=f; g.gain.setValueAtTime(vol,audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+d); o.start();o.stop(audioCtx.currentTime+d); }
+function vib(ms){navigator.vibrate?.(ms)}
+function bgm(){ if(!audioCtx)return; const notes=[110,138,165,138,123,147,185,147]; let i=0; setInterval(()=>{if(!started)return; const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='triangle';o.frequency.value=notes[i++%notes.length];o.connect(g);g.connect(audioCtx.destination);g.gain.setValueAtTime(.016,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.22);o.start();o.stop(audioCtx.currentTime+.23)},260)}
+
+const world={w:1200,h:2500};
+const walls=[
+ {x:0,y:0,w:1200,h:50},{x:0,y:0,w:50,h:2500},{x:1150,y:0,w:50,h:2500},
+ {x:0,y:2450,w:1200,h:50},
+ {x:50,y:650,w:430,h:40},{x:720,y:650,w:430,h:40},
+ {x:50,y:1450,w:460,h:40},{x:690,y:1450,w:460,h:40},
+ {x:510,y:650,w:180,h:40,gate:'g1'},{x:510,y:1450,w:180,h:40,gate:'g2'}
+];
+let gates={g1:false,g2:false};
+const p={x:600,y:300,r:24,hp:4,maxhp:4,spd:235,dirX:0,dirY:1,inv:0,dash:0,dashCd:0,xp:0};
+let cam={x:0,y:0};
+let alarms=[{x:270,y:250,hp:2},{x:920,y:350,hp:2},{x:320,y:520,hp:2}];
+let beans=[{x:250,y:850,taken:false},{x:940,y:980,taken:false},{x:600,y:1260,taken:false}];
+let mobs=[{x:370,y:930,hp:2,v:75},{x:830,y:1090,hp:2,v:85},{x:350,y:1250,hp:2,v:90}];
+let boss={x:600,y:1900,hp:18,max:18,v:105,phase:1,alive:true,shotCd:0};
+let projectiles=[];let particles=[];let attackCd=0;let slash=0;let kills=0,hits=0,beanCount=0,finished=false;
+function rectCollideCircle(r,c){const nx=Math.max(r.x,Math.min(c.x,r.x+r.w)),ny=Math.max(r.y,Math.min(c.y,r.y+r.h));const dx=c.x-nx,dy=c.y-ny;return dx*dx+dy*dy<c.r*c.r}
+function blocked(nx,ny){const c={x:nx,y:ny,r:p.r};return walls.some(r=>{if(r.gate&&gates[r.gate])return false;return rectCollideCircle(r,c)})}
+function movePlayer(dx,dy,dt){let speed=p.spd*(p.dash>0?2.25:1);let nx=p.x+dx*speed*dt;if(!blocked(nx,p.y))p.x=nx;let ny=p.y+dy*speed*dt;if(!blocked(p.x,ny))p.y=ny;p.x=Math.max(70,Math.min(world.w-70,p.x));p.y=Math.max(70,Math.min(world.h-70,p.y));if(Math.hypot(dx,dy)>.05){p.dirX=dx;p.dirY=dy}}
+function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+function toast(s){const e=document.getElementById('toast');e.textContent=s;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),1200)}
+function banner(k,t,s){const e=document.getElementById('banner');document.getElementById('bannerK').textContent=k;document.getElementById('bannerT').textContent=t;document.getElementById('bannerS').textContent=s;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1500)}
+function updateHUD(){document.getElementById('hp').textContent='❤️'.repeat(Math.max(0,p.hp))+'🖤'.repeat(p.maxhp-p.hp);document.getElementById('xp').textContent=Math.min(100,p.xp);if(p.y<650){zoneName.textContent='勇者宿舍';objective.textContent=`摧毀鬧鐘怪 ${3-alarms.filter(a=>a.hp<=0).length}/3`}else if(p.y<1450){zoneName.textContent='咖啡森林';objective.textContent=`收集咖啡豆 ${beanCount}/3，找到出口`}else if(boss.alive){zoneName.textContent='月底城';objective.textContent=`擊敗「月底獸」 HP ${Math.max(0,boss.hp)}/${boss.max}`}else{zoneName.textContent='月底城';objective.textContent='出口已開啟，走進傳送門'}}
+function attack(){if(attackCd>0||finished)return;attackCd=.34;slash=.13;sfx('slash');vib(18);const ax=p.x+p.dirX*55,ay=p.y+p.dirY*55;let hit=false;[...alarms,...mobs].forEach(e=>{if(e.hp>0&&Math.hypot(e.x-ax,e.y-ay)<75){e.hp--;hit=true;if(e.hp<=0){kills++;p.xp+=12;burst(e.x,e.y)}}});if(boss.alive&&Math.hypot(boss.x-ax,boss.y-ay)<95){boss.hp--;hit=true;p.xp+=3;burst(boss.x,boss.y);if(boss.hp<=0){boss.alive=false;kills++;gates.g2=true;sfx('clear');vib([40,40,80]);banner('BOSS DOWN','月底獸 被擊敗','出口打開了，自己走過去才算破關！')}} if(hit){sfx('hit');vib(30)} if(alarms.every(a=>a.hp<=0)&&!gates.g1){gates.g1=true;sfx('door');banner('GATE OPEN','宿舍出口解鎖','你真的把門打開了。往下走！')}}
+function doDash(){if(p.dashCd>0||finished)return;p.dash=.18;p.dashCd=1.1;vib(20)}
+function damage(){if(p.inv>0||finished)return;p.hp--;hits++;p.inv=1;sfx('hit');vib([25,25,45]);if(p.hp<=0){p.hp=4;p.x=Math.min(600,Math.max(600,p.x));p.y=p.y<1450?780:1570;toast('💀 被打趴了，但生日遊戲不准 Game Over。滿血復活。')}}
+function burst(x,y){for(let i=0;i<9;i++)particles.push({x,y,vx:(Math.random()-.5)*240,vy:(Math.random()-.5)*240,t:.45})}
+function enemyAI(e,dt){if(e.hp<=0)return;const d=dist(e,p);if(d<270){const dx=(p.x-e.x)/d,dy=(p.y-e.y)/d;e.x+=dx*e.v*dt;e.y+=dy*e.v*dt}if(d<42)damage()}
+function bossAI(dt){if(!boss.alive)return;const d=dist(boss,p);if(d<500){const sp=boss.hp<9?135:boss.v;boss.x+=(p.x-boss.x)/d*sp*dt;boss.y+=(p.y-boss.y)/d*sp*dt;boss.shotCd-=dt;if(boss.shotCd<=0){boss.shotCd=boss.hp<9?.65:1.05;const n=boss.hp<9?5:3;for(let i=0;i<n;i++){const a=Math.atan2(p.y-boss.y,p.x-boss.x)+(i-(n-1)/2)*.18;projectiles.push({x:boss.x,y:boss.y,vx:Math.cos(a)*230,vy:Math.sin(a)*230,r:10,t:4})}sfx('boss')}}if(d<55)damage()}
+function update(dt){if(!started||finished)return;attackCd=Math.max(0,attackCd-dt);slash=Math.max(0,slash-dt);p.inv=Math.max(0,p.inv-dt);p.dash=Math.max(0,p.dash-dt);p.dashCd=Math.max(0,p.dashCd-dt);
+ let dx=keys.right-keys.left+joy.x,dy=keys.down-keys.up+joy.y;let m=Math.hypot(dx,dy);if(m>1){dx/=m;dy/=m}movePlayer(dx,dy,dt);
+ mobs.forEach(e=>enemyAI(e,dt)); bossAI(dt);
+ projectiles.forEach(q=>{q.x+=q.vx*dt;q.y+=q.vy*dt;q.t-=dt;if(Math.hypot(q.x-p.x,q.y-p.y)<p.r+q.r){q.t=0;damage()}});projectiles=projectiles.filter(q=>q.t>0);
+ beans.forEach(b=>{if(!b.taken&&Math.hypot(b.x-p.x,b.y-p.y)<38){b.taken=true;beanCount++;p.xp+=15;sfx('coin');vib(18);toast(`☕ 咖啡豆 ${beanCount}/3`);if(beanCount===3){toast('⚡ DASH 冷卻加速！');p.dashCd=0}}});
+ particles.forEach(q=>{q.x+=q.vx*dt;q.y+=q.vy*dt;q.vx*=.94;q.vy*=.94;q.t-=dt});particles=particles.filter(q=>q.t>0);
+ if(!gates.g2&&p.y>1450&&!boss.alive)gates.g2=true;
+ if(!boss.alive&&p.y>2320&&Math.abs(p.x-600)<130){finishGame()}
+ cam.x=Math.max(0,Math.min(world.w-W,p.x-W/2));cam.y=Math.max(0,Math.min(world.h-H,p.y-H*.58));updateHUD();}
+function finishGame(){finished=true;sfx('clear');vib([40,50,100,50,140]);const sec=Math.round((performance.now()-t0)/1000);document.getElementById('kills').textContent=kills;document.getElementById('hits').textContent=hits;document.getElementById('beans').textContent=beanCount;document.getElementById('time').textContent=sec;let g='A';if(hits===0&&beanCount===3)g='S';else if(hits>5)g='B+';document.getElementById('grade').textContent=g;document.getElementById('end').style.display='grid'}
+function drawRoundedRect(x,y,w,h,r,fill){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill()}
+function draw(){ctx.clearRect(0,0,W,H);ctx.save();ctx.translate(-cam.x,-cam.y);
+ // floor zones
+ ctx.fillStyle='#121926';ctx.fillRect(0,0,world.w,650);ctx.fillStyle='#102018';ctx.fillRect(0,690,world.w,760);ctx.fillStyle='#211318';ctx.fillRect(0,1490,world.w,1010);
+ // decor
+ for(let y=80;y<2400;y+=120){for(let x=100;x<1150;x+=150){if(((x+y)/10)%3<1){ctx.fillStyle=y<650?'#ffffff08':y<1450?'#7fff8b0b':'#ff87950b';ctx.fillRect(x,y,34,34)}}}
+ // walls/gates
+ walls.forEach(r=>{if(r.gate&&gates[r.gate])return;ctx.fillStyle=r.gate?'#d8a94d':'#394356';ctx.fillRect(r.x,r.y,r.w,r.h);if(r.gate){ctx.fillStyle='#2b2111';for(let i=0;i<4;i++)ctx.fillRect(r.x+20+i*42,r.y+4,18,r.h-8)}});
+ // portal
+ if(!boss.alive){ctx.save();ctx.translate(600,2380);ctx.strokeStyle='#86f6ff';ctx.lineWidth=8;ctx.beginPath();ctx.ellipse(0,0,85,38,0,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=.25;ctx.fillStyle='#86f6ff';ctx.beginPath();ctx.ellipse(0,0,70,28,0,0,Math.PI*2);ctx.fill();ctx.restore()}
+ // beans
+ beans.forEach(b=>{if(b.taken)return;ctx.fillStyle='#d4a25d';ctx.beginPath();ctx.ellipse(b.x,b.y,14,20,.45,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#5b3a1d';ctx.beginPath();ctx.moveTo(b.x-7,b.y+13);ctx.quadraticCurveTo(b.x+4,b.y,b.x+7,b.y-13);ctx.stroke()});
+ // alarms
+ alarms.forEach(a=>{if(a.hp<=0)return;ctx.save();ctx.translate(a.x,a.y);ctx.fillStyle='#ff667d';ctx.fillRect(-24,-18,48,38);ctx.fillStyle='#fff';ctx.fillRect(-3,-11,6,17);ctx.fillRect(-3,11,6,4);ctx.fillStyle='#ff667d';ctx.beginPath();ctx.arc(-18,-21,11,Math.PI,0);ctx.arc(18,-21,11,Math.PI,0);ctx.fill();ctx.restore()});
+ // mobs
+ mobs.forEach(e=>{if(e.hp<=0)return;ctx.save();ctx.translate(e.x,e.y);ctx.fillStyle='#86e7a8';ctx.beginPath();ctx.arc(0,0,24,Math.PI,0);ctx.lineTo(24,18);ctx.quadraticCurveTo(12,28,0,20);ctx.quadraticCurveTo(-12,28,-24,18);ctx.closePath();ctx.fill();ctx.fillStyle='#18221c';ctx.fillRect(-10,-5,5,6);ctx.fillRect(5,-5,5,6);ctx.restore()});
+ // boss
+ if(boss.alive){ctx.save();ctx.translate(boss.x,boss.y);let pulse=1+Math.sin(performance.now()/130)*.04;ctx.scale(pulse,pulse);ctx.fillStyle='#8d3141';ctx.beginPath();ctx.arc(0,0,58,0,Math.PI*2);ctx.fill();ctx.fillStyle='#f4d4d8';ctx.font='900 28px system-ui';ctx.textAlign='center';ctx.fillText('$',0,10);ctx.fillStyle='#0008';ctx.fillRect(-70,-84,140,12);ctx.fillStyle='#ff5570';ctx.fillRect(-70,-84,140*(boss.hp/boss.max),12);ctx.restore()}
+ // projectiles
+ projectiles.forEach(q=>{ctx.fillStyle='#ff5d79';ctx.beginPath();ctx.arc(q.x,q.y,q.r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='10px system-ui';ctx.textAlign='center';ctx.fillText('$',q.x,q.y+3)});
+ // player
+ ctx.save();ctx.translate(p.x,p.y);if(p.inv>0&&Math.floor(p.inv*12)%2===0)ctx.globalAlpha=.35;ctx.fillStyle='#e8f0ff';ctx.beginPath();ctx.arc(0,-12,17,0,Math.PI*2);ctx.fill();ctx.fillStyle='#627cff';ctx.beginPath();ctx.roundRect(-18,4,36,36,10);ctx.fill();ctx.fillStyle='#111827';ctx.fillRect(-7,-17,4,4);ctx.fillRect(5,-17,4,4);ctx.strokeStyle='#111827';ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,-10,7,.25,Math.PI-.25);ctx.stroke();if(slash>0){ctx.strokeStyle='#fff';ctx.lineWidth=8;ctx.globalAlpha=.85;const a=Math.atan2(p.dirY,p.dirX);ctx.beginPath();ctx.arc(0,0,58,a-.7,a+.7);ctx.stroke()}ctx.restore();
+ particles.forEach(q=>{ctx.globalAlpha=Math.max(0,q.t/.45);ctx.fillStyle='#fff';ctx.fillRect(q.x-3,q.y-3,6,6);ctx.globalAlpha=1});
+ ctx.restore();
+ // directional hint near gates
+ ctx.save();ctx.textAlign='center';ctx.font='800 13px system-ui';ctx.fillStyle='#fff9';if(!gates.g1)ctx.fillText('🔒 打掉 3 個鬧鐘才會開門',W/2,670-cam.y);else if(p.y<780)ctx.fillText('↓ 走進下一區',W/2,670-cam.y);if(p.y>1350&&p.y<1530&&boss.alive)ctx.fillText('↓ BOSS ROOM',W/2,1490-cam.y);ctx.restore();
 }
-function stopBgm(){if(currentBgm){clearInterval(currentBgm);currentBgm=null}}
-$('#soundBtn').onclick=()=>{soundOn=!soundOn;$('#soundBtn').textContent=soundOn?'🔊':'🔇'; if(!soundOn)stopBgm(); else {ensureAudio();clickS()}}
+let last=performance.now();function loop(now){let dt=Math.min(.032,(now-last)/1000);last=now;update(dt);draw();requestAnimationFrame(loop)}requestAnimationFrame(loop);
 
-$('#bootBtn').onclick=()=>{ensureAudio();clickS();show('#s1');setTimeout(()=>{bossS();vibrate([40,50,90]);shake();$('#levelAnim').classList.add('glitch');setTimeout(()=>{$('#failMsg').style.display='block';errorS()},420)},900)};
-$('#toAlarm').onclick=()=>{clickS();show('#s2');bgm('adventure');startAlarm()};
-
-let alarmHp=100,alarmEnded=false,alarmTimer;
-function startAlarm(){alarmHp=100;alarmEnded=false;$('#alarmHp').style.width='100%';$('#alarmText').innerHTML='<b>3 秒內狂點它！</b><br><span class="small">TAP TAP TAP</span>';alarmTimer=setTimeout(()=>endAlarm(false),3000)}
-$('#alarm').addEventListener('pointerdown',e=>{if(alarmEnded)return;alarmHp=Math.max(0,alarmHp-17);$('#alarmHp').style.width=alarmHp+'%';hitS();vibrate(18);const d=document.createElement('div');d.className='damage';d.textContent='-17';d.style.left=(e.clientX-25)+'px';d.style.top=(e.clientY-35)+'px';$('#game').appendChild(d);setTimeout(()=>d.remove(),700);if(alarmHp<=0)endAlarm(true)});
-function endAlarm(win){if(alarmEnded)return;alarmEnded=true;clearTimeout(alarmTimer); if(win){winS();toast('鬧鐘怪受到 999 傷害！');$('#alarmText').innerHTML='✅ 擊敗成功。<br><b>……但你設定了 6 個鬧鐘。</b>'}else{errorS();$('#alarmText').innerHTML='❌ 你被鬧鐘怪擊敗。<br><b>這其實很正常。</b>'} setTimeout(()=>{show('#s3');startCoffee()},1900)}
-
-let holding=false,coffeeP=0,coffeeRaf,coffeeDir=1;
-function startCoffee(){coffeeP=0;$('#needle').style.left='0%';$('#fill').style.width='0%';$('#coffeeText').textContent='按住不要放。'}
-function coffLoop(){if(!holding)return;coffeeP+=0.7*coffeeDir;if(coffeeP>=100){coffeeP=100;coffeeDir=-1}else if(coffeeP<=0){coffeeP=0;coffeeDir=1}$('#needle').style.left=coffeeP+'%';$('#fill').style.width=coffeeP+'%';coffeeRaf=requestAnimationFrame(coffLoop)}
-function coffStart(e){e.preventDefault();if(holding)return;holding=true;ensureAudio();tone(180,.12,'triangle',.025);coffeeRaf=requestAnimationFrame(coffLoop)}
-function coffEnd(){if(!holding)return;holding=false;cancelAnimationFrame(coffeeRaf);let msg='';if(coffeeP<22){msg='LOW：今天可能撐不到下午。';errorS()}else if(coffeeP<47){msg='GOOD：能活。';tone(520,.14,'triangle',.05)}else if(coffeeP<75){msg='PERFECT！咖啡因 +80';winS();vibrate([25,35,45])}else{msg='⚠ OVERDOSE：你現在可以聽見自己的心跳。';errorS();vibrate([40,40,40]);shake()}$('#coffeeText').innerHTML='<b>'+msg+'</b>';setTimeout(()=>{show('#s4');startBoss()},1800)}
-$('#coffee').addEventListener('pointerdown',coffStart);window.addEventListener('pointerup',coffEnd);
-
-let drops=[],bossTimer,spawnTimer,wallet=8720,bossRunning=false,playerX=.5;
-function startBoss(){stopBgm();bossS();vibrate([80,60,120]);flash();setTimeout(()=>bgm('boss'),500);wallet=8720;bossRunning=true;drops=[];$('#wallet').textContent='錢包：$'+wallet.toLocaleString();const arena=$('#arena'),player=$('#player');player.style.left='50%';playerX=.5;
-  spawnTimer=setInterval(()=>spawnDrop(),380);bossTimer=setTimeout(endBoss,7200);requestAnimationFrame(dropLoop)}
-const types=[['💰',120,1],['💳',-800,-1],['🛍️',-300,-1],['🍜',-120,-1]];
-function spawnDrop(){if(!bossRunning)return;const arena=$('#arena'),el=document.createElement('div');const t=types[Math.floor(Math.random()*types.length)];el.className='drop';el.textContent=t[0];el.dataset.val=t[1];el.dataset.good=t[2];el.dataset.y=-40;el.style.left=(6+Math.random()*84)+'%';arena.appendChild(el);drops.push(el)}
-function dropLoop(){if(!bossRunning)return;const arena=$('#arena'),ar=arena.getBoundingClientRect(),pr=$('#player').getBoundingClientRect();drops=[...drops].filter(el=>{let y=parseFloat(el.dataset.y)+4.7;el.dataset.y=y;el.style.transform=`translateY(${y}px)`;const r=el.getBoundingClientRect();const hit=!(r.right<pr.left||r.left>pr.right||r.bottom<pr.top||r.top>pr.bottom);if(hit){const val=+el.dataset.val;wallet=Math.max(0,wallet+val);$('#wallet').textContent='錢包：$'+wallet.toLocaleString();if(val>0){tone(760,.08,'triangle',.04);vibrate(10)}else{hitS();shake();vibrate(28)}el.remove();return false}if(r.top>ar.bottom){el.remove();return false}return true});requestAnimationFrame(dropLoop)}
-function setPlayerFromX(clientX){const ar=$('#arena').getBoundingClientRect();playerX=Math.min(.94,Math.max(.06,(clientX-ar.left)/ar.width));$('#player').style.left=(playerX*100)+'%'}
-$('#arena').addEventListener('pointerdown',e=>{setPlayerFromX(e.clientX);$('#arena').setPointerCapture?.(e.pointerId)});$('#arena').addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='touch')setPlayerFromX(e.clientX)});
-function endBoss(){if(!bossRunning)return;bossRunning=false;clearInterval(spawnTimer);clearTimeout(bossTimer);drops.forEach(e=>e.remove());drops=[];stopBgm();wallet=Math.min(wallet,385);$('#wallet').textContent='錢包：$'+wallet.toLocaleString();errorS();toast('Boss 已撤退，但你的錢也一起走了。');setTimeout(()=>{show('#s5');bgm('adventure')},1800)}
-
-$('#chest').onclick=()=>{chestS();vibrate([25,30,60]);flash();$('#chest').classList.remove('pulse');setTimeout(()=>show('#s6'),650)};
-$('#toTime').onclick=()=>{clickS();stopBgm();show('#s7');setTimeout(()=>{bossS();vibrate([70,50,100]);shake();setTimeout(()=>show('#s8'),1200)},800)};
-
-let timeHits=0,hp=100,partyCount=0,timeLocked=false;
-$('#attackTime').onclick=()=>{if(timeLocked)return;timeHits++;hitS();vibrate(24);shake();$('#timeText').innerHTML='<b>0 DAMAGE</b><br>攻擊無效。';if(timeHits>=2){timeLocked=true;$('#attackTime').disabled=true;$('#attackTime').style.opacity=.4;startTimeAttack()}};
-function startTimeAttack(){let vals=[72,43,18,5],i=0;const step=()=>{if(i>=vals.length){joinParty();return}hp=vals[i++];$('#hpNum').textContent=hp;$('#playerHp').style.width=hp+'%';errorS();vibrate(35);shake();setTimeout(step,650)};setTimeout(step,650)}
-function joinParty(){const icons=['🧑‍🤝‍🧑','📸','❤️'];let i=0;const next=()=>{if(i>=icons.length){$('#hpNum').textContent='999+';$('#playerHp').style.width='100%';$('#timeText').innerHTML='<b>時間仍然沒有被打敗。</b>';setTimeout(()=>{show('#s9');bgm('emo')},1400);return}const m=document.createElement('div');m.className='member';m.textContent=icons[i++];$('#party').appendChild(m);tone(523+(i*80),.22,'triangle',.05);vibrate([20,30,35]);hp=Math.min(100,hp+30);$('#hpNum').textContent=hp;$('#playerHp').style.width=hp+'%';setTimeout(next,700)};next()}
-
-$('#oldBtn').onclick=()=>{clickS();toast('系統理解您的感受……但沒有這個功能。');vibrate(20)};
-$('#continueBtn').onclick=()=>levelUp();
-function levelUp(){stopBgm();winS();vibrate([40,50,40,60,120]);flash();shake();setTimeout(()=>{show('#s10');bgm('emo')},600)}
-$('#restartBtn').onclick=()=>{stopBgm();location.reload()};
+const keys={left:0,right:0,up:0,down:0};addEventListener('keydown',e=>{if(e.key==='a'||e.key==='ArrowLeft')keys.left=1;if(e.key==='d'||e.key==='ArrowRight')keys.right=1;if(e.key==='w'||e.key==='ArrowUp')keys.up=1;if(e.key==='s'||e.key==='ArrowDown')keys.down=1;if(e.code==='Space'){e.preventDefault();attack()}if(e.key==='Shift')doDash()});addEventListener('keyup',e=>{if(e.key==='a'||e.key==='ArrowLeft')keys.left=0;if(e.key==='d'||e.key==='ArrowRight')keys.right=0;if(e.key==='w'||e.key==='ArrowUp')keys.up=0;if(e.key==='s'||e.key==='ArrowDown')keys.down=0});
+const base=document.getElementById('stickBase'),stick=document.getElementById('stick');const joy={x:0,y:0};let joyId=null;
+function joyMove(e){const r=base.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=e.clientX-cx,dy=e.clientY-cy;const max=39,m=Math.hypot(dx,dy)||1;if(m>max){dx=dx/m*max;dy=dy/m*max}stick.style.transform=`translate(${dx}px,${dy}px)`;joy.x=dx/max;joy.y=dy/max}
+base.addEventListener('pointerdown',e=>{joyId=e.pointerId;base.setPointerCapture(joyId);joyMove(e)});base.addEventListener('pointermove',e=>{if(e.pointerId===joyId)joyMove(e)});function joyEnd(){joyId=null;joy.x=joy.y=0;stick.style.transform='translate(0,0)'}base.addEventListener('pointerup',joyEnd);base.addEventListener('pointercancel',joyEnd);
+attackBtn=document.getElementById('attack');dashBtn=document.getElementById('dash');attackBtn.addEventListener('pointerdown',()=>{attackBtn.classList.add('active');attack()});attackBtn.addEventListener('pointerup',()=>attackBtn.classList.remove('active'));dashBtn.addEventListener('pointerdown',()=>{dashBtn.classList.add('active');doDash()});dashBtn.addEventListener('pointerup',()=>dashBtn.classList.remove('active'));
+document.getElementById('startBtn').onclick=()=>{audioCtx=new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume();started=true;t0=performance.now();document.getElementById('start').style.display='none';bgm();banner('STAGE 01','勇者宿舍','左手移動，右手攻擊。自己走到出口。');sfx('clear')};
 </script>
 </body></html>
