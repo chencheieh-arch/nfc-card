@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
-<title>LEVEL +1｜Birthday Chaos v8</title>
+<title>LEVEL +1｜Story Run v9</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#03050a;color:#fff;font-family:Inter,system-ui,-apple-system,"Noto Sans TC",sans-serif}
@@ -26,6 +26,14 @@ canvas{width:min(100vw,480px);height:var(--app-height);max-height:920px;backgrou
 #bossMechanic{position:absolute;left:50%;top:max(160px,calc(env(safe-area-inset-top) + 148px));transform:translateX(-50%);padding:8px 12px;border-radius:999px;background:#1a0912d9;border:1px solid #ff748a44;font-size:10px;letter-spacing:.08em;opacity:0;transition:.2s;white-space:nowrap}#bossMechanic.show{opacity:1}
 @media(max-height:700px){#breakBtn{right:17px;bottom:calc(160px + var(--lift));width:118px;height:42px}#routeBadge{top:max(126px,calc(env(safe-area-inset-top) + 114px))}#synergyBadge{top:max(154px,calc(env(safe-area-inset-top) + 142px))}}
 
+
+/* ===== v9 STORY RUN ===== */
+#allyBadge{position:absolute;left:10px;top:max(146px,calc(env(safe-area-inset-top) + 134px));padding:7px 10px;border-radius:999px;background:#11172bd9;border:1px solid #9bd9ff34;font-size:10px;color:#cdeeff;opacity:0;transform:translateY(-5px);transition:.2s;backdrop-filter:blur(9px);box-shadow:0 0 22px #77cfff12}#allyBadge.show{opacity:1;transform:translateY(0)}
+#storyScene{position:absolute;inset:0;display:none;place-items:center;padding:20px;background:radial-gradient(circle at 50% 20%,#17203ce8,#050710f8 64%);z-index:40;pointer-events:auto}.storyCard{width:min(402px,93vw);max-height:88%;overflow:auto;border-radius:30px;padding:27px 23px;background:linear-gradient(180deg,#101a31f5,#080f1df2);border:1px solid #ffffff19;box-shadow:0 30px 110px #000e;text-align:center}.storyIcon{font-size:48px;filter:drop-shadow(0 8px 20px #000b);margin:4px 0 6px}.storyTitle{font-size:29px;font-weight:1000;line-height:1.15;margin:5px 0 10px}.storyBody{font-size:13px;line-height:1.8;opacity:.82}.storyBody b{color:#fff}.storyAccent{color:#ffe59c;font-weight:900}.storyName{font-size:33px;font-weight:1000;margin:8px 0;color:#e9f5ff;text-shadow:0 0 28px #8bd7ff55}.storyBtn{margin-top:18px;width:100%;padding:15px 17px;border:0;border-radius:18px;background:linear-gradient(180deg,#f6f9ff,#cfe9ff);color:#07101a;font-weight:1000;font-size:15px}.storyBtn.gold{background:linear-gradient(180deg,#fff1ae,#e8b65e);box-shadow:0 0 30px #ffc85d22}.memoryPhoto{height:150px;margin:14px 0;border-radius:20px;display:grid;place-items:center;background:radial-gradient(circle at 30% 20%,#7fc8ff44,#2b335c 44%,#13182a 100%);border:1px solid #ffffff1a;box-shadow:inset 0 0 50px #0005;overflow:hidden;position:relative}.memoryPhoto::after{content:'MEMORY';position:absolute;right:10px;bottom:8px;font-size:9px;letter-spacing:.24em;opacity:.4}.memoryPhoto .mock{font-size:42px;filter:drop-shadow(0 8px 15px #0009)}
+.storyInputs{display:grid;gap:8px;margin:13px 0 4px;text-align:left}.storyInputs label{font-size:10px;opacity:.62;letter-spacing:.08em}.storyInputs input{width:100%;border:1px solid #ffffff17;background:#ffffff08;color:#fff;border-radius:13px;padding:11px 12px;font-size:13px;outline:none}.storyInputs input:focus{border-color:#87d7ff77;box-shadow:0 0 0 3px #68c9ff0d}.storyMini{font-size:10px;opacity:.54;line-height:1.55;margin-top:8px}
+#timeLabel{position:absolute;top:24%;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.34em;opacity:0;transition:.25s;text-shadow:0 0 18px #fff6}#timeLabel.show{opacity:.78}.zeroFloat{position:absolute;font-weight:1000;font-size:18px;color:#fff;text-shadow:0 0 18px #fff9;pointer-events:none;animation:zeroUp .75s ease-out forwards}@keyframes zeroUp{to{transform:translateY(-32px);opacity:0}}
+#storyProgress{position:absolute;left:50%;top:max(118px,calc(env(safe-area-inset-top) + 106px));transform:translateX(-50%);font-size:10px;letter-spacing:.22em;opacity:0;transition:.2s;color:#e7edf7;text-shadow:0 0 16px #fff4}#storyProgress.show{opacity:.72}
+
 </style>
 </head>
 <body>
@@ -45,8 +53,19 @@ canvas{width:min(100vw,480px);height:var(--app-height);max-height:920px;backgrou
   <div id="bossMechanic">🛡️ 先破壞帳單核心</div>
   <div id="breakBtn"><span>BIRTHDAY BREAK<br><small id="breakTxt">0%</small></span></div>
   <div id="decision"><div class="card"><div class="eyebrow" id="decisionK">ROUTE SELECT</div><div class="decisionIcon" id="decisionIcon">🚪</div><div class="picktitle" id="decisionTitle">選一條路</div><div class="decisionLead" id="decisionLead">選擇會改變這一局後面的風險與 Build。</div><div class="choices" id="decisionChoices"></div></div></div>
+
+  <div id="allyBadge">✦ UNKNOWN PLAYER｜ONLINE</div>
+  <div id="storyProgress">STORY MODE｜FIRST RUN</div>
+  <div id="timeLabel">FINAL DATA｜TIME</div>
+  <div id="storyScene"><div class="storyCard">
+    <div class="eyebrow" id="storyK">STORY EVENT</div>
+    <div class="storyIcon" id="storyIcon">🎂</div>
+    <div class="storyTitle" id="storyTitle">LEVEL +1</div>
+    <div class="storyBody" id="storyBody"></div>
+    <button class="storyBtn" id="storyBtn">繼續</button>
+  </div></div>
   <div class="flash" id="flash"></div>
-  <div id="start"><div class="card"><div class="eyebrow">LEVEL +1｜BIRTHDAY CHAOS</div><h1>v8</h1><div class="sub">每一局都要做選擇</div><div class="lead">自動攻擊保留，這次把爽度變成真正的遊戲循環：<br><br><b>路線選擇、詛咒禮盒、Build 連鎖、無厘頭事件、可破解 Boss、BIRTHDAY BREAK 終極技。</b></div><button class="startbtn" id="startBtn">🎧 開始 Birthday Chaos</button><div class="hint">左手移動｜自動攻擊｜SKILL 爆發｜DASH 閃招｜SWAP 換武器<br>手機底部安全區已保留</div></div></div>
+  <div id="start"><div class="card"><div class="eyebrow">LEVEL +1｜STORY RUN</div><h1>v9</h1><div class="sub">第一次把「生日故事」放進遊戲裡</div><div class="lead">v8 的爽度保留。這版測的是：<b>玩、笑、荒謬、伏筆、感動、禮物揭曉</b>能不能真的串成同一場生日冒險。</div><div class="storyInputs"><label>測試壽星</label><input id="testPlayer" value="壽星勇者" maxlength="18"><label>測試送禮人</label><input id="testGiver" value="神秘送禮人" maxlength="18"><label>最終實體禮物</label><input id="testGift" value="神秘生日禮物" maxlength="28"><label>禮物提示</label><input id="testGiftHint" value="請抬頭看看送禮人的手上。" maxlength="38"></div><button class="startbtn" id="startBtn">🎧 啟動生日升級程序</button><div class="hint">左手移動｜自動攻擊｜SKILL｜DASH｜SWAP｜BIRTHDAY BREAK<br>建議開聲音；正式版會改成客戶提交資料自動帶入。</div></div></div>
   <div id="levelup"><div class="card"><div class="eyebrow">LEVEL UP</div><div class="picktitle">三選一，Build 立即改變</div><div class="lead">能力會真的改變攻擊方式，不只加數字。</div><div class="choices" id="choices"></div></div></div>
   <div id="evolve"><div class="card evolveCard"><div class="eyebrow">WEAPON EVOLUTION</div><div class="picktitle" id="evolveTitle">武器進化！</div><div class="lead" id="evolveDesc">攻擊模式會直接變形。</div><div class="choices" id="evolveChoices"></div></div></div>
   <div id="end"><div class="card"><div class="eyebrow">RUN COMPLETE</div><div class="grade" id="grade">S</div><h2 style="margin:0 0 8px">這一局打完了。</h2><div class="lead">這次真正的重玩點是：不同路線、詛咒選擇與 Build 連鎖，會讓每局打法都不一樣。</div><div class="stats"><div class="stat">擊倒<br><b id="kills">0</b></div><div class="stat">完美閃避<br><b id="dodges">0</b></div><div class="stat">最高連擊<br><b id="maxCombo">0</b></div><div class="stat">等級<br><b id="finalLv">1</b></div></div><div class="build" id="buildTxt"></div><button class="startbtn" onclick="location.reload()">再開一局走別條路</button></div></div>
@@ -292,5 +311,127 @@ addEventListener('keydown',e=>{if(e.key==='a'||e.key==='ArrowLeft')keys.left=1;i
 const base=$('#joyBase'),stick=$('#joyStick');function joyMove(e){const r=base.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=e.clientX-cx,dy=e.clientY-cy,max=40,m=Math.hypot(dx,dy)||1;if(m>max){dx=dx/m*max;dy=dy/m*max}stick.style.transform=`translate(${dx}px,${dy}px)`;joy.x=dx/max;joy.y=dy/max}function joyEnd(){joyId=null;joy.x=joy.y=0;stick.style.transform='translate(0,0)'}base.addEventListener('pointerdown',e=>{joyId=e.pointerId;base.setPointerCapture(joyId);joyMove(e)});base.addEventListener('pointermove',e=>{if(e.pointerId===joyId)joyMove(e)});base.addEventListener('pointerup',joyEnd);base.addEventListener('pointercancel',joyEnd);
 [['skill',useSkill],['dash',dash],['swap',switchWeapon]].forEach(([id,fn])=>{const b=$('#'+id);b.addEventListener('pointerdown',()=>{b.classList.add('active');fn()});b.addEventListener('pointerup',()=>b.classList.remove('active'));b.addEventListener('pointercancel',()=>b.classList.remove('active'))});
 $('#startBtn').onclick=()=>{audioCtx=new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume();started=true;t0=performance.now();event1=event2=event3=true;$('#start').style.display='none';startBgm();for(let i=0;i<6;i++)spawnEnemy(i===3?'runner':'chaser');banner('BIRTHDAY CHAOS','這一局不會照劇本走','自動攻擊｜你負責走位、選路、賭風險、放大招');updateHUD()};
+
+/* =========================
+   v9 STORY RUN LAYER
+   ========================= */
+const v9BaseUpdate=update,v9BaseDraw=draw,v9BaseSpawnBoss=spawnBoss;
+let v9Player='壽星勇者',v9Giver='神秘送禮人',v9Gift='神秘生日禮物',v9GiftHint='請抬頭看看送禮人的手上。';
+let v9StoryFinal=false,v9TimeMode=false,v9TimeT=0,v9TimeAtkCd=.3,v9TimeHazCd=.8,v9TimeOrigin={x:900,y:760};
+let v9WishDone=false,v9Wish='',v9SupportPower=1,v9Aid1=false,v9Aid2=false,v9ChaosAid=false,v9TimeJoined=false,v9MemSpawn=[false,false,false],v9MemorySeen=0;
+let v9MemoryDrops=[],v9Zeroes=[],v9FinalQueue=[];
+
+function v9ShowAlly(msg='UNKNOWN PLAYER｜ONLINE',ms=2300){const e=$('#allyBadge');e.textContent='✦ '+msg;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),ms)}
+function v9StoryScene(k,icon,title,body,button='繼續',onNext=null,gold=false){
+  paused=true;$('#storyK').textContent=k;$('#storyIcon').textContent=icon;$('#storyTitle').textContent=title;$('#storyBody').innerHTML=body;$('#storyBtn').textContent=button;$('#storyBtn').classList.toggle('gold',gold);$('#storyScene').style.display='grid';
+  $('#storyBtn').onclick=()=>{$('#storyScene').style.display='none';paused=false;if(onNext)onNext()};
+}
+function v9StoryQueue(list){v9FinalQueue=[...list];const next=()=>{if(!v9FinalQueue.length)return;const s=v9FinalQueue.shift();v9StoryScene(s.k,s.icon,s.title,s.body,s.btn||'繼續',()=>{if(s.action)s.action();next()},!!s.gold)};next()}
+function v9BeginGameplay(){
+  started=true;t0=performance.now();v8GameTime=0;runSeconds=0;event1=event2=event3=true;$('#storyProgress').classList.add('show');startBgm();for(let i=0;i<6;i++)spawnEnemy(i===3?'runner':'chaser');banner('STORY MODE','上一年度清理開始','先別想太多。看到怪，走位就對了。');updateHUD();
+}
+function v9Intro(){
+  v9StoryQueue([
+    {k:'BIRTHDAY PATCH',icon:'🎂',title:`${v9Player}｜LEVEL +1`,body:`正在安裝「新的一歲」……<br><br><b>13%　47%　89%</b><br><br><span class="storyAccent">⚠ UPDATE FAILED</span><br>偵測到大量上一年度殘留資料。`,btn:'蛤？什麼東西'},
+    {k:'RESIDUAL DATA',icon:'🗃️',title:'必須先清理',body:`熬夜 × 217<br>亂花錢 × 82<br>「我明天再弄」× 369<br>不知道吃什麼 × 541<br>黑歷史照片 × <b>無法計算</b><br><br>系統：<b>清乾淨才准你升級。</b>`,btn:'好啦，開打',action:v9BeginGameplay}
+  ])
+}
+function v9SpawnMemory(id){
+  const ang=Math.random()*Math.PI*2,d=150+Math.random()*110;
+  const m={id,x:Math.max(80,Math.min(world.w-80,p.x+Math.cos(ang)*d)),y:Math.max(80,Math.min(world.h-80,p.y+Math.sin(ang)*d)),taken:false};
+  v9MemoryDrops.push(m);toast(`📸 MEMORY FRAGMENT 0${id} 掉落`);v9ShowAlly('UNKNOWN PLAYER｜留下了一段資料');
+}
+function v9OpenMemory(id){
+  v9MemorySeen++;
+  const scenes={
+    1:{icon:'😂',title:'MEMORY FRAGMENT 01',photo:'📸',body:`<div class="memoryPhoto"><div class="mock">😂📸</div></div>AI 辨識中……<br>……<br><b>系統建議：不要辨識。</b><br><br><span class="small">正式版這裡會換成送禮人提供的搞笑／黑歷史照片。</span>`},
+    2:{icon:'🫧',title:'MEMORY FRAGMENT 02',photo:'🫧',body:`<div class="memoryPhoto"><div class="mock">🫶📷</div></div>「這一天好像沒什麼特別。」<br><br>但不知道為什麼，<br><b>有人把它留了下來。</b>`},
+    3:{icon:'✦',title:'MEMORY FRAGMENT 03',photo:'✦',body:`<div class="memoryPhoto"><div class="mock">✨📷</div></div>戰鬥價值：<b>0</b><br>稀有度：無法判定<br><br>UNKNOWN PLAYER 將它標記為：<br><span class="storyAccent">「重要。」</span>`}
+  };
+  const s=scenes[id];v9StoryScene('MEMORY FOUND',s.icon,s.title,s.body,'收進背包');
+}
+function v9BirthdayWish(){
+  if(v9WishDone||paused)return;v9WishDone=true;
+  v8Decision('BIRTHDAY WISH','🎂','生日願望只能選一次','不是心理測驗。你選的願望會真的改變這一局。',[
+    {tag:'WISH',name:'💰 錢多一點',desc:'傷害＋12%、經驗獎勵提高。代價：最終帳單核心更耐打。',cls:'risk',apply:()=>{v9Wish='money';p.damageMul*=1.12;v8RewardMul*=1.22;banner('WISH GRANTED','錢多一點','系統：好。月底也收到通知了。')}},
+    {tag:'WISH',name:'😴 讓我睡飽',desc:'最大生命＋1、技能回復加快 18%。副作用：暫無，先讓你休息。',cls:'safe',apply:()=>{v9Wish='sleep';p.maxhp+=1;p.hp=p.maxhp;p.skillRate*=1.18;banner('WISH GRANTED','讓我睡飽','這願望意外地很務實。')}},
+    {tag:'WISH',name:'❤️ 被大家愛',desc:'UNKNOWN PLAYER 的援助變強。CURSE：無。',cls:'chaos',apply:()=>{v9Wish='love';v9SupportPower=2;p.maxhp+=1;p.hp=p.maxhp;v8AddBreak(30);banner('WISH GRANTED','被大家愛','系統：這個已經有人幫你處理了。')}}
+  ]);
+}
+function v9Aid(type){
+  if(type===1){p.hp=Math.min(p.maxhp,p.hp+v9SupportPower);v8AddBreak(12*v9SupportPower);v9ShowAlly('UNKNOWN PLAYER 使用了「你再撐一下」');toast(`❤️ UNKNOWN PLAYER｜HP +${v9SupportPower}`);burst(p.x,p.y,'#9fe7ff',16,200)}
+  if(type===2){v8AddBreak(22*v9SupportPower);p.inv=Math.max(p.inv,2.5);v9ShowAlly('UNKNOWN PLAYER 丟下緊急補給');toast('🎁 BREAK 能量補給＋護盾');burst(p.x,p.y,'#ffe59d',18,220)}
+  if(type===3){p.skillCd=0;addFever(70);v9ShowAlly('UNKNOWN PLAYER：今天你最大');toast('⚡ 技能冷卻歸零｜FEVER +70');burst(p.x,p.y,'#ffb8e8',20,240)}
+}
+function v9UpdateStoryDrops(){
+  v9MemoryDrops.forEach(m=>{if(!m.taken&&Math.hypot(m.x-p.x,m.y-p.y)<42){m.taken=true;sfx('chest');vib([15,20,35]);burst(m.x,m.y,'#bdeaff',16,220);v9OpenMemory(m.id)}});
+  v9MemoryDrops=v9MemoryDrops.filter(m=>!m.taken);
+}
+function v9StartTimeFinal(){
+  if(v9StoryFinal)return;v9StoryFinal=true;v9TimeMode=true;v9TimeT=0;v9TimeAtkCd=.2;v9TimeHazCd=.7;
+  enemies=[];projectiles=[];enemyShots=[];hazards=[];weaponDrops=[];gifts=[];eliteChest=null;boss=null;p.hp=p.maxhp;p.inv=1.5;
+  v9TimeOrigin={x:Math.max(220,Math.min(world.w-220,p.x)),y:Math.max(220,Math.min(world.h-220,p.y-270))};
+  clearInterval(bgmTimer);startBgm();$('#timeLabel').classList.add('show');$('#bossMechanic').classList.remove('show');banner('FINAL DATA','TIME','最後一筆資料，無法刪除。');vib([40,50,90]);
+}
+function v9TimeAttackVisual(){
+  const a=Math.atan2(v9TimeOrigin.y-p.y,v9TimeOrigin.x-p.x);projectiles.push({x:p.x,y:p.y,vx:Math.cos(a)*720,vy:Math.sin(a)*720,r:8,t:.7,dmg:0,pierce:0,c:'#ffffff'});
+  v9Zeroes.push({x:v9TimeOrigin.x,y:v9TimeOrigin.y-60,t:.75});
+}
+function v9UpdateTime(dt){
+  v9TimeT+=dt;v9TimeAtkCd-=dt;v9TimeHazCd-=dt;
+  if(v9TimeAtkCd<=0){v9TimeAtkCd=.72;v9TimeAttackVisual();sfx('slash')}
+  if(v9TimeHazCd<=0&&v9TimeT<12){v9TimeHazCd=Math.max(.55,1.35-v9TimeT*.045);let a=Math.random()*Math.PI*2;enemyShots.push({x:v9TimeOrigin.x,y:v9TimeOrigin.y,vx:Math.cos(a)*245,vy:Math.sin(a)*245,r:10,t:4});if(Math.random()<.48)hazards.push({x:Math.max(80,Math.min(world.w-80,p.x+rand(-150,150))),y:Math.max(80,Math.min(world.h-80,p.y+rand(-170,170))),r:62,t:1.05,boom:.3,dead:false})}
+  if(v9TimeT>8.7&&v9TimeT<9.0){p.hp=Math.min(p.hp,1);toast('⏳ TIME：不可迴避的年度傷害');flash();vib([30,30,70])}
+  if(v9TimeT>=10.5&&!v9TimeJoined){v9TimeJoined=true;p.inv=999;p.hp=p.maxhp;enemyShots=[];hazards=[];v9ShowAlly(`${v9Giver.toUpperCase()}？｜SIGNAL FOUND`,3300);banner('PARTY MEMBER','UNKNOWN PLAYER HAS JOINED','「有人記得你。」｜護盾 ∞');sfx('fever');vib([20,30,70,40,100])}
+  v9Zeroes.forEach(z=>z.t-=dt);v9Zeroes=v9Zeroes.filter(z=>z.t>0);
+  if(v9TimeT>=14.5){v9TimeMode=false;$('#timeLabel').classList.remove('show');enemyShots=[];hazards=[];projectiles=[];v9FinalCinematic()}
+}
+function v9FinalCinematic(){
+  clearInterval(bgmTimer);
+  v9StoryQueue([
+    {k:'FINAL RESULT',icon:'⏳',title:'TIME 無法被擊敗',body:`你的最強武器、技能、BIRTHDAY BREAK——<br>全部造成：<b>0 DAMAGE</b>。<br><br><span class="storyAccent">因為你本來就不需要打敗時間。</span><br><br>你只需要繼續往前走。`,btn:'繼續往前'},
+    {k:'IDENTITY RESOLVED',icon:'✦',title:'UNKNOWN PLAYER',body:`正在解析身分……<br><br><div class="storyName">${v9Giver}</div><br><b>PARTY MEMBER｜從一開始就在。</b>`,btn:'原來是你'},
+    {k:'MESSAGE',icon:'💌',title:`來自 ${v9Giver}`,body:`「我沒辦法幫你把時間停下來。」<br><br>「所以只好偷偷幫你做了一場遊戲。」<br><br>「至少今年生日，<br><b>讓你多留下一個回憶。</b>」`,btn:'……繼續'},
+    {k:'LEVEL UP COMPLETE',icon:'🎂',title:'LV.32 → LV.33',body:`新的一歲 × 1<br>回憶 × 很多<br>黑歷史 × 刪不掉<br><span class="storyAccent">陪伴 × ∞</span><br><br><b>${v9Player}，升級完成。</b>`,btn:'領取升級獎勵',gold:true},
+    {k:'LEGENDARY DROP',icon:'🎁',title:'REAL WORLD DROP DETECTED',body:`系統偵測到一件不屬於遊戲世界的 Legendary Item。<br><br><div class="storyName">${v9Gift}</div><br><span class="storyAccent">${v9GiftHint}</span>`,btn:'領取我的生日獎勵',gold:true},
+    {k:'NEW QUEST UNLOCKED',icon:'🗺️',title:'好好把下一歲活完。',body:`期限：下一次生日<br>難度：未知<br>隊伍：<b>不是一個人</b><br><br><span class="storyAccent">HAPPY BIRTHDAY.</span><br><br>遊戲還沒破關。<br><br><span class="small">This quest was secretly prepared by ${v9Giver}<br>Experience crafted by 享刻畫</span>`,btn:'完成 LEVEL +1',gold:true,action:v9StoryFinish}
+  ])
+}
+function v9StoryFinish(){
+  finished=true;paused=true;clearInterval(bgmTimer);sfx('level');vib([35,45,80,50,130]);
+  $('#kills').textContent=kills;$('#dodges').textContent=p.perfectDodges;$('#maxCombo').textContent=p.maxCombo;$('#finalLv').textContent=p.level;
+  $('#grade').textContent=p.level>=9&&p.perfectDodges>=3?'S':p.level>=7?'A+':'A';
+  const bs=weaponOrder.map(k=>`${weapons[k].icon}${weapons[k].name} Lv.${weapons[k].level}${weapons[k].evolved?'・EVOLVED':''}`);if(orbitLevel)bs.push(`🕯️蠟燭陣 Lv.${orbitLevel}`);if(p.dashShock)bs.push(`💥殘影爆破 Lv.${p.dashShock}`);
+  $('#buildTxt').innerHTML=`<b>FIRST RUN STORY COMPLETE</b><br>生日願望：${v9Wish||'未選'}<br>回憶碎片：${v9MemorySeen}/3<br>送禮人：${v9Giver}<br>REAL WORLD DROP：${v9Gift}<br><br><b>本局 Build</b><br>${bs.join('　｜　')}`;
+  const end=$('#end');end.querySelector('.eyebrow').textContent='LEVEL UP COMPLETE';end.querySelector('h2').textContent='這不是結束，是下一歲的開始。';end.querySelector('.lead').innerHTML=`第一次 STORY RUN 已完成。<br><b>正式版之後會把照片、祝福、禮物資料換成每位客戶的真實內容。</b>`;end.querySelector('.startbtn').textContent='再開一局 CHAOS MODE';end.style.display='grid';
+}
+
+// 普通 Boss 現在是「上一年度殘留資料」；擊敗後才進真正的 TIME 結局。
+spawnBoss=function(){v9BaseSpawnBoss();banner('FINAL CHECKPOINT','年度殘留獸','先清掉最後一批殘留資料。之後應該就能升級了……吧？');if(v9Wish==='money'){enemies.filter(e=>e.kind==='core').forEach(e=>{e.hp*=1.2;e.maxhp*=1.2})}}
+finishRun=function(){if(!v9StoryFinal){v9StartTimeFinal();return}v9StoryFinish()}
+
+// STORY 時間點疊在 v8 Chaos 之上；不改 v8 戰鬥爽度。
+update=function(dt){
+  if(v9TimeMode){v9BaseUpdate(dt);if(!paused&&!finished)v9UpdateTime(dt);return}
+  v9BaseUpdate(dt);if(!started||paused||finished||v9StoryFinal)return;
+  if(!v9MemSpawn[0]&&runSeconds>=12){v9MemSpawn[0]=true;v9SpawnMemory(1)}
+  if(!v9Aid1&&runSeconds>=26){v9Aid1=true;v9Aid(1)}
+  if(!v9MemSpawn[1]&&runSeconds>=34){v9MemSpawn[1]=true;v9SpawnMemory(2)}
+  if(!v9WishDone&&runSeconds>=49&&!paused)v9BirthdayWish();
+  if(!v9Aid2&&runSeconds>=69){v9Aid2=true;v9Aid(2)}
+  if(!v9MemSpawn[2]&&runSeconds>=76){v9MemSpawn[2]=true;v9SpawnMemory(3)}
+  if(runSeconds>=89&&!v9ChaosAid){v9ChaosAid=true;v9Aid(3)}
+  v9UpdateStoryDrops();
+}
+
+function v9DrawMemoryDrops(){ctx.save();ctx.translate(-cam.x,-cam.y);v9MemoryDrops.forEach(m=>{let bob=Math.sin(performance.now()/170+m.id)*5;let rg=ctx.createRadialGradient(m.x,m.y+bob,4,m.x,m.y+bob,42);rg.addColorStop(0,'#c9efff66');rg.addColorStop(1,'#83cfff00');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(m.x,m.y+bob,42,0,Math.PI*2);ctx.fill();ctx.fillStyle='#0d1a2b';ctx.strokeStyle='#a9e6ff99';ctx.lineWidth=3;ctx.beginPath();ctx.roundRect(m.x-28,m.y-21+bob,56,42,9);ctx.fill();ctx.stroke();ctx.font='25px system-ui';ctx.textAlign='center';ctx.fillText('📸',m.x,m.y+9+bob);ctx.font='800 9px system-ui';ctx.fillStyle='#eaf9ff';ctx.fillText('MEMORY',m.x,m.y+38+bob)});ctx.restore()}
+function v9DrawTime(){if(!v9TimeMode)return;const sx=v9TimeOrigin.x-cam.x,sy=v9TimeOrigin.y-cam.y;ctx.save();let pulse=1+Math.sin(performance.now()/180)*.04;ctx.translate(sx,sy);ctx.scale(pulse,pulse);let rg=ctx.createRadialGradient(0,0,10,0,0,150);rg.addColorStop(0,'rgba(235,243,255,.18)');rg.addColorStop(.5,'rgba(130,160,210,.10)');rg.addColorStop(1,'rgba(90,120,180,0)');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(0,0,150,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(225,238,255,.78)';ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,0,66,0,Math.PI*2);ctx.stroke();ctx.strokeStyle='rgba(225,238,255,.32)';ctx.lineWidth=2;for(let i=0;i<12;i++){let a=i*Math.PI/6;ctx.beginPath();ctx.moveTo(Math.cos(a)*49,Math.sin(a)*49);ctx.lineTo(Math.cos(a)*60,Math.sin(a)*60);ctx.stroke()}let a=performance.now()/900;ctx.strokeStyle='#fff';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*38,Math.sin(a)*38);ctx.stroke();ctx.strokeStyle='#a8cfff';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(-a*.42)*27,Math.sin(-a*.42)*27);ctx.stroke();ctx.fillStyle='#fff';ctx.font='1000 24px system-ui';ctx.textAlign='center';ctx.fillText('TIME',0,104);ctx.restore();v9Zeroes.forEach(z=>{const x=z.x-cam.x,y=z.y-cam.y;ctx.globalAlpha=Math.max(0,z.t/.75);ctx.fillStyle='#fff';ctx.font='1000 20px system-ui';ctx.textAlign='center';ctx.fillText('0 DAMAGE',x,y-(.75-z.t)*35)});ctx.globalAlpha=1}
+const v9UnderlyingDraw=draw;draw=function(){v9UnderlyingDraw();v9DrawMemoryDrops();v9DrawTime()}
+
+$('#startBtn').onclick=()=>{
+  v9Player=($('#testPlayer').value||'壽星勇者').trim();v9Giver=($('#testGiver').value||'神秘送禮人').trim();v9Gift=($('#testGift').value||'神秘生日禮物').trim();v9GiftHint=($('#testGiftHint').value||'請抬頭看看送禮人的手上。').trim();
+  audioCtx=new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume();$('#start').style.display='none';v9Intro();
+};
+
 </script>
 </body></html>
