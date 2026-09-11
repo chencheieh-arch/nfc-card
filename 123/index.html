@@ -3,9 +3,30 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
-<title>LEVEL +1｜Story Run v9</title>
+<title>LEVEL +1｜Story Rewrite v9.2</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:none}
+/* iOS game-touch protection: prevent text selection, callouts and image dragging during play */
+html,body,#wrap,canvas,.ui,.frame,.controls,.joyBase,.joyStick,.btn,.choice,.storyBtn,.startbtn,#breakBtn,#decision,#storyScene{
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+  -webkit-user-drag:none;
+}
+button,.btn,.choice,.storyBtn,.startbtn,#breakBtn,.joyBase,.joyStick{
+  -webkit-appearance:none;
+  appearance:none;
+  outline:none;
+  touch-action:none;
+}
+img,canvas{ -webkit-user-drag:none; user-drag:none; }
+/* Inputs on the test setup screen must remain editable/selectable. */
+input,textarea{
+  -webkit-user-select:text;
+  user-select:text;
+  -webkit-touch-callout:default;
+  touch-action:manipulation;
+}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#03050a;color:#fff;font-family:Inter,system-ui,-apple-system,"Noto Sans TC",sans-serif}
 :root{--app-height:100dvh;--lift:58px}
 #wrap{position:relative;width:100%;height:var(--app-height);min-height:100svh;display:grid;place-items:center;background:radial-gradient(circle at 50% 14%,#182957,#080d1b 43%,#03050a 82%)}
@@ -65,7 +86,7 @@ canvas{width:min(100vw,480px);height:var(--app-height);max-height:920px;backgrou
     <button class="storyBtn" id="storyBtn">繼續</button>
   </div></div>
   <div class="flash" id="flash"></div>
-  <div id="start"><div class="card"><div class="eyebrow">LEVEL +1｜STORY RUN</div><h1>v9</h1><div class="sub">第一次把「生日故事」放進遊戲裡</div><div class="lead">v8 的爽度保留。這版測的是：<b>玩、笑、荒謬、伏筆、感動、禮物揭曉</b>能不能真的串成同一場生日冒險。</div><div class="storyInputs"><label>測試壽星</label><input id="testPlayer" value="壽星勇者" maxlength="18"><label>測試送禮人</label><input id="testGiver" value="神秘送禮人" maxlength="18"><label>最終實體禮物</label><input id="testGift" value="神秘生日禮物" maxlength="28"><label>禮物提示</label><input id="testGiftHint" value="請抬頭看看送禮人的手上。" maxlength="38"></div><button class="startbtn" id="startBtn">🎧 啟動生日升級程序</button><div class="hint">左手移動｜自動攻擊｜SKILL｜DASH｜SWAP｜BIRTHDAY BREAK<br>建議開聲音；正式版會改成客戶提交資料自動帶入。</div></div></div>
+  <div id="start"><div class="card"><div class="eyebrow">LEVEL +1｜STORY REWRITE</div><h1>v9.2</h1><div class="sub">有些東西，不該被清掉。</div><div class="lead">爽度保留，故事整條重寫。這次不是打敗時間，而是<b>把值得留下的東西帶去下一個 LEVEL。</b></div><div class="storyInputs"><label>測試壽星</label><input id="testPlayer" value="壽星勇者" maxlength="18"><label>測試送禮人</label><input id="testGiver" value="神秘送禮人" maxlength="18"><label>最終實體禮物</label><input id="testGift" value="神秘生日禮物" maxlength="28"><label>禮物提示</label><input id="testGiftHint" value="請抬頭看看送禮人的手上。" maxlength="38"><label>送禮人的最後一句話</label><input id="testBlessing" value="下一歲也要好好玩、好好生活。" maxlength="52"></div><button class="startbtn" id="startBtn">🎧 啟動生日升級程序</button><div class="hint">左手移動｜自動攻擊｜SKILL｜DASH｜SWAP｜BIRTHDAY BREAK<br>建議開聲音；正式版會改成客戶提交資料自動帶入。</div></div></div>
   <div id="levelup"><div class="card"><div class="eyebrow">LEVEL UP</div><div class="picktitle">三選一，Build 立即改變</div><div class="lead">能力會真的改變攻擊方式，不只加數字。</div><div class="choices" id="choices"></div></div></div>
   <div id="evolve"><div class="card evolveCard"><div class="eyebrow">WEAPON EVOLUTION</div><div class="picktitle" id="evolveTitle">武器進化！</div><div class="lead" id="evolveDesc">攻擊模式會直接變形。</div><div class="choices" id="evolveChoices"></div></div></div>
   <div id="end"><div class="card"><div class="eyebrow">RUN COMPLETE</div><div class="grade" id="grade">S</div><h2 style="margin:0 0 8px">這一局打完了。</h2><div class="lead">這次真正的重玩點是：不同路線、詛咒選擇與 Build 連鎖，會讓每局打法都不一樣。</div><div class="stats"><div class="stat">擊倒<br><b id="kills">0</b></div><div class="stat">完美閃避<br><b id="dodges">0</b></div><div class="stat">最高連擊<br><b id="maxCombo">0</b></div><div class="stat">等級<br><b id="finalLv">1</b></div></div><div class="build" id="buildTxt"></div><button class="startbtn" onclick="location.reload()">再開一局走別條路</button></div></div>
@@ -73,6 +94,35 @@ canvas{width:min(100vw,480px);height:var(--app-height);max-height:920px;backgrou
 <script>
 function syncVisibleViewport(){const vv=window.visualViewport;const h=Math.round(vv?vv.height:window.innerHeight);document.documentElement.style.setProperty('--app-height',h+'px')}
 syncVisibleViewport();addEventListener('resize',syncVisibleViewport,{passive:true});addEventListener('orientationchange',()=>setTimeout(syncVisibleViewport,80),{passive:true});if(window.visualViewport){visualViewport.addEventListener('resize',syncVisibleViewport,{passive:true});visualViewport.addEventListener('scroll',syncVisibleViewport,{passive:true})}
+</script>
+<script>
+// iPhone / iPad Safari: keep gameplay touches inside the game instead of opening
+// text selection, Copy/Look Up callouts, drag previews or browser gestures.
+(function installGameTouchGuards(){
+  const root=document.getElementById('wrap');
+  const isEditable=(el)=>el && (el.matches?.('input,textarea,[contenteditable="true"]') || el.closest?.('input,textarea,[contenteditable="true"]'));
+  ['contextmenu','selectstart','dragstart'].forEach(type=>{
+    root.addEventListener(type,e=>{
+      if(isEditable(e.target)) return;
+      e.preventDefault();
+    },{passive:false});
+  });
+  // Safari-specific pinch / gesture events. The game is portrait, fixed viewport.
+  ['gesturestart','gesturechange','gestureend'].forEach(type=>{
+    document.addEventListener(type,e=>{
+      if(isEditable(e.target)) return;
+      e.preventDefault();
+    },{passive:false});
+  });
+  // Prevent accidental double-tap browser behavior on game controls while preserving inputs.
+  let lastTouchEnd=0;
+  root.addEventListener('touchend',e=>{
+    if(isEditable(e.target)) return;
+    const now=Date.now();
+    if(now-lastTouchEnd<=280) e.preventDefault();
+    lastTouchEnd=now;
+  },{passive:false});
+})();
 </script>
 <script>
 const $=s=>document.querySelector(s),C=$('#game'),ctx=C.getContext('2d'),W=C.width,H=C.height;
@@ -433,5 +483,710 @@ $('#startBtn').onclick=()=>{
   audioCtx=new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume();$('#start').style.display='none';v9Intro();
 };
 
+</script>
+
+<style>
+/* ===== v9.2 STORY REWRITE / ARCHIVE RUN ===== */
+#archiveHud{position:absolute;left:50%;top:max(132px,calc(env(safe-area-inset-top) + 118px));transform:translateX(-50%);width:min(88%,410px);display:none;text-align:center;z-index:8;pointer-events:none}
+#archiveHud.show{display:block}.archiveObjective{display:inline-block;padding:8px 13px;border-radius:999px;background:#070c16d9;border:1px solid #d9edff22;backdrop-filter:blur(10px);font-size:11px;letter-spacing:.08em;box-shadow:0 10px 28px #0008}.archiveProgress{height:6px;margin:8px auto 0;width:78%;border-radius:99px;background:#ffffff10;overflow:hidden}.archiveProgress>div{height:100%;width:0;background:linear-gradient(90deg,#9be6ff,#fff1b2);box-shadow:0 0 14px #8feaff77;transition:.2s}
+#archiveMsg{position:absolute;left:50%;top:33%;transform:translate(-50%,-50%) scale(.96);width:88%;text-align:center;opacity:0;transition:.2s;z-index:9;pointer-events:none;text-shadow:0 8px 26px #000}.archiveMsg.show{opacity:1;transform:translate(-50%,-50%) scale(1)}#archiveMsg .ak{font-size:10px;letter-spacing:.34em;opacity:.68}#archiveMsg .at{font-size:30px;font-weight:1000;line-height:1.12;margin-top:5px}#archiveMsg .as{font-size:12px;opacity:.8;margin-top:7px;line-height:1.5}
+.storyChoiceRow{display:grid;gap:9px;margin-top:16px}.storyChoice{padding:14px;border-radius:17px;border:1px solid #ffffff17;background:#0d1729;text-align:left;font-size:13px;font-weight:900}.storyChoice small{display:block;font-size:10px;opacity:.65;margin-top:4px;font-weight:500}.storyChoice.keep{border-color:#8de5ff55;background:linear-gradient(180deg,#11263a,#091522)}.storyChoice.delete{border-color:#ff7f9655;background:linear-gradient(180deg,#25131d,#120a10)}
+</style>
+<script>
+/* =========================
+   v9.2 STORY REWRITE PATCH
+   Theme: 有些東西，不該被清掉。
+   ========================= */
+let v92Blessing='下一歲也要好好玩、好好生活。';
+let v92DeleteBlocks=0,v92MemoryAnalyzed=0,v92ArchiveStarted=false,v92ArchiveMode=false,v92ArchiveT=0,v92ArchiveSpeed=240,v92TimeLine=0,v92ArchiveHits=0,v92Player2=false,v92Portal=false,v92PortalT=0,v92PortalEntered=false,v92Key=false,v92ChaosHack=false,v92MidReveal=false,v92CarryChosen=false;
+let v92Runner={x:240,y:690,r:20,dash:0,dashCd:0,inv:0};
+let v92Road=0,v92Obstacles=[],v92ArchiveMem=[],v92ArchiveParticles=[];
+const v92OldDash=dash;
+
+// Add dedicated archive HUD without disturbing the existing UI.
+(function(){
+  const frame=document.querySelector('.frame');
+  const h=document.createElement('div');h.id='archiveHud';h.innerHTML='<div class="archiveObjective" id="archiveObjective">FINAL OBJECTIVE｜穿過時間</div><div class="archiveProgress"><div id="archiveProgressFill"></div></div>';
+  const m=document.createElement('div');m.id='archiveMsg';m.innerHTML='<div class="ak" id="archiveMsgK">OBJECTIVE CHANGED</div><div class="at" id="archiveMsgT">往前走。</div><div class="as" id="archiveMsgS">不要打敗時間。</div>';
+  frame.appendChild(h);frame.appendChild(m);
+})();
+function v92ArchiveMessage(k,t,s,ms=1900){$('#archiveMsgK').textContent=k;$('#archiveMsgT').textContent=t;$('#archiveMsgS').textContent=s;$('#archiveMsg').classList.add('show');clearTimeout($('#archiveMsg')._t);$('#archiveMsg')._t=setTimeout(()=>$('#archiveMsg').classList.remove('show'),ms)}
+function v92StoryChoice(){
+  paused=true;$('#storyK').textContent='YEAR ARCHIVE';$('#storyIcon').textContent='🗂️';$('#storyTitle').textContent='剩下的回憶，要怎麼處理？';
+  $('#storyBody').innerHTML=`系統準備封存 LV.32。<br><br>剩餘未處理資料：<b>MEMORY × ${Math.max(3,v9MemorySeen)}</b><br><br>這些資料沒有戰鬥價值，也不能換成 EXP。<div class="storyChoiceRow"><div class="storyChoice delete" id="v92Delete">🗑️ 全部刪除<small>乾乾淨淨升級。理論上。</small></div><div class="storyChoice keep" id="v92Keep">💾 帶去下一個 LEVEL<small>把值得留下的，一起帶走。</small></div></div>`;
+  $('#storyBtn').style.display='none';$('#storyScene').style.display='grid';
+  $('#v92Delete').onclick=()=>{
+    v92DeleteBlocks++;$('#storyBody').innerHTML=`正在刪除 MEMORY……<br><br><b>1%　8%　12%</b><br><br><span class="storyAccent">⚠ DELETE DENIED</span><br><br>權限遭外部覆寫。<br>備註：<b>「不准刪。」</b><br><br><span class="small">系統：……到底誰一直改我的權限？</span>`;
+    $('#storyBtn').style.display='block';$('#storyBtn').textContent='好啦，帶走';$('#storyBtn').onclick=()=>{v92CarryChosen=true;$('#storyScene').style.display='none';$('#storyBtn').style.display='block';paused=false;v92BeginArchiveGate()};
+  };
+  $('#v92Keep').onclick=()=>{v92CarryChosen=true;$('#storyScene').style.display='none';$('#storyBtn').style.display='block';paused=false;v92BeginArchiveGate()};
+}
+function v92BeginArchiveGate(){
+  v9StoryScene('ARCHIVE GATE','🚪','年度封存程序',`LV.32 準備封存。<br><br>正在檢查最後一筆資料……<br><br><span class="storyAccent">TIME.lock</span><br>狀態：<b>不可刪除</b><br><br>系統：看來最後一件事不是把它打掉。`,'開啟最後任務',()=>v92StartArchiveRun(),true);
+}
+function v92StartArchiveRun(){
+  v92ArchiveStarted=true;v92ArchiveMode=true;v92ArchiveT=0;v92TimeLine=H+80;v92Road=0;v92Obstacles=[];v92ArchiveMem=[];v92Player2=false;v92Portal=false;v92PortalT=0;v92PortalEntered=false;v92Key=false;
+  enemies=[];projectiles=[];enemyShots=[];hazards=[];gifts=[];weaponDrops=[];boss=null;eliteChest=null;
+  p.inv=999;paused=false;$('#archiveHud').classList.add('show');$('#timeLabel').classList.add('show');$('#timeLabel').textContent='FINAL OBJECTIVE｜穿過時間';
+  v92ArchiveMessage('OBJECTIVE CHANGED','不要打敗時間。','往前走。',2500);sfx('fever');vib([25,25,60]);
+}
+function v92SpawnObstacle(){
+  const types=['📅','⌛','🧾','🕰️'];const x=70+Math.random()*(W-140);v92Obstacles.push({x,y:-40,r:22+Math.random()*8,vy:170+Math.random()*80,icon:types[Math.floor(Math.random()*types.length)],dead:false});
+}
+function v92SpawnArchiveMemory(id){
+  if(v92ArchiveMem.some(m=>m.id===id&&!m.got))return;
+  const lane=[120,240,360][(id-1)%3];v92ArchiveMem.push({id,x:lane,y:-55,vy:105,got:false,miss:0});
+  v92ArchiveMessage('MEMORY DETECTED',`MEMORY 0${id}`,'把它帶去下一個 LEVEL。',1500);
+}
+function v92Dash(){
+  if(!v92ArchiveMode){v92OldDash();return}
+  if(v92Runner.dashCd>0)return;v92Runner.dash=.22;v92Runner.dashCd=.9;v92TimeLine=Math.min(H+100,v92TimeLine+45);vib(18);sfx('dash');
+}
+dash=v92Dash;
+function v92UpdateArchive(dt){
+  if(paused||finished)return;
+  v92ArchiveT+=dt;v92Road+=dt*v92ArchiveSpeed;v92Runner.inv=Math.max(0,v92Runner.inv-dt);v92Runner.dash=Math.max(0,v92Runner.dash-dt);v92Runner.dashCd=Math.max(0,v92Runner.dashCd-dt);
+  let dx=keys.right-keys.left+joy.x,dy=keys.down-keys.up+joy.y,m=Math.hypot(dx,dy);if(m>1){dx/=m;dy/=m}let sp=v92Runner.dash>0?520:250;v92Runner.x=Math.max(45,Math.min(W-45,v92Runner.x+dx*sp*dt));const archiveMinY=v92Portal?H*.16:H*.33;v92Runner.y=Math.max(archiveMinY,Math.min(H*.78,v92Runner.y+dy*sp*dt));
+  // TIME closes in slowly; hits make it surge, dash creates distance.
+  v92TimeLine-=dt*(22+v92ArchiveT*1.7);
+  if(Math.random()<dt*(.75+v92ArchiveT*.045)&&v92ArchiveT<18)v92SpawnObstacle();
+  if(v92ArchiveT>3&&!v92ArchiveMem.some(m=>m.id===1))v92SpawnArchiveMemory(1);
+  if(v92ArchiveT>7&&!v92ArchiveMem.some(m=>m.id===2))v92SpawnArchiveMemory(2);
+  if(v92ArchiveT>11&&!v92ArchiveMem.some(m=>m.id===3))v92SpawnArchiveMemory(3);
+  v92Obstacles.forEach(o=>{o.y+=o.vy*dt;if(!o.dead&&Math.hypot(o.x-v92Runner.x,o.y-v92Runner.y)<o.r+v92Runner.r&&v92Runner.inv<=0){o.dead=true;v92Runner.inv=.75;v92ArchiveHits++;v92TimeLine-=48;flash();vib([20,25,40]);toast('⏳ TIME 靠近了！');}});v92Obstacles=v92Obstacles.filter(o=>!o.dead&&o.y<H+60);
+  v92ArchiveMem.forEach(m=>{if(m.got)return;m.y+=m.vy*dt;if(Math.hypot(m.x-v92Runner.x,m.y-v92Runner.y)<43){m.got=true;sfx('chest');vib([14,18,30]);v92TimeLine=Math.min(H+100,v92TimeLine+70);v92ArchiveParticles.push(...Array.from({length:18},()=>({x:m.x,y:m.y,vx:(Math.random()-.5)*220,vy:(Math.random()-.5)*220,t:.55})));v92ArchiveMessage('MEMORY SAVED',`MEMORY 0${m.id} 已帶走`,'ARCHIVE 不是 DELETE。',1500)}else if(m.y>H+50){m.y=-45;m.x=70+Math.random()*(W-140);m.miss++;toast('📸 MEMORY 沒接到，重新送回前方。')}});
+  v92ArchiveParticles.forEach(q=>{q.x+=q.vx*dt;q.y+=q.vy*dt;q.vx*=.94;q.vy*=.94;q.t-=dt});v92ArchiveParticles=v92ArchiveParticles.filter(q=>q.t>0);
+  let got=v92ArchiveMem.filter(m=>m.got).length;$('#archiveProgressFill').style.width=(got/3*100)+'%';$('#archiveObjective').textContent=`FINAL OBJECTIVE｜MEMORY ${got}/3｜穿過時間`;
+  if(got===3&&v92ArchiveT>13&&!v92Player2){v92Player2=true;v92TimeLine=Math.min(H+100,v92TimeLine+130);v92ArchiveMessage('PLAYER 2 JOINED','有人追上來了。','PARTY MEMBER｜SIGNAL UNKNOWN',2500);v9ShowAlly('PLAYER 2｜CONNECTED',3000);sfx('fever');vib([20,30,70,40,100]);}
+  if(v92Player2&&v92ArchiveT>16&&!v92Portal){v92Portal=true;v92Key=true;v92ArchiveMessage('PARTY KEY RECEIVED',`${v9Giver}`,'前方 ARCHIVE GATE 已解鎖。',3000);$('#archiveObjective').textContent='ARCHIVE GATE OPEN｜往上移動，進入傳送門';toast('⬆️ 往上走！ARCHIVE GATE 已解鎖');}
+  if(v92Portal){v92PortalT+=dt;const px=W/2,py=(v92PortalT>7?H*.32:H*.25);if(Math.hypot(px-v92Runner.x,py-v92Runner.y)<66){v92PortalEntered=true;v92ArchiveMode=false;$('#archiveHud').classList.remove('show');$('#timeLabel').classList.remove('show');v92ArchiveCinematic();return}}
+  // fail-forward: TIME never causes a hard game over.
+  if(v92TimeLine<v92Runner.y+65){v92TimeLine=v92Runner.y+65;if(v92Player2){v92TimeLine+=90;v92ArchiveMessage('PARTY SHIELD','PLAYER 2 擋住了 TIME','快走！',1100)}else{v92Runner.inv=1;toast('⏳ 差點被 TIME 追上，快 DASH！')}}
+}
+function v92ArchiveCinematic(){
+  clearInterval(bgmTimer);paused=true;
+  v9StoryQueue([
+    {k:'YEAR ARCHIVE',icon:'🗂️',title:'LV.32 ARCHIVED',body:`不是 DELETE。<br><br>只是把這一年，<br><b>好好收進了回憶裡。</b><br><br>保留項目：MEMORY × 3`,btn:'安裝下一個 LEVEL'},
+    {k:'BIRTHDAY PATCH',icon:'🎂',title:'INSTALLING LV.33',body:`13%<br>47%<br><span class="storyAccent">89%</span><br><br>……<br><br><b>100%</b><br><br><span class="storyAccent">LEVEL UP COMPLETE</span>`,btn:'繼續',gold:true},
+    {k:'IDENTITY RESOLVED',icon:'✦',title:'PLAYER 2',body:`一路修改刪除權限、偷偷補血、亂改遊戲規則的人……<br><br><div class="storyName">${v9Giver}</div><br><b>PARTY MEMBER｜從一開始就在。</b>`,btn:'原來是你'},
+    {k:'MESSAGE RECEIVED',icon:'💌',title:`${v9Giver} 留下一句話`,body:`「${v92Blessing}」<br><br><span class="small">有些上一歲留下來的東西，不是負擔。<br>是下一歲還想一起帶走的東西。</span>`,btn:'收下'},
+    {k:'SYSTEM NOTICE',icon:'🎒',title:'等一下。',body:`PARTY MEMBER 背包內仍有一件物品尚未交付。<br><br>系統：<b>是否強制交付？</b><br><br>${v9Giver}：……`,btn:'當然要',gold:true},
+    {k:'LEGENDARY DROP',icon:'🎁',title:'REAL WORLD DROP DETECTED',body:`此物品不屬於遊戲世界。<br><br><div class="storyName">${v9Gift}</div><br><span class="storyAccent">${v9GiftHint}</span><br><br><b>它不在手機裡。</b>`,btn:'領取現實世界獎勵',gold:true},
+    {k:'NEW QUEST UNLOCKED',icon:'🗺️',title:'好好把下一歲活完。',body:`期限：下一次生日<br>難度：未知<br>隊伍：<b>不是一個人</b><br><br><span class="storyAccent">HAPPY BIRTHDAY.</span><br><br>遊戲還沒破關。<br><br><span class="small">This quest was secretly prepared by ${v9Giver}<br>Experience crafted by 享刻畫</span>`,btn:'完成 LEVEL +1',gold:true,action:v92Finish}
+  ]);
+}
+function v92Finish(){
+  finished=true;paused=true;clearInterval(bgmTimer);sfx('level');vib([35,45,80,50,130]);
+  $('#kills').textContent=kills;$('#dodges').textContent=p.perfectDodges;$('#maxCombo').textContent=p.maxCombo;$('#finalLv').textContent=p.level;$('#grade').textContent=p.level>=9&&p.perfectDodges>=3?'S':p.level>=7?'A+':'A';
+  const bs=weaponOrder.map(k=>`${weapons[k].icon}${weapons[k].name} Lv.${weapons[k].level}${weapons[k].evolved?'・EVOLVED':''}`);if(orbitLevel)bs.push(`🕯️蠟燭陣 Lv.${orbitLevel}`);if(p.dashShock)bs.push(`💥殘影爆破 Lv.${p.dashShock}`);
+  $('#buildTxt').innerHTML=`<b>STORY REWRITE COMPLETE</b><br>主題：有些東西，不該被清掉。<br>MEMORY：3/3 ARCHIVED<br>PLAYER 2：${v9Giver}<br>REAL WORLD DROP：${v9Gift}<br><br><b>本局 Build</b><br>${bs.join('　｜　')}`;
+  const end=$('#end');end.querySelector('.eyebrow').textContent='LEVEL UP COMPLETE';end.querySelector('h2').textContent='上一歲已封存。下一歲，開始。';end.querySelector('.lead').innerHTML='V9.2 STORY REWRITE 測試完成。<br><b>第一次劇情負責留下回憶；Replay 之後才回到純爽玩的 CHAOS MODE。</b>';end.querySelector('.startbtn').textContent='再開一局 CHAOS MODE';end.style.display='grid';
+}
+function v92MemoryScene(id){
+  v9MemorySeen++;v92MemoryAnalyzed++;
+  const data={
+    1:{icon:'😂',title:'MEMORY 01｜疑似黑歷史',visual:'😂📸',analysis:'AI 辨識中……<br>……<br><b>系統建議：不要辨識。</b>',note:'「這張留著。」'},
+    2:{icon:'🫧',title:'MEMORY 02｜普通的一天',visual:'🫶📷',analysis:'戰鬥價值：0<br>金錢價值：0<br>任務價值：0<br><br><b>建議：DELETE</b>',note:'「普通也可以很重要。」'},
+    3:{icon:'✦',title:'MEMORY 03｜無法分類',visual:'✨📷',analysis:'稀有度：無法判定<br>用途：無法判定<br><br>系統：<b>又是你？</b>',note:'「DO NOT DELETE。」'}
+  }[id];
+  v9StoryScene('RESIDUAL FILE',data.icon,data.title,`<div class="memoryPhoto"><div class="mock">${data.visual}</div></div>${data.analysis}<br><br>正在刪除……<br><span class="storyAccent">⚠ DELETE FAILED</span><br>權限已被 UNKNOWN USER 覆寫。<br><br>備註：<b>${data.note}</b>`,'先收進背包',()=>{
+    if(id===3&&!v92MidReveal){v92MidReveal=true;setTimeout(()=>v9StoryScene('ANOMALY FOUND','🧩','這些不是殘留資料',`重新比對完成。<br><br>三個 MEMORY 都有相同來源。<br><br><b>它們不是系統留下來的。</b><br><br><span class="storyAccent">有人刻意把它們保存了下來。</span><br><br><span class="small">來源：UNKNOWN USER</span>`,'……誰？'),80)}
+  });
+}
+// Replace the old memory presentation but keep its world pickup behavior.
+v9OpenMemory=v92MemoryScene;
+function v92BirthdayWish(){
+  if(v9WishDone||paused)return;v9WishDone=true;
+  v8Decision('LEVEL 33 PARAMETER','🎂','設定下一年度願望','LEVEL 33 缺少一個必要參數。選擇會直接改變本局 Buff。',[
+    {tag:'WISH',name:'💰 錢多一點',desc:'傷害＋12%、經驗提高。系統不保證願望實現。',cls:'risk',apply:()=>{v9Wish='money';p.damageMul*=1.12;v8RewardMul*=1.22;banner('PARAMETER SAVED','錢多一點','系統：已記錄。月底也同步收到通知。')}},
+    {tag:'WISH',name:'😴 睡飽一點',desc:'最大生命＋1、技能回復加快。這願望非常務實。',cls:'safe',apply:()=>{v9Wish='sleep';p.maxhp++;p.hp=p.maxhp;p.skillRate*=1.18;banner('PARAMETER SAVED','睡飽一點','至少這個我們可以努力。')}},
+    {tag:'WISH',name:'❤️ 快樂一點',desc:'UNKNOWN 援助增強。CURSE：無。奇怪，這格已有人先填好了。',cls:'chaos',apply:()=>{v9Wish='love';v9SupportPower=2;p.maxhp++;p.hp=p.maxhp;v8AddBreak(30);banner('PARAMETER SAVED','快樂一點','系統：這個已經有人幫你處理了。')}}
+  ]);
+}
+v9BirthdayWish=v92BirthdayWish;
+function v92Intro(){
+  v9StoryQueue([
+    {k:'BIRTHDAY PATCH',icon:'🎂',title:`${v9Player}｜LEVEL +1`,body:`正在安裝「新的一歲」……<br><br><b>13%　47%　<span class="storyAccent">89%</span></b><br><br><span class="storyAccent">⚠ UPDATE FAILED</span><br>上一年度存檔無法封存。`,btn:'蛤？為什麼'},
+    {k:'SYSTEM DIAGNOSIS',icon:'🗃️',title:'偵測到上一年度殘留資料',body:`熬夜 × 217<br>亂花錢 × 82<br>「我明天再弄」× 369<br>不知道吃什麼 × 541<br>黑歷史 × <b>無法計算</b><br><br>系統：<b>把垃圾清乾淨，才准你升級。</b>`,btn:'好啦，清一清',action:v9BeginGameplay}
+  ]);
+}
+v9Intro=v92Intro;
+// The old ordinary boss is removed. Reaching the final checkpoint begins archive choice + TIME escape instead.
+spawnBoss=function(){
+  if(v92ArchiveStarted||paused)return;
+  // Story gate: the three memory beats must be experienced before the final archive.
+  if(v9MemorySeen<3){
+    runSeconds=94;
+    const missing=v9MemoryDrops.filter(m=>!m.taken);
+    missing.forEach((m,i)=>{m.x=Math.max(90,Math.min(world.w-90,p.x+(i-1)*95));m.y=Math.max(90,Math.min(world.h-90,p.y-130-i*45))});
+    toast(`📸 最後封存前，先收回剩餘 MEMORY ${3-v9MemorySeen} 個`);
+    return;
+  }
+  bossSpawned=true;enemies=[];projectiles=[];enemyShots=[];hazards=[];gifts=[];weaponDrops=[];eliteChest=null;
+  v9StoryScene('FINAL CHECKPOINT','🧹','上一年度清理完成',`熬夜、帳單、拖延、亂買東西……<br>能打的差不多都打完了。<br><br>剩下 MEMORY × ${Math.max(3,v9MemorySeen)}。<br><br>系統準備執行最後封存。`,'檢查剩餘資料',()=>v92StoryChoice());
+};
+// Old TIME boss/cinematic are bypassed entirely.
+finishRun=function(){ if(!v92ArchiveStarted)spawnBoss(); };
+
+// Rebuild story update on top of the original v8 gameplay loop.
+update=function(dt){
+  if(v92ArchiveMode){v92UpdateArchive(dt);return}
+  v9BaseUpdate(dt);if(!started||paused||finished||v92ArchiveStarted)return;
+  if(!v9MemSpawn[0]&&runSeconds>=12){v9MemSpawn[0]=true;v9SpawnMemory(1)}
+  if(!v9Aid1&&runSeconds>=26){v9Aid1=true;v9Aid(1)}
+  if(!v9MemSpawn[1]&&runSeconds>=34){v9MemSpawn[1]=true;v9SpawnMemory(2)}
+  if(!v9WishDone&&runSeconds>=49&&!paused)v92BirthdayWish();
+  if(!v9Aid2&&runSeconds>=69){v9Aid2=true;v9Aid(2)}
+  if(!v9MemSpawn[2]&&runSeconds>=76){v9MemSpawn[2]=true;v9SpawnMemory(3)}
+  if(runSeconds>=81&&!v92ChaosHack){v92ChaosHack=true;v9ShowAlly('UNKNOWN USER｜ADMIN OVERRIDE',2600);toast('⚠ 系統：請停止擅自修改遊戲規則。')}
+  if(runSeconds>=89&&!v9ChaosAid){v9ChaosAid=true;v9Aid(3)}
+  v9UpdateStoryDrops();
+};
+function v92DrawArchive(){
+  // Screen-space cinematic runner section.
+  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0d1530');g.addColorStop(.55,'#090f1f');g.addColorStop(1,'#05070c');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // scrolling road
+  ctx.save();ctx.globalAlpha=.22;ctx.strokeStyle='#9cc7ff';ctx.lineWidth=1;for(let i=0;i<10;i++){let y=((i*120+v92Road)%1200)-120;ctx.beginPath();ctx.moveTo(70,y);ctx.lineTo(W-70,y);ctx.stroke()}ctx.restore();
+  // fading archive cards in background
+  ctx.save();ctx.globalAlpha=.1;ctx.font='900 16px system-ui';ctx.fillStyle='#fff';for(let i=0;i<9;i++){let y=((i*180+v92Road*.65)%1700)-150;ctx.fillText(['2025','MON','TODO','PAY','LATE','MEMORY'][i%6],32+(i%3)*145,y)}ctx.restore();
+  // TIME wave
+  let tg=ctx.createLinearGradient(0,v92TimeLine-100,0,H);tg.addColorStop(0,'rgba(140,165,220,0)');tg.addColorStop(.25,'rgba(90,112,168,.24)');tg.addColorStop(1,'rgba(8,10,18,.96)');ctx.fillStyle=tg;ctx.fillRect(0,v92TimeLine-100,W,H-v92TimeLine+100);ctx.strokeStyle='rgba(220,235,255,.68)';ctx.lineWidth=3;ctx.beginPath();for(let x=0;x<=W;x+=16){let y=v92TimeLine+Math.sin(x*.045+performance.now()/270)*8; if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.font='1000 16px system-ui';ctx.textAlign='center';ctx.fillStyle='rgba(235,245,255,.75)';ctx.fillText('TIME',W/2,Math.min(H-20,v92TimeLine+36));
+  // obstacles
+  v92Obstacles.forEach(o=>{ctx.font='32px system-ui';ctx.textAlign='center';ctx.globalAlpha=.82;ctx.fillText(o.icon,o.x,o.y+10)});ctx.globalAlpha=1;
+  // memory pickups
+  v92ArchiveMem.forEach(m=>{if(m.got)return;let rg=ctx.createRadialGradient(m.x,m.y,4,m.x,m.y,34);rg.addColorStop(0,'#d9f5ff88');rg.addColorStop(1,'#8adfff00');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(m.x,m.y,34,0,Math.PI*2);ctx.fill();ctx.fillStyle='#effbff';ctx.font='26px system-ui';ctx.textAlign='center';ctx.fillText('📸',m.x,m.y+8);ctx.fillStyle='#bceaff';ctx.font='800 9px system-ui';ctx.fillText('MEMORY 0'+m.id,m.x,m.y+31)});
+  // portal
+  if(v92Portal){let px=W/2,py=(v92PortalT>7?H*.32:H*.25);let rg=ctx.createRadialGradient(px,py,8,px,py,78);rg.addColorStop(0,'#fff8c6aa');rg.addColorStop(.4,'#9cecff55');rg.addColorStop(1,'#9cecff00');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(px,py,78,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#d9f7ff';ctx.lineWidth=6;ctx.beginPath();ctx.ellipse(px,py,58,32,0,0,Math.PI*2);ctx.stroke();ctx.font='900 10px system-ui';ctx.fillStyle='#fff';ctx.fillText('ARCHIVE GATE',px,py-48)}
+  // player 2
+  if(v92Player2){ctx.save();ctx.translate(v92Runner.x+42,v92Runner.y+10);ctx.fillStyle='#ffd98d';ctx.beginPath();ctx.arc(0,-9,13,0,Math.PI*2);ctx.fill();ctx.fillStyle='#6d4f94';ctx.beginPath();ctx.roundRect(-14,5,28,30,9);ctx.fill();ctx.fillStyle='#fff';ctx.font='800 8px system-ui';ctx.textAlign='center';ctx.fillText(v92Portal?v9Giver:'P2',0,49);ctx.restore()}
+  // hero
+  ctx.save();ctx.translate(v92Runner.x,v92Runner.y);if(v92Runner.inv>0&&Math.floor(v92Runner.inv*12)%2===0)ctx.globalAlpha=.4;ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(0,24,22,7,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#4056cc';ctx.beginPath();ctx.moveTo(-15,5);ctx.quadraticCurveTo(0,43,15,5);ctx.lineTo(11,34);ctx.quadraticCurveTo(0,45,-11,34);ctx.closePath();ctx.fill();ctx.fillStyle='#edf4ff';ctx.beginPath();ctx.arc(0,-9,15,0,Math.PI*2);ctx.fill();ctx.fillStyle='#263b89';ctx.beginPath();ctx.roundRect(-15,6,30,30,9);ctx.fill();ctx.restore();
+  v92ArchiveParticles.forEach(q=>{ctx.globalAlpha=Math.max(0,q.t/.55);ctx.fillStyle='#c8f1ff';ctx.fillRect(q.x-3,q.y-3,6,6)});ctx.globalAlpha=1;
+}
+const v92PrePatchDraw=draw;
+draw=function(){if(v92ArchiveMode){v92DrawArchive();return}v92PrePatchDraw()};
+// Ensure the archive uses the patched DASH action after existing pointer listeners call global dash.
+$('#dash').replaceWith($('#dash').cloneNode(true));
+$('#dash').addEventListener('pointerdown',()=>{$('#dash').classList.add('active');v92Dash()});$('#dash').addEventListener('pointerup',()=>$('#dash').classList.remove('active'));$('#dash').addEventListener('pointercancel',()=>$('#dash').classList.remove('active'));
+// Start screen now reads v9.2 fields and launches the rewritten intro.
+$('#startBtn').onclick=()=>{
+  v9Player=($('#testPlayer').value||'壽星勇者').trim();v9Giver=($('#testGiver').value||'神秘送禮人').trim();v9Gift=($('#testGift').value||'神秘生日禮物').trim();v9GiftHint=($('#testGiftHint').value||'請抬頭看看送禮人的手上。').trim();v92Blessing=($('#testBlessing').value||'下一歲也要好好玩、好好生活。').trim();
+  audioCtx=new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume();$('#start').style.display='none';v92Intro();
+};
+</script>
+
+
+<style>
+/* ===== v9.3 TIME CONSEQUENCE PATCH ===== */
+#archiveDanger{margin:7px auto 0;width:78%;font-size:9px;letter-spacing:.12em;opacity:.7;display:flex;justify-content:space-between;gap:8px}
+#archiveDanger .warn{color:#ff9dad;font-weight:900}.archiveProgress.time>div{background:linear-gradient(90deg,#66799e,#ff8fa5);box-shadow:0 0 14px #ff789655}
+#archiveBackWarn{position:absolute;left:50%;top:43%;transform:translate(-50%,-50%) scale(.95);padding:10px 14px;border-radius:14px;background:#280d18de;border:1px solid #ff8ba955;color:#ffdbe4;font-size:12px;font-weight:900;letter-spacing:.06em;opacity:0;transition:.16s;z-index:10;pointer-events:none;white-space:nowrap}
+#archiveBackWarn.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+</style>
+<script>
+/* =========================
+   v9.3 TIME CONSEQUENCE
+   Story rule: 往前才能封存；回頭會讓 TIME 吞掉已保存的 MEMORY。
+   ========================= */
+let v93Distance=0,v93TouchCd=0,v93BackWarned=false,v93LostMemory=0,v93KeyGranted=false,v93GateReady=false,v93LastDy=0;
+(function(){
+  const hud=$('#archiveHud');
+  if(hud&&!$('#archiveDanger')){
+    const d=document.createElement('div');d.id='archiveDanger';d.innerHTML='<span>ARCHIVE <b id="archivePct">0%</b></span><span>TIME GAP <b id="timeGap">SAFE</b></span>';
+    hud.appendChild(d);
+  }
+  const frame=document.querySelector('.frame');
+  if(frame&&!$('#archiveBackWarn')){const w=document.createElement('div');w.id='archiveBackWarn';w.textContent='⚠ 你正在回頭｜TIME 加速';frame.appendChild(w)}
+})();
+function v93WarnBack(){
+  const e=$('#archiveBackWarn'); if(!e)return;
+  e.classList.add('show'); clearTimeout(e._t); e._t=setTimeout(()=>e.classList.remove('show'),900);
+}
+// The final mission now explains the actual gameplay consequence before it begins.
+v92BeginArchiveGate=function(){
+  v9StoryScene('ARCHIVE GATE','🚪','最後不是戰鬥，是護送',`LV.32 的垃圾資料已清理完成。<br><br>但 <span class="storyAccent">TIME.lock</span> 正在回收所有尚未封存的資料。<br><br><b>把 3 個 MEMORY 帶到 ARCHIVE GATE。</b><br><br>⚠ 往後退，TIME 會加速。<br>⚠ 被 TIME 追上，最近保存的 MEMORY 會被吞回去。<br><br><span class="small">這次「往前走」不是一句台詞。</span>`,'帶著回憶往前',()=>v92StartArchiveRun(),true);
+};
+const v93OldStartArchive=v92StartArchiveRun;
+v92StartArchiveRun=function(){
+  v93OldStartArchive();
+  v93Distance=0;v93TouchCd=0;v93BackWarned=false;v93LostMemory=0;v93KeyGranted=false;v93GateReady=false;v93LastDy=0;
+  v92Runner.x=W/2;v92Runner.y=H*.73;v92TimeLine=H+70;v92ArchiveMem=[];v92Obstacles=[];v92Portal=false;v92Player2=false;v92Key=false;v92PortalT=0;
+  $('#archiveProgressFill').style.width='0%';
+  $('#archiveObjective').textContent='FINAL OBJECTIVE｜把 MEMORY 帶過 TIME';
+  if($('#archivePct'))$('#archivePct').textContent='0%';
+  if($('#timeGap'))$('#timeGap').textContent='SAFE';
+  v92ArchiveMessage('FINAL OBJECTIVE','把重要的帶走。','往前，別讓 TIME 把它們拿回去。',2800);
+};
+function v93LoseMemory(){
+  const got=v92ArchiveMem.filter(m=>m.got).sort((a,b)=>b.id-a.id);
+  if(got.length){
+    const m=got[0];m.got=false;m.y=-60;m.x=70+Math.random()*(W-140);m.miss=(m.miss||0)+1;v93LostMemory++;
+    v93Distance=Math.max(0,v93Distance-9);v92TimeLine=Math.min(H+90,v92Runner.y+185);
+    flash();vib([35,30,70]);sfx('hit');
+    v92ArchiveMessage('TIME ERASED',`MEMORY 0${m.id} 被吞回去了`,'追回來。別讓它留在上一歲。',1700);
+    toast(`⏳ MEMORY 0${m.id} LOST｜快追回來`);
+  }else{
+    v93Distance=Math.max(0,v93Distance-16);v92TimeLine=Math.min(H+90,v92Runner.y+175);
+    flash();vib([30,25,60]);
+    v92ArchiveMessage('ARCHIVE REWIND','封存進度倒退','沒有 MEMORY 可以替你擋這一下。',1500);
+    toast('⏪ ARCHIVE -16%');
+  }
+  v92Portal=false;v93GateReady=false;
+}
+function v93Dash(){
+  if(!v92ArchiveMode){v92OldDash();return}
+  if(v92Runner.dashCd>0)return;
+  v92Runner.dash=.22;v92Runner.dashCd=.9;
+  // Only a forward/upward dash creates meaningful distance from TIME.
+  const forward=(joy.y<-.15||keys.up>0);
+  if(forward){v92TimeLine=Math.min(H+100,v92TimeLine+62);v93Distance=Math.min(100,v93Distance+3.5)}
+  vib(18);sfx('dash');
+}
+dash=v93Dash;
+// Rebind mobile DASH to the v9.3 action.
+$('#dash').replaceWith($('#dash').cloneNode(true));
+$('#dash').addEventListener('pointerdown',()=>{$('#dash').classList.add('active');v93Dash()});
+$('#dash').addEventListener('pointerup',()=>$('#dash').classList.remove('active'));
+$('#dash').addEventListener('pointercancel',()=>$('#dash').classList.remove('active'));
+
+v92UpdateArchive=function(dt){
+  if(paused||finished)return;
+  v92ArchiveT+=dt;v93TouchCd=Math.max(0,v93TouchCd-dt);v92Runner.inv=Math.max(0,v92Runner.inv-dt);v92Runner.dash=Math.max(0,v92Runner.dash-dt);v92Runner.dashCd=Math.max(0,v92Runner.dashCd-dt);
+  let dx=keys.right-keys.left+joy.x,dy=keys.down-keys.up+joy.y,m=Math.hypot(dx,dy);if(m>1){dx/=m;dy/=m}v93LastDy=dy;
+  const forward=Math.max(0,-dy),backward=Math.max(0,dy),idle=Math.hypot(dx,dy)<.12?1:0;
+  let sp=v92Runner.dash>0?525:255;v92Runner.x=Math.max(45,Math.min(W-45,v92Runner.x+dx*sp*dt));
+  const minY=H*.17;v92Runner.y=Math.max(minY,Math.min(H*.80,v92Runner.y+dy*sp*dt));
+
+  // Progress only meaningfully grows when the player commits to moving forward.
+  v93Distance+=dt*(0.45+forward*9.5+(v92Runner.dash>0&&forward>.2?7:0)-backward*7.5);
+  v93Distance=Math.max(0,Math.min(100,v93Distance));
+  v92Road+=dt*(105+forward*235-backward*30);
+
+  // TIME is always coming, but hesitation/backtracking makes it dramatically faster.
+  let closeRate=18+v92ArchiveT*.72+idle*12+backward*105-forward*9;
+  closeRate=Math.max(7,closeRate);v92TimeLine-=dt*closeRate;
+  if(backward>.28){if(!v93BackWarned||Math.random()<dt*.45){v93WarnBack();v93BackWarned=true}}
+
+  // Hazards punish bad lines by giving TIME a burst of speed and shaving progress.
+  if(Math.random()<dt*(.72+v92ArchiveT*.04)&&v92ArchiveT<28)v92SpawnObstacle();
+  v92Obstacles.forEach(o=>{o.y+=o.vy*dt;if(!o.dead&&Math.hypot(o.x-v92Runner.x,o.y-v92Runner.y)<o.r+v92Runner.r&&v92Runner.inv<=0){o.dead=true;v92Runner.inv=.7;v92ArchiveHits++;v92TimeLine-=62;v93Distance=Math.max(0,v93Distance-3);flash();vib([20,25,45]);toast('⏳ 撞到了｜TIME 突然逼近');}});v92Obstacles=v92Obstacles.filter(o=>!o.dead&&o.y<H+60);
+
+  // MEMORY now appears because of forward progress, not because a timer says so.
+  if(v93Distance>=14&&!v92ArchiveMem.some(m=>m.id===1))v92SpawnArchiveMemory(1);
+  if(v93Distance>=37&&!v92ArchiveMem.some(m=>m.id===2))v92SpawnArchiveMemory(2);
+  if(v93Distance>=61&&!v92ArchiveMem.some(m=>m.id===3))v92SpawnArchiveMemory(3);
+  v92ArchiveMem.forEach(mem=>{if(mem.got)return;mem.y+=mem.vy*dt;if(Math.hypot(mem.x-v92Runner.x,mem.y-v92Runner.y)<43){mem.got=true;sfx('chest');vib([14,18,30]);v92TimeLine=Math.min(H+100,v92TimeLine+72);v93Distance=Math.min(100,v93Distance+3);v92ArchiveParticles.push(...Array.from({length:18},()=>({x:mem.x,y:mem.y,vx:(Math.random()-.5)*220,vy:(Math.random()-.5)*220,t:.55})));v92ArchiveMessage('MEMORY SAVED',`MEMORY 0${mem.id} 已保存`,'它現在是你的 TIME SHIELD。',1450)}else if(mem.y>H+50){mem.y=-45;mem.x=70+Math.random()*(W-140);mem.miss++;toast('📸 MEMORY 從你身邊滑過，前方重新出現');}});
+  v92ArchiveParticles.forEach(q=>{q.x+=q.vx*dt;q.y+=q.vy*dt;q.vx*=.94;q.vy*=.94;q.t-=dt});v92ArchiveParticles=v92ArchiveParticles.filter(q=>q.t>0);
+
+  let got=v92ArchiveMem.filter(mm=>mm.got).length;
+  const gap=Math.max(0,Math.round(v92TimeLine-v92Runner.y));
+  $('#archiveProgressFill').style.width=v93Distance+'%';
+  $('#archiveObjective').textContent=`穿過時間｜ARCHIVE ${Math.floor(v93Distance)}%｜MEMORY ${got}/3`;
+  if($('#archivePct'))$('#archivePct').textContent=Math.floor(v93Distance)+'%';
+  if($('#timeGap')){$('#timeGap').textContent=gap<95?'DANGER':gap<170?'CLOSE':'SAFE';$('#timeGap').parent().classList.toggle('warn',gap<95)}
+
+  // PLAYER 2 arrives only after the player has personally preserved the memories and made real forward progress.
+  if(got===3&&v93Distance>=76&&!v92Player2){v92Player2=true;v92TimeLine=Math.min(H+100,v92TimeLine+120);v92ArchiveMessage('PLAYER 2 JOINED','有人追上你了。','不是來替你破關，是陪你把最後一段走完。',2500);v9ShowAlly('PLAYER 2｜CONNECTED',3000);sfx('fever');vib([20,30,70,40,100]);}
+  if(v92Player2&&got===3&&v93Distance>=90&&!v93KeyGranted){v93KeyGranted=true;v92Key=true;v92ArchiveMessage('PARTY KEY RECEIVED','最後一把鑰匙','來源：PLAYER 2',2000);}
+  if(v93KeyGranted&&got===3&&v93Distance>=100&&!v93GateReady){v93GateReady=true;v92Portal=true;v92PortalT=0;v92ArchiveMessage('ARCHIVE GATE OPEN','你把重要的都帶到了。','現在才可以離開這一年。',2500);toast('⬆️ ARCHIVE GATE OPEN｜最後往前');}
+  if((got<3||v93Distance<100)&&v92Portal){v92Portal=false;v93GateReady=false;}
+  if(v92Portal){v92PortalT+=dt;const px=W/2,py=H*.24;if(Math.hypot(px-v92Runner.x,py-v92Runner.y)<68&&got===3){v92PortalEntered=true;v92ArchiveMode=false;$('#archiveHud').classList.remove('show');$('#timeLabel').classList.remove('show');v92ArchiveCinematic();return}}
+
+  // This is the actual consequence that was missing in v9.2.
+  if(v92TimeLine<v92Runner.y+54&&v93TouchCd<=0){v93TouchCd=1.6;v93LoseMemory();}
+};
+
+// Story pacing: three acts instead of unrelated timed popups.
+update=function(dt){
+  if(v92ArchiveMode){v92UpdateArchive(dt);return}
+  v9BaseUpdate(dt);if(!started||paused||finished||v92ArchiveStarted)return;
+  // ACT I｜清垃圾
+  if(!v9MemSpawn[0]&&runSeconds>=13){v9MemSpawn[0]=true;v9SpawnMemory(1)}
+  if(!v9Aid1&&runSeconds>=30&&v9MemorySeen>=1){v9Aid1=true;v9Aid(1)}
+  // ACT II｜有人在改系統
+  if(!v9MemSpawn[1]&&runSeconds>=47){v9MemSpawn[1]=true;v9SpawnMemory(2)}
+  if(!v9WishDone&&runSeconds>=55&&!paused)v92BirthdayWish();
+  if(!v9MemSpawn[2]&&runSeconds>=70){v9MemSpawn[2]=true;v9SpawnMemory(3)}
+  if(runSeconds>=79&&!v92ChaosHack){v92ChaosHack=true;v9ShowAlly('UNKNOWN USER｜正在覆寫遊戲規則…',2400);toast('⚠ SYSTEM：偵測到未授權修改')}
+  // ACT III｜玩家已知道有人在幫他，但還不知道是誰
+  if(!v9Aid2&&runSeconds>=86&&v9MemorySeen>=2){v9Aid2=true;v9Aid(2)}
+  if(runSeconds>=93&&!v9ChaosAid){v9ChaosAid=true;v9Aid(3)}
+  v9UpdateStoryDrops();
+};
+
+// Give each MEMORY beat a different narrative job so it no longer feels repetitive.
+v92MemoryScene=function(id){
+  v9MemorySeen++;v92MemoryAnalyzed++;
+  if(id===1){
+    v9StoryScene('RESIDUAL FILE','😂','MEMORY 01｜疑似黑歷史',`<div class="memoryPhoto"><div class="mock">😂📸</div></div>AI 辨識中……<br>……<br><b>系統建議：不要辨識。</b><br><br>正在刪除……<br><span class="storyAccent">⚠ DELETE FAILED</span><br><br>UNKNOWN USER：<b>「這張留著。」</b>`,'蛤？誰啦');
+  }else if(id===2){
+    v9StoryScene('PERMISSION CONFLICT','🫧','MEMORY 02｜普通的一天',`<div class="memoryPhoto"><div class="mock">🫶📷</div></div>戰鬥價值：0<br>金錢價值：0<br>任務價值：0<br><br>系統再次建議：DELETE<br><span class="storyAccent">⚠ 再次遭到相同權限阻止</span><br><br>UNKNOWN USER：<b>「普通也可以很重要。」</b>`,'這人到底是誰',()=>banner('OBJECTIVE UPDATED','找出 UNKNOWN USER','他好像不是來搗亂的。'));
+  }else{
+    v9StoryScene('ANOMALY FOUND','✦','MEMORY 03｜來源一致',`<div class="memoryPhoto"><div class="mock">✨📷</div></div>三個 MEMORY 比對完成。<br><br><b>它們不是系統殘留。</b><br><br><span class="storyAccent">有人刻意把它們保存到今天。</span><br><br>來源：UNKNOWN USER<br>備註：<b>DO NOT DELETE.</b>`,'先把它們留下',()=>{v92MidReveal=true;banner('STORY UPDATE','這場遊戲裡還有另一個人','但他還不打算現身。')});
+  }
+};
+v9OpenMemory=v92MemoryScene;
+
+// Draw the runner with visible consequences: danger vignette, backward warning, and a fixed reachable gate.
+v92DrawArchive=function(){
+  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0d1530');g.addColorStop(.55,'#090f1f');g.addColorStop(1,'#05070c');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  ctx.save();ctx.globalAlpha=.22;ctx.strokeStyle='#9cc7ff';ctx.lineWidth=1;for(let i=0;i<11;i++){let y=((i*112+v92Road)%1232)-112;ctx.beginPath();ctx.moveTo(66,y);ctx.lineTo(W-66,y);ctx.stroke()}ctx.restore();
+  ctx.save();ctx.globalAlpha=.09;ctx.font='900 16px system-ui';ctx.fillStyle='#fff';for(let i=0;i<10;i++){let y=((i*175+v92Road*.68)%1750)-160;ctx.fillText(['2025','LATE','PAY','TODO','MEMORY','YESTERDAY'][i%6],24+(i%3)*152,y)}ctx.restore();
+  // TIME wall
+  let tg=ctx.createLinearGradient(0,v92TimeLine-110,0,H);tg.addColorStop(0,'rgba(140,165,220,0)');tg.addColorStop(.22,'rgba(94,112,172,.30)');tg.addColorStop(1,'rgba(5,7,13,.98)');ctx.fillStyle=tg;ctx.fillRect(0,v92TimeLine-110,W,H-v92TimeLine+110);ctx.strokeStyle='rgba(226,237,255,.78)';ctx.lineWidth=3;ctx.beginPath();for(let x=0;x<=W;x+=14){let y=v92TimeLine+Math.sin(x*.05+performance.now()/240)*9;if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.font='1000 15px system-ui';ctx.textAlign='center';ctx.fillStyle='rgba(240,246,255,.8)';ctx.fillText('TIME',W/2,Math.min(H-20,v92TimeLine+34));
+  // obstacle / memory
+  v92Obstacles.forEach(o=>{ctx.font='32px system-ui';ctx.textAlign='center';ctx.globalAlpha=.84;ctx.fillText(o.icon,o.x,o.y+10)});ctx.globalAlpha=1;
+  v92ArchiveMem.forEach(mem=>{if(mem.got)return;let rg=ctx.createRadialGradient(mem.x,mem.y,4,mem.x,mem.y,36);rg.addColorStop(0,'#dcf7ffaa');rg.addColorStop(1,'#8adfff00');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(mem.x,mem.y,36,0,Math.PI*2);ctx.fill();ctx.font='27px system-ui';ctx.fillStyle='#fff';ctx.fillText('📸',mem.x,mem.y+8);ctx.font='800 9px system-ui';ctx.fillStyle='#c7eeff';ctx.fillText('MEMORY 0'+mem.id,mem.x,mem.y+31)});
+  // gate
+  if(v92Portal){let px=W/2,py=H*.24;let rg=ctx.createRadialGradient(px,py,8,px,py,82);rg.addColorStop(0,'#fff8c6bb');rg.addColorStop(.42,'#9cecff66');rg.addColorStop(1,'#9cecff00');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(px,py,82,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#e3fbff';ctx.lineWidth=6;ctx.beginPath();ctx.ellipse(px,py,60,34,0,0,Math.PI*2);ctx.stroke();ctx.font='900 10px system-ui';ctx.fillStyle='#fff';ctx.fillText('ARCHIVE GATE',px,py-50)}
+  // player 2
+  if(v92Player2){ctx.save();ctx.translate(v92Runner.x+42,v92Runner.y+10);ctx.fillStyle='#ffd98d';ctx.beginPath();ctx.arc(0,-9,13,0,Math.PI*2);ctx.fill();ctx.fillStyle='#6d4f94';ctx.beginPath();ctx.roundRect(-14,5,28,30,9);ctx.fill();ctx.font='800 8px system-ui';ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText(v92Portal?v9Giver:'P2',0,49);ctx.restore()}
+  // hero
+  ctx.save();ctx.translate(v92Runner.x,v92Runner.y);if(v92Runner.inv>0&&Math.floor(v92Runner.inv*12)%2===0)ctx.globalAlpha=.4;ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(0,24,22,7,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#4056cc';ctx.beginPath();ctx.moveTo(-15,5);ctx.quadraticCurveTo(0,43,15,5);ctx.lineTo(11,34);ctx.quadraticCurveTo(0,45,-11,34);ctx.closePath();ctx.fill();ctx.fillStyle='#edf4ff';ctx.beginPath();ctx.arc(0,-9,15,0,Math.PI*2);ctx.fill();ctx.fillStyle='#263b89';ctx.beginPath();ctx.roundRect(-15,6,30,30,9);ctx.fill();ctx.restore();
+  v92ArchiveParticles.forEach(q=>{ctx.globalAlpha=Math.max(0,q.t/.55);ctx.fillStyle='#c8f1ff';ctx.fillRect(q.x-3,q.y-3,6,6)});ctx.globalAlpha=1;
+  // Visible danger when TIME is near.
+  const gap=v92TimeLine-v92Runner.y;if(gap<150){const a=Math.max(0,Math.min(.36,(150-gap)/230));let edge=ctx.createRadialGradient(W/2,H/2,170,W/2,H/2,H*.72);edge.addColorStop(0,'rgba(255,70,105,0)');edge.addColorStop(1,`rgba(255,70,105,${a})`);ctx.fillStyle=edge;ctx.fillRect(0,0,W,H)}
+};
+</script>
+
+
+<style>
+/* ===== v9.4 MEMORY RELAY + MEANINGFUL DOWNED STATE ===== */
+#candlesHud{position:absolute;left:14px;top:max(95px,calc(env(safe-area-inset-top) + 82px));z-index:12;padding:7px 10px;border-radius:13px;background:#080d18d9;border:1px solid #ffffff19;backdrop-filter:blur(10px);font-size:11px;letter-spacing:.05em;box-shadow:0 8px 24px #0007;pointer-events:none}
+#candlesHud b{color:#ffe59b}#candlesHud.hide{display:none}
+#downedOverlay{position:absolute;inset:0;z-index:70;display:none;place-items:center;padding:22px;background:radial-gradient(circle at 50% 35%,#2a1221e8,#05070df8 70%);pointer-events:auto}
+#downedOverlay.show{display:grid}.downedCard{width:min(390px,92vw);padding:28px 22px;border-radius:28px;text-align:center;background:linear-gradient(180deg,#25131fee,#0b0e18f2);border:1px solid #ff91a933;box-shadow:0 30px 100px #000d}.downedIcon{font-size:50px}.downedTitle{font-size:30px;font-weight:1000;margin:5px 0}.downedText{font-size:13px;line-height:1.7;opacity:.8}.downedBtn{width:100%;margin-top:15px;padding:15px;border:0;border-radius:17px;font-weight:1000;font-size:14px;background:linear-gradient(180deg,#fff0b5,#e9bb62);color:#120d08}.downedBtn.secondary{background:#ffffff0c;color:#fff;border:1px solid #ffffff18}
+#relayHud{position:absolute;left:50%;top:max(132px,calc(env(safe-area-inset-top) + 118px));transform:translateX(-50%);width:min(90%,420px);z-index:14;display:none;text-align:center;pointer-events:none}
+#relayHud.show{display:block}.relayCard{padding:10px 12px;border-radius:16px;background:#07101ee8;border:1px solid #bfe9ff24;backdrop-filter:blur(12px);box-shadow:0 12px 34px #0008}.relayStep{font-size:10px;letter-spacing:.24em;opacity:.62}.relayGoal{font-size:14px;font-weight:1000;margin-top:3px}.relayMeta{display:flex;justify-content:center;gap:13px;margin-top:7px;font-size:10px;opacity:.76}.relayMeta b{color:#fff}.relayDots{display:flex;justify-content:center;gap:7px;margin-top:8px}.relayDot{width:28px;height:5px;border-radius:999px;background:#ffffff15}.relayDot.done{background:#9aeaff;box-shadow:0 0 12px #8de8ff77}.relayDot.current{background:#ffe28f;box-shadow:0 0 12px #ffd66f77}
+#relayArrow{position:absolute;left:50%;top:27%;transform:translate(-50%,-50%);z-index:13;display:none;pointer-events:none;text-align:center;color:#dff8ff;text-shadow:0 5px 18px #000}.relayArrow.show{display:block;animation:relayBob .8s ease-in-out infinite alternate}.relayArrow .arr{font-size:28px;line-height:1}.relayArrow .txt{font-size:10px;font-weight:900;letter-spacing:.12em}@keyframes relayBob{to{transform:translate(-50%,-44%)}}
+#relayFail{position:absolute;inset:0;z-index:65;display:none;place-items:center;padding:22px;background:#050810e6;pointer-events:auto}#relayFail.show{display:grid}.relayFailCard{width:min(382px,92vw);padding:25px 21px;border-radius:26px;text-align:center;background:linear-gradient(180deg,#111b30f5,#080e19f4);border:1px solid #ffffff18;box-shadow:0 30px 100px #000d}.relayFailK{font-size:10px;letter-spacing:.3em;opacity:.62}.relayFailT{font-size:28px;font-weight:1000;margin:7px 0}.relayFailS{font-size:13px;line-height:1.65;opacity:.78}.relayFailBtn{width:100%;margin-top:15px;padding:15px;border:0;border-radius:17px;background:linear-gradient(180deg,#eefaff,#bfe8ff);color:#06101a;font-weight:1000;font-size:14px}
+</style>
+<script>
+/* =========================
+   v9.4 MEMORY RELAY
+   - Main combat: no automatic resurrection. HP 0 enters DOWNED state and spends a visible Birthday Candle.
+   - TIME RUN: no HP. Three explicit relay segments: collect MEMORY -> deliver to BEACON.
+   - TIME catching the player restarts only the current relay segment from a checkpoint.
+   ========================= */
+let v94Candles=2;
+let v94RelayStage=1,v94RelayArchived=0,v94RelayCarrying=false,v94RelayMemory=null,v94RelayBeacon=false,v94RelayFails=0,v94RelayFailing=false,v94RelayFinalGate=false,v94RelayAssist=0,v94RelayP2Saved=false;
+(function(){
+  const frame=document.querySelector('.frame');
+  if(!frame)return;
+  const ch=document.createElement('div');ch.id='candlesHud';ch.innerHTML='CONTINUE｜生日蠟燭 <b id="candleCount">🕯️🕯️</b>';frame.appendChild(ch);
+  const d=document.createElement('div');d.id='downedOverlay';d.innerHTML='<div class="downedCard"><div class="downedIcon">🕯️</div><div class="downedTitle" id="downedTitle">YOU ARE DOWN</div><div class="downedText" id="downedText"></div><button class="downedBtn" id="continueBtn"></button><button class="downedBtn secondary" id="restartBtn">重新開始這一局</button></div>';frame.appendChild(d);
+  const h=document.createElement('div');h.id='relayHud';h.innerHTML='<div class="relayCard"><div class="relayStep" id="relayStep">MEMORY RELAY｜STEP 1 / 3</div><div class="relayGoal" id="relayGoal">取得 MEMORY 01</div><div class="relayMeta"><span>封存 <b id="relayArchived">0/3</b></span><span>TIME <b id="relayGap">SAFE</b></span></div><div class="relayDots"><i class="relayDot" id="rd1"></i><i class="relayDot" id="rd2"></i><i class="relayDot" id="rd3"></i></div></div>';frame.appendChild(h);
+  const a=document.createElement('div');a.id='relayArrow';a.innerHTML='<div class="arr">↑</div><div class="txt" id="relayArrowTxt">前往 MEMORY</div>';frame.appendChild(a);
+  const f=document.createElement('div');f.id='relayFail';f.innerHTML='<div class="relayFailCard"><div class="relayFailK">TIME CAUGHT YOU</div><div class="relayFailT" id="relayFailT">這段沒有封存成功</div><div class="relayFailS" id="relayFailS"></div><button class="relayFailBtn" id="relayRetryBtn">從上一個 CHECKPOINT 重跑</button></div>';frame.appendChild(f);
+  $('#restartBtn').onclick=()=>location.reload();
+  $('#relayRetryBtn').onclick=()=>{ $('#relayFail').classList.remove('show'); paused=false; v94ResetRelayStage(false); };
+})();
+function v94UpdateCandles(){
+  const e=$('#candleCount');if(e)e.textContent='🕯️'.repeat(v94Candles)+'·'.repeat(Math.max(0,2-v94Candles));
+}
+function v94ShowDowned(){
+  paused=true;
+  const can=v94Candles>0;
+  $('#downedOverlay').classList.add('show');
+  $('#downedTitle').textContent=can?'YOU ARE DOWN':'RUN FAILED';
+  $('#downedText').innerHTML=can?`這次不會自動站起來。<br><br>要繼續，就必須消耗一根 <b>Birthday Candle</b>。<br>剩餘：<b>${v94Candles}</b>`:`生日蠟燭已經用完。<br><br>這局真的結束了。血條不再只是裝飾。`;
+  $('#continueBtn').style.display=can?'block':'none';
+  $('#continueBtn').textContent=can?`🕯️ 點燃生日蠟燭續命（剩 ${v94Candles}）`:'';
+  $('#continueBtn').onclick=()=>{
+    if(v94Candles<=0)return;
+    v94Candles--;v94UpdateCandles();p.hp=p.maxhp;p.inv=2.2;p.combo=0;p.comboT=0;
+    // breathing room after continue
+    enemyShots=[];hazards=[];enemies.forEach(e=>{let dx=e.x-p.x,dy=e.y-p.y,m=Math.hypot(dx,dy)||1;e.x+=dx/m*120;e.y+=dy/m*120});
+    $('#downedOverlay').classList.remove('show');paused=false;sfx('fever');vib([20,30,70]);toast(`🕯️ CONTINUE｜剩 ${v94Candles} 根生日蠟燭`);
+  };
+}
+// Replace the old infinite auto-revive rule.
+hitPlayer=function(){
+  if(p.inv>0||finished||paused||v92ArchiveMode)return;
+  p.hp--;p.inv=.9;p.combo=0;p.comboT=0;flash();sfx('hit');vib([25,25,45]);
+  if(p.hp<=0){p.hp=0;v94ShowDowned();}
+};
+
+// Explain a clear, three-step relay before entering TIME.
+v92BeginArchiveGate=function(){
+  v9StoryScene('TIME RELAY','⏳','最後任務｜把回憶送過時間',`TIME.lock 不需要被擊敗。<br><br>這次只有一個很清楚的規則：<br><br><b>① 撿起 MEMORY<br>② 把它送到畫面上方的 ARCHIVE BEACON<br>③ 完成 3 次</b><br><br>如果 TIME 追到你，<span class="storyAccent">當前這一段會失敗並回到上一個 CHECKPOINT</span>。<br><br>沒有血條，也沒有無限復活。`,'開始 MEMORY RELAY',()=>v92StartArchiveRun(),true);
+};
+function v94SpawnRelayMemory(){
+  v94RelayMemory={id:v94RelayStage,x:[125,240,355][(v94RelayStage-1)%3],y:H*.31,r:24,got:false};
+  v94RelayCarrying=false;v94RelayBeacon=false;
+  v92ArchiveMessage('STEP '+v94RelayStage+' / 3',`取得 MEMORY 0${v94RelayStage}`,'拿到後，把它送到上方封存點。',1700);
+}
+function v94ResetRelayStage(first=false){
+  v94RelayFailing=false;v94RelayCarrying=false;v94RelayBeacon=false;v94RelayFinalGate=false;
+  v92Runner.x=W/2;v92Runner.y=H*.77;v92Runner.inv=.8;v92Runner.dash=0;v92Runner.dashCd=0;
+  v92TimeLine=H+95;v92Obstacles=[];v92ArchiveParticles=[];v92Road=0;
+  v94SpawnRelayMemory();
+  if(!first) v92ArchiveMessage('CHECKPOINT RESTORED',`STEP ${v94RelayStage} / 3`,'這次把 MEMORY 送到上方藍色封存點。',1600);
+  v94RelayUpdateHud();
+}
+function v94RelayUpdateHud(){
+  const gap=Math.round(v92TimeLine-v92Runner.y);
+  $('#relayStep').textContent=v94RelayFinalGate?'FINAL GATE':`MEMORY RELAY｜STEP ${v94RelayStage} / 3`;
+  $('#relayArchived').textContent=`${v94RelayArchived}/3`;
+  $('#relayGap').textContent=gap<95?'DANGER':gap<170?'CLOSE':'SAFE';
+  $('#relayGoal').textContent=v94RelayFinalGate?'進入金色 ARCHIVE GATE':v94RelayCarrying?`把 MEMORY 0${v94RelayStage} 送到上方封存點`:`先取得 MEMORY 0${v94RelayStage}`;
+  for(let i=1;i<=3;i++){const d=$('#rd'+i);d.className='relayDot'+(i<=v94RelayArchived?' done':i===v94RelayStage&&!v94RelayFinalGate?' current':'');}
+  $('#relayArrowTxt').textContent=v94RelayFinalGate?'進入 ARCHIVE GATE':v94RelayCarrying?'送到封存點':'前往 MEMORY';
+}
+function v94RelayFail(){
+  if(v94RelayFailing)return;v94RelayFailing=true;paused=true;v94RelayFails++;
+  $('#relayFailT').textContent=v94RelayCarrying?`MEMORY 0${v94RelayStage} 被 TIME 截走`:`STEP ${v94RelayStage} 沒有完成`;
+  $('#relayFailS').innerHTML=`你沒有死亡，也不會扣一點分數就當沒事。<br><br><b>當前段落必須重跑。</b><br>已完成的 CHECKPOINT：${v94RelayArchived}/3`+(v94RelayFails>=2?'<br><br><span style="color:#ffe59b">連續失敗後，本段 TIME 速度已稍微降低。</span>':'');
+  $('#relayFail').classList.add('show');
+  flash();vib([35,30,80]);sfx('hit');
+  if(v94RelayFails>=2)v94RelayAssist=Math.min(3,v94RelayAssist+1);
+}
+function v94CompleteRelayStage(){
+  if(!v94RelayCarrying)return;
+  v94RelayArchived++;v94RelayCarrying=false;sfx('level');vib([18,24,55]);
+  v92ArchiveMessage('MEMORY ARCHIVED',`MEMORY 0${v94RelayStage}｜SAFE`,`CHECKPOINT ${v94RelayArchived}/3 已建立。`,1800);
+  if(v94RelayArchived>=3){
+    v92Player2=true;v92Key=true;v94RelayFinalGate=true;v92TimeLine=Math.min(H+100,v92Runner.y+240);
+    v9ShowAlly('PLAYER 2｜CONNECTED',2600);v92ArchiveMessage('PLAYER 2 JOINED',`${v9Giver}`,'最後一扇門，一起走。',2400);sfx('fever');vib([20,30,70,40,100]);
+    v94RelayMemory=null;v92Runner.y=H*.72;v92Runner.x=W/2;v94RelayUpdateHud();
+  }else{
+    v94RelayStage++;setTimeout(()=>{if(v92ArchiveMode&&!finished){v94ResetRelayStage(true)}},700);
+  }
+}
+const v94OldStart=v92StartArchiveRun;
+v92StartArchiveRun=function(){
+  v94OldStart();
+  v94RelayStage=1;v94RelayArchived=0;v94RelayFails=0;v94RelayAssist=0;v94RelayP2Saved=false;v94RelayFinalGate=false;
+  v92ArchiveMem=[];v92Portal=false;v92Player2=false;v92Key=false;
+  $('#archiveHud').classList.remove('show');$('#relayHud').classList.add('show');$('#relayArrow').classList.add('show');$('#candlesHud').classList.add('hide');
+  $('#timeLabel').textContent='FINAL OBJECTIVE｜MEMORY RELAY';
+  v94ResetRelayStage(true);
+};
+function v94ArchiveDash(){
+  if(!v92ArchiveMode){v92OldDash();return}
+  if(v92Runner.dashCd>0)return;
+  v92Runner.dash=.22;v92Runner.dashCd=.86;
+  const forward=(joy.y<-.12||keys.up>0);if(forward)v92TimeLine=Math.min(H+110,v92TimeLine+66);
+  vib(18);sfx('dash');
+}
+dash=v94ArchiveDash;v93Dash=v94ArchiveDash;
+
+v92UpdateArchive=function(dt){
+  if(paused||finished||v94RelayFailing)return;
+  v92ArchiveT+=dt;v92Runner.inv=Math.max(0,v92Runner.inv-dt);v92Runner.dash=Math.max(0,v92Runner.dash-dt);v92Runner.dashCd=Math.max(0,v92Runner.dashCd-dt);
+  let dx=keys.right-keys.left+joy.x,dy=keys.down-keys.up+joy.y,m=Math.hypot(dx,dy);if(m>1){dx/=m;dy/=m}
+  const sp=v92Runner.dash>0?530:260;v92Runner.x=Math.max(43,Math.min(W-43,v92Runner.x+dx*sp*dt));v92Runner.y=Math.max(H*.15,Math.min(H*.82,v92Runner.y+dy*sp*dt));
+  // TIME closes in. Each stage gets faster, repeated fails get a mild accessibility reduction.
+  const stagePressure=9*(v94RelayStage-1);const assist=v94RelayAssist*5;const idle=Math.hypot(dx,dy)<.12?8:0;const backward=Math.max(0,dy)*55;
+  v92TimeLine-=dt*Math.max(15,30+stagePressure+idle+backward-assist);
+  v92Road+=dt*(140+Math.max(0,-dy)*160);
+  // Hazards create route choice, but no HP damage in TIME RELAY.
+  const hazardRate=.55+.16*(v94RelayStage-1);
+  if(Math.random()<dt*hazardRate)v92SpawnObstacle();
+  v92Obstacles.forEach(o=>{o.y+=o.vy*dt;if(!o.dead&&Math.hypot(o.x-v92Runner.x,o.y-v92Runner.y)<o.r+v92Runner.r&&v92Runner.inv<=0){o.dead=true;v92Runner.inv=.7;v92TimeLine-=56;flash();vib([18,20,38]);toast('⏳ 撞擊｜TIME 靠近');}});v92Obstacles=v92Obstacles.filter(o=>!o.dead&&o.y<H+55);
+  // MEMORY is a clear stationary objective in the upper half of the screen.
+  if(v94RelayMemory&&!v94RelayMemory.got){
+    const mm=v94RelayMemory;
+    if(Math.hypot(mm.x-v92Runner.x,mm.y-v92Runner.y)<48){mm.got=true;v94RelayCarrying=true;v94RelayBeacon=true;v92TimeLine=Math.min(H+110,v92TimeLine+85);sfx('chest');vib([14,18,34]);burst(mm.x,mm.y,'#bfefff',16,190);v92ArchiveMessage('MEMORY ACQUIRED',`MEMORY 0${v94RelayStage}`,'現在送到畫面上方的藍色 ARCHIVE BEACON。',1800);}
+  }
+  // Deliver to a fixed, visible blue checkpoint.
+  const bx=W/2,by=H*.20;
+  if(v94RelayBeacon&&Math.hypot(bx-v92Runner.x,by-v92Runner.y)<70)v94CompleteRelayStage();
+  // After all three checkpoints, enter one final gold gate.
+  if(v94RelayFinalGate&&Math.hypot(W/2-v92Runner.x,H*.20-v92Runner.y)<72){v92ArchiveMode=false;$('#relayHud').classList.remove('show');$('#relayArrow').classList.remove('show');$('#timeLabel').classList.remove('show');v92ArchiveCinematic();return;}
+  if(v92TimeLine<v92Runner.y+50)v94RelayFail();
+  v94RelayUpdateHud();
+};
+
+// Cleaner TIME RELAY drawing: objective first, spectacle second.
+v92DrawArchive=function(){
+  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#101b38');g.addColorStop(.52,'#091225');g.addColorStop(1,'#04070d');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // forward motion lanes
+  ctx.save();ctx.globalAlpha=.22;ctx.strokeStyle='#9acfff';ctx.lineWidth=1;for(let i=0;i<10;i++){let y=((i*118+v92Road)%1180)-118;ctx.beginPath();ctx.moveTo(72,y);ctx.lineTo(W-72,y);ctx.stroke()}ctx.restore();
+  // TIME wall
+  let tg=ctx.createLinearGradient(0,v92TimeLine-100,0,H);tg.addColorStop(0,'rgba(120,150,215,0)');tg.addColorStop(.2,'rgba(86,105,166,.32)');tg.addColorStop(1,'rgba(4,6,12,.98)');ctx.fillStyle=tg;ctx.fillRect(0,v92TimeLine-100,W,H-v92TimeLine+100);ctx.strokeStyle='rgba(230,241,255,.82)';ctx.lineWidth=3;ctx.beginPath();for(let x=0;x<=W;x+=14){let y=v92TimeLine+Math.sin(x*.05+performance.now()/235)*9;if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.font='1000 14px system-ui';ctx.textAlign='center';ctx.fillStyle='#eaf5ff';ctx.fillText('TIME',W/2,Math.min(H-18,v92TimeLine+32));
+  // obstacles
+  v92Obstacles.forEach(o=>{ctx.font='31px system-ui';ctx.globalAlpha=.84;ctx.fillText(o.icon,o.x,o.y+10)});ctx.globalAlpha=1;
+  // memory objective
+  if(v94RelayMemory&&!v94RelayMemory.got){const m=v94RelayMemory;let rg=ctx.createRadialGradient(m.x,m.y,3,m.x,m.y,48);rg.addColorStop(0,'#e9fcffcc');rg.addColorStop(1,'#8de7ff00');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(m.x,m.y,48,0,Math.PI*2);ctx.fill();ctx.font='34px system-ui';ctx.fillText('📸',m.x,m.y+10);ctx.font='1000 10px system-ui';ctx.fillStyle='#d9f8ff';ctx.fillText('MEMORY 0'+v94RelayStage,m.x,m.y+39)}
+  // checkpoint beacon / final gate
+  if(v94RelayBeacon||v94RelayFinalGate){const bx=W/2,by=H*.20;let rg=ctx.createRadialGradient(bx,by,6,bx,by,82);rg.addColorStop(0,v94RelayFinalGate?'#fff1aacc':'#bcefffcc');rg.addColorStop(1,v94RelayFinalGate?'#ffd76c00':'#8ce8ff00');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(bx,by,82,0,Math.PI*2);ctx.fill();ctx.strokeStyle=v94RelayFinalGate?'#ffe18a':'#bcefff';ctx.lineWidth=6;ctx.beginPath();ctx.ellipse(bx,by,61,34,0,0,Math.PI*2);ctx.stroke();ctx.font='900 10px system-ui';ctx.fillStyle='#fff';ctx.fillText(v94RelayFinalGate?'ARCHIVE GATE':'ARCHIVE BEACON',bx,by-50)}
+  // carried memory tether
+  if(v94RelayCarrying&&!v94RelayFinalGate){ctx.strokeStyle='rgba(159,234,255,.55)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(v92Runner.x,v92Runner.y-22);ctx.lineTo(v92Runner.x,v92Runner.y-48);ctx.stroke();ctx.font='24px system-ui';ctx.fillText('📸',v92Runner.x,v92Runner.y-52)}
+  // Player 2 only appears after all memories are archived.
+  if(v94RelayFinalGate){ctx.save();ctx.translate(v92Runner.x+42,v92Runner.y+8);ctx.fillStyle='#ffd98d';ctx.beginPath();ctx.arc(0,-9,13,0,Math.PI*2);ctx.fill();ctx.fillStyle='#6d4f94';ctx.beginPath();ctx.roundRect(-14,5,28,30,9);ctx.fill();ctx.font='800 8px system-ui';ctx.fillStyle='#fff';ctx.fillText(v9Giver,0,49);ctx.restore()}
+  // hero
+  ctx.save();ctx.translate(v92Runner.x,v92Runner.y);if(v92Runner.inv>0&&Math.floor(v92Runner.inv*12)%2===0)ctx.globalAlpha=.42;ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(0,24,22,7,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#4056cc';ctx.beginPath();ctx.moveTo(-15,5);ctx.quadraticCurveTo(0,43,15,5);ctx.lineTo(11,34);ctx.quadraticCurveTo(0,45,-11,34);ctx.closePath();ctx.fill();ctx.fillStyle='#edf4ff';ctx.beginPath();ctx.arc(0,-9,15,0,Math.PI*2);ctx.fill();ctx.fillStyle='#263b89';ctx.beginPath();ctx.roundRect(-15,6,30,30,9);ctx.fill();ctx.restore();
+  // danger edge
+  const gap=v92TimeLine-v92Runner.y;if(gap<150){const a=Math.max(0,Math.min(.4,(150-gap)/210));let edge=ctx.createRadialGradient(W/2,H/2,170,W/2,H/2,H*.74);edge.addColorStop(0,'rgba(255,70,105,0)');edge.addColorStop(1,`rgba(255,70,105,${a})`);ctx.fillStyle=edge;ctx.fillRect(0,0,W,H)}
+};
+// Reset visible continue resource when a new test starts.
+$('#startBtn').addEventListener('click',()=>{v94Candles=2;v94UpdateCandles();$('#candlesHud').classList.remove('hide')});
+v94UpdateCandles();
+</script>
+
+
+<script>
+/* ===== v9.5 BOSS GATE + RELAY SUCCESS FIX =====
+   Goals:
+   1) Story Run must defeat a real YEAR BOSS before entering TIME RELAY.
+   2) Delivering MEMORY to BEACON must never also trigger TIME failure on the same frame.
+*/
+let v95BossVictory=false,v95BossDelayedToast=false,v95RelaySuccessLock=false;
+
+// Restore a real boss encounter before TIME. Keep v8 shield-core mechanics.
+spawnBoss=function(){
+  if(v92ArchiveStarted||paused||bossSpawned||v95BossVictory)return;
+  // The three MEMORY story beats are prerequisites, but they do NOT replace the boss anymore.
+  if(v9MemorySeen<3){
+    runSeconds=Math.min(runSeconds,99.2);
+    if(!v95BossDelayedToast){
+      v95BossDelayedToast=true;
+      toast(`📸 BOSS 前先收回剩餘 MEMORY ${3-v9MemorySeen} 個`);
+      setTimeout(()=>v95BossDelayedToast=false,1800);
+    }
+    return;
+  }
+  bossSpawned=true;
+  enemies=[];projectiles=[];enemyShots=[];hazards=[];gifts=[];weaponDrops=[];eliteChest=null;
+  boss={x:900,y:760,r:68,hp:300,maxhp:300,v:80,shotCd:.75,ringCd:2.2,hazardCd:3.2,dashCd:4,alive:true,stun:0,phase:1,tele:0,title:'年度殘留獸'};
+  v8BossShieldBroken=false;
+  for(let i=0;i<3;i++){
+    const a=i*Math.PI*2/3;
+    enemies.push({x:boss.x+Math.cos(a)*170,y:boss.y+Math.sin(a)*170,r:26,hp:24,maxhp:24,v:0,kind:'core',shotCd:1,stun:0,elite:false,id:Math.random(),coreAngle:a});
+  }
+  banner('YEAR BOSS','年度殘留獸','先破壞 3 個帳單核心，再清掉最後一批爛事。');
+  sfx('boss');vib([50,40,90,40,120]);
+  $('#bossMechanic').textContent='🛡️ 帳單核心 3/3｜Boss 傷害僅 16%';
+};
+
+// Boss defeat is now the explicit chapter clear that unlocks the archive story.
+finishRun=function(){
+  if(v95BossVictory||v92ArchiveStarted)return;
+  v95BossVictory=true;
+  bossSpawned=true;
+  enemyShots=[];hazards=[];enemies=[];projectiles=[];
+  sfx('level');vib([30,30,70,45,110]);
+  banner('BOSS CLEAR','年度殘留清除完成','戰鬥章節結束。接下來處理不能用武器解決的東西。');
+  setTimeout(()=>{
+    if(finished||v92ArchiveStarted)return;
+    v9StoryScene('CHAPTER CLEAR','🏆','LV.32｜戰鬥清理完成',
+      `鬧鐘、帳單、拖延、購物慾……<br><br><b>能打掉的東西，你真的打完了。</b><br><br>但是系統還剩下 3 個 MEMORY 無法刪除。<br><br><span class="storyAccent">接下來不是 Boss 戰。</span><br>是年度封存程序。`,
+      '整理最後的 MEMORY',()=>v92StoryChoice(),true);
+  },1150);
+};
+
+// Rename boss phase copy so the story never calls this TIME before TIME RELAY.
+const v95BossPhaseCheck=bossPhaseCheck;
+bossPhaseCheck=function(){
+  if(!boss||!boss.alive)return;
+  const before=boss.phase;
+  v95BossPhaseCheck();
+  if(boss&&boss.alive&&boss.phase!==before){
+    // Existing mechanics remain; this toast clarifies the enemy identity.
+    toast(`⚔️ 年度殘留獸｜PHASE ${boss.phase}`);
+  }
+};
+
+// Relay success now has an atomic lock. A successful BEACON delivery cannot fail later in the same frame.
+const v95OldCompleteRelayStage=v94CompleteRelayStage;
+v94CompleteRelayStage=function(){
+  if(!v94RelayCarrying||v95RelaySuccessLock)return false;
+  v95RelaySuccessLock=true;
+  // Create breathing room BEFORE any later TIME check.
+  v92TimeLine=H+130;
+  v92Runner.inv=1.1;
+  v94RelayFailing=false;
+  v95OldCompleteRelayStage();
+  setTimeout(()=>{v95RelaySuccessLock=false},220);
+  return true;
+};
+
+// Reset must also clear the delivery lock.
+const v95OldResetRelay=v94ResetRelayStage;
+v94ResetRelayStage=function(first=false){
+  v95RelaySuccessLock=false;
+  v95OldResetRelay(first);
+};
+
+// Replace TIME RELAY update with explicit mutually-exclusive states.
+v92UpdateArchive=function(dt){
+  if(paused||finished||v94RelayFailing)return;
+  v92ArchiveT+=dt;
+  v92Runner.inv=Math.max(0,v92Runner.inv-dt);
+  v92Runner.dash=Math.max(0,v92Runner.dash-dt);
+  v92Runner.dashCd=Math.max(0,v92Runner.dashCd-dt);
+  let dx=keys.right-keys.left+joy.x,dy=keys.down-keys.up+joy.y,m=Math.hypot(dx,dy);
+  if(m>1){dx/=m;dy/=m}
+  const sp=v92Runner.dash>0?530:260;
+  v92Runner.x=Math.max(43,Math.min(W-43,v92Runner.x+dx*sp*dt));
+  v92Runner.y=Math.max(H*.15,Math.min(H*.82,v92Runner.y+dy*sp*dt));
+
+  // TIME pressure.
+  const stagePressure=8*(v94RelayStage-1),assist=v94RelayAssist*5,idle=Math.hypot(dx,dy)<.12?6:0,backward=Math.max(0,dy)*48;
+  v92TimeLine-=dt*Math.max(14,27+stagePressure+idle+backward-assist);
+  v92Road+=dt*(140+Math.max(0,-dy)*160);
+
+  // Obstacles.
+  const hazardRate=.48+.13*(v94RelayStage-1);
+  if(Math.random()<dt*hazardRate)v92SpawnObstacle();
+  v92Obstacles.forEach(o=>{
+    o.y+=o.vy*dt;
+    if(!o.dead&&Math.hypot(o.x-v92Runner.x,o.y-v92Runner.y)<o.r+v92Runner.r&&v92Runner.inv<=0){
+      o.dead=true;v92Runner.inv=.7;v92TimeLine-=48;flash();vib([18,20,38]);toast('⏳ 撞擊｜TIME 靠近');
+    }
+  });
+  v92Obstacles=v92Obstacles.filter(o=>!o.dead&&o.y<H+55);
+
+  // STEP A: acquire current MEMORY.
+  if(v94RelayMemory&&!v94RelayMemory.got&&!v94RelayCarrying){
+    const mm=v94RelayMemory;
+    if(Math.hypot(mm.x-v92Runner.x,mm.y-v92Runner.y)<48){
+      mm.got=true;v94RelayCarrying=true;v94RelayBeacon=true;
+      v92TimeLine=Math.min(H+130,v92TimeLine+100);
+      sfx('chest');vib([14,18,34]);burst(mm.x,mm.y,'#bfefff',16,190);
+      v92ArchiveMessage('MEMORY ACQUIRED',`MEMORY 0${v94RelayStage}`,'目標已更新：送到上方藍色 ARCHIVE BEACON。',1900);
+      v94RelayUpdateHud();
+    }
+  }
+
+  // STEP B: deliver. SUCCESS RETURNS IMMEDIATELY — no TIME fail can occur this frame.
+  const bx=W/2,by=H*.20;
+  if(v94RelayCarrying&&v94RelayBeacon&&Math.hypot(bx-v92Runner.x,by-v92Runner.y)<74){
+    if(v94CompleteRelayStage()){
+      v94RelayUpdateHud();
+      return;
+    }
+  }
+
+  // FINAL GATE: after 3 secured memories.
+  if(v94RelayFinalGate&&Math.hypot(W/2-v92Runner.x,H*.20-v92Runner.y)<76){
+    v92ArchiveMode=false;
+    $('#relayHud').classList.remove('show');$('#relayArrow').classList.remove('show');$('#timeLabel').classList.remove('show');
+    v92ArchiveCinematic();
+    return;
+  }
+
+  // Failure is evaluated only if no success happened this frame.
+  if(!v95RelaySuccessLock&&v92TimeLine<v92Runner.y+46){
+    v94RelayFail();
+    return;
+  }
+  v94RelayUpdateHud();
+};
+
+// Clarify the TIME chapter intro: it follows boss victory.
+v92BeginArchiveGate=function(){
+  v9StoryScene('FINAL CHAPTER','⏳','Boss 打完了，現在穿過時間',
+    `年度殘留獸已經被清除。<br><br>但 MEMORY 不是敵人，TIME 也不是下一隻 Boss。<br><br>最後任務只有三段：<br><br><b>① 取得 MEMORY<br>② 送到藍色 ARCHIVE BEACON<br>③ 畫面出現「MEMORY SECURED」才算完成</b><br><br>完成 3 次後，金色 ARCHIVE GATE 才會開啟。`,
+    '開始最後封存',()=>v92StartArchiveRun(),true);
+};
+
+// Stronger confirmation language on a successful relay.
+const v95OldArchiveMessage=v92ArchiveMessage;
+// Keep function itself, but successful stage uses upgraded text via override above and UI update.
+
+// Reset test-state fields when starting a new run.
+$('#startBtn').addEventListener('click',()=>{v95BossVictory=false;v95BossDelayedToast=false;v95RelaySuccessLock=false});
 </script>
 </body></html>
