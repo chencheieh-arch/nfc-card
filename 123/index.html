@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
-<title>LEVEL +1｜Birthday Rush v7</title>
+<title>LEVEL +1｜Birthday Chaos v8</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#03050a;color:#fff;font-family:Inter,system-ui,-apple-system,"Noto Sans TC",sans-serif}
@@ -17,6 +17,15 @@ canvas{width:min(100vw,480px);height:var(--app-height);max-height:920px;backgrou
 .controls{pointer-events:auto;position:absolute;left:0;right:0;bottom:max(var(--lift),calc(env(safe-area-inset-bottom) + 34px));height:165px}.joyBase{position:absolute;left:23px;bottom:15px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ffffff18,#ffffff07 62%,#00000020);border:1px solid #ffffff1e;box-shadow:inset 0 0 28px #0008,0 18px 40px #0008}.joyStick{position:absolute;left:40px;top:40px;width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ffffff74,#ffffff20 70%);border:1px solid #ffffff50;box-shadow:0 10px 24px #0008}.btn{position:absolute;border-radius:50%;display:grid;place-items:center;text-align:center;font-weight:1000;color:#fff;user-select:none;border:1px solid #ffffff2b;box-shadow:inset 0 0 24px #ffffff12,0 16px 36px #0009;backdrop-filter:blur(9px)}.btn.active{transform:scale(.93);filter:brightness(1.32)}#skill{right:21px;bottom:15px;width:90px;height:90px;background:radial-gradient(circle at 35% 30%,#ffd872c4,#9c5b1677 70%);font-size:10px;line-height:1.05}#dash{right:119px;bottom:18px;width:61px;height:61px;background:radial-gradient(circle at 35% 30%,#82d4ffc9,#1d628179 70%);font-size:9px}#swap{right:120px;bottom:92px;width:58px;height:58px;background:radial-gradient(circle at 35% 30%,#bc9affc1,#56328b79 70%);font-size:9px}.readyPulse{animation:pulse 1s infinite}@keyframes pulse{50%{box-shadow:inset 0 0 30px #fff8,0 0 34px #ffd46d99,0 16px 36px #0009}}
 #start,#end,#levelup,#evolve{position:absolute;inset:0;pointer-events:auto;display:grid;place-items:center;padding:22px;background:linear-gradient(180deg,#070b14e9,#050810f5);z-index:10}#end,#levelup,#evolve{display:none}.card{width:min(398px,92vw);border-radius:28px;padding:27px 23px;background:linear-gradient(180deg,#101a2fed,#09111fea);border:1px solid #ffffff18;box-shadow:0 28px 100px #000c;text-align:center}.eyebrow{font-size:10px;letter-spacing:.34em;opacity:.7}h1{font-size:38px;line-height:1.04;margin:10px 0 5px}.sub{font-size:16px;font-weight:800;color:#d6e7ff;margin-bottom:11px}.lead{font-size:13px;line-height:1.72;opacity:.8}.startbtn{margin-top:18px;width:100%;padding:16px;border:0;border-radius:18px;background:linear-gradient(180deg,#f4f8ff,#cce7ff);color:#07101a;font-size:16px;font-weight:1000}.hint{font-size:11px;line-height:1.55;opacity:.58;margin-top:11px}.picktitle{font-size:27px;font-weight:1000;margin:5px 0 2px}.choices{display:grid;gap:10px;margin-top:16px}.choice{pointer-events:auto;text-align:left;border:1px solid #ffffff16;background:linear-gradient(180deg,#111b30,#0b1425);border-radius:18px;padding:13px 14px;box-shadow:0 10px 28px #0006}.choice:active{transform:scale(.985)}.rarity{font-size:9px;letter-spacing:.2em;margin-bottom:4px}.choice b{font-size:15px}.choice p{margin:5px 0 0;font-size:11px;line-height:1.45;opacity:.72}.choice.rare{border-color:#70caff55}.choice.epic{border-color:#bd8cff66;box-shadow:0 0 22px #9c6cff16}.choice.legend{border-color:#ffd26e88;box-shadow:0 0 28px #ffca5c1b}.rare .rarity{color:#8ed8ff}.epic .rarity{color:#c7a1ff}.legend .rarity{color:#ffd36e}.evolveCard{border-color:#ffd36e88;background:linear-gradient(180deg,#21182d,#0b1425)}.grade{font-size:64px;font-weight:1000;line-height:1;margin:10px 0}.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.stat{background:#ffffff08;border:1px solid #ffffff10;border-radius:15px;padding:11px}.build{font-size:11px;line-height:1.75;text-align:left;margin-top:12px;padding:12px;border-radius:15px;background:#ffffff07;border:1px solid #ffffff0e}.flash{position:absolute;inset:0;background:white;opacity:0;pointer-events:none}.flash.on{animation:flash .25s ease-out}@keyframes flash{0%{opacity:.75}100%{opacity:0}}
 @media(max-height:700px){:root{--lift:44px}.joyBase{left:18px;bottom:8px;width:114px;height:114px}.joyStick{left:35px;top:35px;width:44px;height:44px}#skill{right:18px;bottom:9px;width:80px;height:80px}#dash{right:104px;bottom:10px;width:54px;height:54px}#swap{right:104px;bottom:70px;width:52px;height:52px}.toast{bottom:calc(168px + var(--lift))}}
+
+/* ===== v8 BIRTHDAY CHAOS ===== */
+#routeBadge{position:absolute;top:max(142px,calc(env(safe-area-inset-top) + 130px));right:10px;padding:7px 10px;border-radius:999px;background:#0a1322d8;border:1px solid #ffffff13;font-size:10px;opacity:.82;backdrop-filter:blur(9px)}
+#synergyBadge{position:absolute;top:max(174px,calc(env(safe-area-inset-top) + 162px));right:10px;max-width:238px;text-align:right;font-size:10px;line-height:1.45;color:#ffe9a4;text-shadow:0 0 12px #ffbd4d55;opacity:0;transition:.2s}#synergyBadge.show{opacity:1}
+#breakBtn{pointer-events:auto;position:absolute;right:18px;bottom:calc(176px + var(--lift));width:126px;height:46px;border-radius:999px;border:1px solid #fff3a244;background:linear-gradient(135deg,#3c193d,#9f4a3b);box-shadow:inset 0 0 22px #fff2,0 12px 30px #0009;display:grid;place-items:center;text-align:center;font-size:10px;font-weight:1000;letter-spacing:.06em;color:#fff;overflow:hidden}#breakBtn::before{content:'';position:absolute;inset:0;transform:translateX(calc(-100% + var(--break,0%)));background:linear-gradient(90deg,#ff76c0aa,#ffd86aaa);transition:.15s;z-index:0}#breakBtn>*{position:relative;z-index:1}#breakBtn.ready{animation:breakPulse .75s infinite alternate;border-color:#fff1a4cc}@keyframes breakPulse{to{filter:brightness(1.35);box-shadow:inset 0 0 28px #fff6,0 0 32px #ffcf6388,0 12px 30px #0009}}
+#decision{position:absolute;inset:0;display:none;place-items:center;padding:20px;background:linear-gradient(180deg,#060912e8,#04060bf7);z-index:20;pointer-events:auto}#decision .card{max-height:88%;overflow:auto}.decisionIcon{font-size:38px;margin:5px 0}.decisionLead{font-size:12px;line-height:1.6;opacity:.72}.choice.risk{border-color:#ff779566;background:linear-gradient(180deg,#291323,#140b14)}.choice.safe{border-color:#78d8b966}.choice.chaos{border-color:#d49bff77;background:linear-gradient(180deg,#20132d,#0d1020)}
+#bossMechanic{position:absolute;left:50%;top:max(160px,calc(env(safe-area-inset-top) + 148px));transform:translateX(-50%);padding:8px 12px;border-radius:999px;background:#1a0912d9;border:1px solid #ff748a44;font-size:10px;letter-spacing:.08em;opacity:0;transition:.2s;white-space:nowrap}#bossMechanic.show{opacity:1}
+@media(max-height:700px){#breakBtn{right:17px;bottom:calc(160px + var(--lift));width:118px;height:42px}#routeBadge{top:max(126px,calc(env(safe-area-inset-top) + 114px))}#synergyBadge{top:max(154px,calc(env(safe-area-inset-top) + 142px))}}
+
 </style>
 </head>
 <body>
@@ -30,11 +39,17 @@ canvas{width:min(100vw,480px);height:var(--app-height);max-height:920px;backgrou
   <div class="banner" id="banner"><div class="k" id="bannerK">EVENT</div><div class="t" id="bannerT">PARTY RUSH</div><div class="s" id="bannerS">刺激事件啟動</div></div>
   <div class="toast" id="toast">AUTO ATTACK ON</div>
   <div class="controls"><div class="joyBase" id="joyBase"><div class="joyStick" id="joyStick"></div></div><div class="btn" id="swap">SWAP</div><div class="btn" id="skill">SKILL</div><div class="btn" id="dash">DASH</div></div>
+
+  <div id="routeBadge">ROUTE｜尚未選擇</div>
+  <div id="synergyBadge">SYNERGY</div>
+  <div id="bossMechanic">🛡️ 先破壞帳單核心</div>
+  <div id="breakBtn"><span>BIRTHDAY BREAK<br><small id="breakTxt">0%</small></span></div>
+  <div id="decision"><div class="card"><div class="eyebrow" id="decisionK">ROUTE SELECT</div><div class="decisionIcon" id="decisionIcon">🚪</div><div class="picktitle" id="decisionTitle">選一條路</div><div class="decisionLead" id="decisionLead">選擇會改變這一局後面的風險與 Build。</div><div class="choices" id="decisionChoices"></div></div></div>
   <div class="flash" id="flash"></div>
-  <div id="start"><div class="card"><div class="eyebrow">LEVEL +1｜BIRTHDAY RUSH</div><h1>v7</h1><div class="sub">刺激度升級版</div><div class="lead">不用按普攻。你只管走位、完美閃避、搶資源、選 Build、放技能。<br><br>這版新增：<b>PARTY FEVER、完美閃避慢動作、武器進化、限時事件、精英伏擊、紅圈預警、Boss 三階段。</b></div><button class="startbtn" id="startBtn">🎧 開始 Birthday Rush</button><div class="hint">左手移動｜自動攻擊｜SKILL 爆發｜DASH 閃招｜SWAP 換武器<br>手機底部安全區已保留</div></div></div>
+  <div id="start"><div class="card"><div class="eyebrow">LEVEL +1｜BIRTHDAY CHAOS</div><h1>v8</h1><div class="sub">每一局都要做選擇</div><div class="lead">自動攻擊保留，這次把爽度變成真正的遊戲循環：<br><br><b>路線選擇、詛咒禮盒、Build 連鎖、無厘頭事件、可破解 Boss、BIRTHDAY BREAK 終極技。</b></div><button class="startbtn" id="startBtn">🎧 開始 Birthday Chaos</button><div class="hint">左手移動｜自動攻擊｜SKILL 爆發｜DASH 閃招｜SWAP 換武器<br>手機底部安全區已保留</div></div></div>
   <div id="levelup"><div class="card"><div class="eyebrow">LEVEL UP</div><div class="picktitle">三選一，Build 立即改變</div><div class="lead">能力會真的改變攻擊方式，不只加數字。</div><div class="choices" id="choices"></div></div></div>
   <div id="evolve"><div class="card evolveCard"><div class="eyebrow">WEAPON EVOLUTION</div><div class="picktitle" id="evolveTitle">武器進化！</div><div class="lead" id="evolveDesc">攻擊模式會直接變形。</div><div class="choices" id="evolveChoices"></div></div></div>
-  <div id="end"><div class="card"><div class="eyebrow">RUN COMPLETE</div><div class="grade" id="grade">S</div><h2 style="margin:0 0 8px">這一局打完了。</h2><div class="lead">真正的重玩點不是分數，而是下一局可以養出完全不同的武器進化與 Build。</div><div class="stats"><div class="stat">擊倒<br><b id="kills">0</b></div><div class="stat">完美閃避<br><b id="dodges">0</b></div><div class="stat">最高連擊<br><b id="maxCombo">0</b></div><div class="stat">等級<br><b id="finalLv">1</b></div></div><div class="build" id="buildTxt"></div><button class="startbtn" onclick="location.reload()">再開一局換 Build</button></div></div>
+  <div id="end"><div class="card"><div class="eyebrow">RUN COMPLETE</div><div class="grade" id="grade">S</div><h2 style="margin:0 0 8px">這一局打完了。</h2><div class="lead">這次真正的重玩點是：不同路線、詛咒選擇與 Build 連鎖，會讓每局打法都不一樣。</div><div class="stats"><div class="stat">擊倒<br><b id="kills">0</b></div><div class="stat">完美閃避<br><b id="dodges">0</b></div><div class="stat">最高連擊<br><b id="maxCombo">0</b></div><div class="stat">等級<br><b id="finalLv">1</b></div></div><div class="build" id="buildTxt"></div><button class="startbtn" onclick="location.reload()">再開一局走別條路</button></div></div>
 </div></div></div>
 <script>
 function syncVisibleViewport(){const vv=window.visualViewport;const h=Math.round(vv?vv.height:window.innerHeight);document.documentElement.style.setProperty('--app-height',h+'px')}
@@ -135,10 +150,147 @@ function drawDrops(){xpOrbs.forEach(o=>{ctx.fillStyle='#9be8ff';ctx.beginPath();
 function drawHazards(){hazards.forEach(h=>{if(!h.exploded){ctx.globalAlpha=.28+.25*Math.sin(performance.now()/80);ctx.fillStyle='#ff536b';ctx.beginPath();ctx.arc(h.x,h.y,h.r,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle='#ff8697';ctx.lineWidth=3;ctx.beginPath();ctx.arc(h.x,h.y,h.r,0,Math.PI*2);ctx.stroke();let rr=h.r*Math.max(.05,h.t/1.3);ctx.strokeStyle='#fff6';ctx.lineWidth=2;ctx.beginPath();ctx.arc(h.x,h.y,rr,0,Math.PI*2);ctx.stroke()}else{ctx.globalAlpha=Math.max(0,h.boom/.32);ctx.fillStyle='#ffb067';ctx.beginPath();ctx.arc(h.x,h.y,h.r*1.05,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}})}
 function drawEffects(){slashes.forEach(s=>{ctx.save();ctx.translate(s.x,s.y);ctx.rotate(s.a);ctx.globalAlpha=s.t/.12;ctx.strokeStyle=currentWeapon().evolved?'#ffd1ff':'#fff';ctx.lineWidth=8;ctx.beginPath();ctx.arc(0,0,s.r,-.78,.78);ctx.stroke();ctx.restore()});projectiles.forEach(q=>{let rg=ctx.createRadialGradient(q.x,q.y,1,q.x,q.y,q.r+8);rg.addColorStop(0,'#fff');rg.addColorStop(1,q.c+'00');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(q.x,q.y,q.r+8,0,Math.PI*2);ctx.fill();ctx.fillStyle=q.c;ctx.beginPath();ctx.arc(q.x,q.y,q.r,0,Math.PI*2);ctx.fill()});enemyShots.forEach(q=>{ctx.fillStyle='#ff6d88';ctx.beginPath();ctx.arc(q.x,q.y,q.r,0,Math.PI*2);ctx.fill()});shockwaves.forEach(s=>{ctx.globalAlpha=Math.max(0,s.t/.5);ctx.strokeStyle=s.c||'#ffd681';ctx.lineWidth=7;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1});particles.forEach(q=>{ctx.globalAlpha=Math.max(0,q.t/.5);ctx.fillStyle=q.c;ctx.fillRect(q.x-q.sz/2,q.y-q.sz/2,q.sz,q.sz)});ctx.globalAlpha=1}
 function draw(){ctx.clearRect(0,0,W,H);ctx.save();ctx.translate(-cam.x,-cam.y);drawArena();drawHazards();drawDrops();enemies.forEach(drawEnemy);drawBoss();drawOrbit();drawHero();drawEffects();ctx.restore();let vg=ctx.createRadialGradient(W/2,H/2,200,W/2,H/2,H/1.05);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.37)');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H)}
+
+/* =========================
+   v8 BIRTHDAY CHAOS LAYER
+   ========================= */
+let v8GameTime=0,v8Route1=false,v8CurseOffer=false,v8Route2=false,v8ChaosEvent=false;
+let v8RouteHistory=[],v8RewardMul=1,v8EnemyHpMul=1,v8EnemySpeedMul=1;
+let v8CurseT=0,v8CurseReward=false,v8ChaosT=0,v8ChaosRevert=null;
+let v8Break=0,v8BreakFX=0,v8ShieldToast=0,v8BossShieldBroken=false;
+let v8HammerPrimed=false,v8BladeRushT=0,v8StarProcCd=0;
+const v8Synergies=new Set();
+
+function v8AddBreak(n){v8Break=Math.min(100,v8Break+n);updateHUD()}
+function v8Decision(k,icon,title,lead,choices){
+  paused=true;$('#decisionK').textContent=k;$('#decisionIcon').textContent=icon;$('#decisionTitle').textContent=title;$('#decisionLead').textContent=lead;
+  const box=$('#decisionChoices');box.innerHTML='';
+  choices.forEach(c=>{const d=document.createElement('div');d.className='choice '+(c.cls||'');d.innerHTML=`<div class="rarity">${c.tag||'ROUTE'}</div><b>${c.name}</b><p>${c.desc}</p>`;d.onclick=()=>{c.apply();v8RouteHistory.push(c.name);$('#decision').style.display='none';paused=false;checkSynergies();updateHUD()};box.appendChild(d)});
+  $('#decision').style.display='grid';
+}
+function v8RouteOne(){v8Route1=true;v8Decision('ROUTE SELECT','🚪','第一個岔路','不是選好看的。這條路會真的改變接下來的風險與獎勵。',[
+ {tag:'HIGH RISK',name:'⚔️ 高壓捷徑',desc:'敵人更快、更硬，但經驗與 BREAK 能量更多。立即觸發精英伏擊。',cls:'risk',apply:()=>{v8EnemyHpMul*=1.20;v8EnemySpeedMul*=1.12;v8RewardMul*=1.40;p.damageMul*=1.12;spawnElite();triggerMeteor();banner('ROUTE','高壓捷徑','你自己選的，別怪系統。')}},
+ {tag:'PARTY',name:'🎁 派對補給站',desc:'立即補血、出現 GIFT RUSH，並取得「生日蠟燭陣」作為 Build 核心。',cls:'safe',apply:()=>{p.hp=p.maxhp;orbitLevel++;triggerGiftRush();v8AddBreak(18);banner('ROUTE','派對補給站','先爽一下，再繼續被追。')}},
+ {tag:'???',name:'🎲 混沌裂縫',desc:'直接觸發一個未知規則事件，獎勵較高，但沒有人知道會發生什麼。',cls:'chaos',apply:()=>{p.dashShock++;v8AddBreak(25);v8RandomChaos();}}
+ ])}
+function v8CurseChoice(){v8CurseOffer=true;v8Decision('DANGER DEAL','🎁','詛咒生日禮盒','這東西看起來就不該打開。當然，也因此很想打開。',[
+ {tag:'CURSED',name:'😈 打開它',desc:'接下來 15 秒敵人速度大增＋大量伏擊。撐過去：永久傷害＋28%、暴擊＋12%、BREAK＋40。',cls:'risk',apply:()=>{v8CurseT=15;v8CurseReward=true;for(let i=0;i<10;i++)spawnEnemy(i%3===0?'shooter':i%4===0?'brute':'runner');triggerMeteor();banner('CURSE ACTIVE','15 秒生日地獄','活下來就把獎勵帶走。')}},
+ {tag:'SAFE',name:'🙈 我俗辣，先不要',desc:'沒有懲罰。補 1 點生命，然後假裝剛剛什麼都沒看到。',cls:'safe',apply:()=>{p.hp=Math.min(p.maxhp,p.hp+1);toast('系統：合理。真的。')}}
+ ])}
+function v8RouteTwo(){v8Route2=true;v8Decision('BUILD PATH','🧬','選擇 Build 連鎖路線','這次不是加 10% 數值，而是選一套會改變打法的連鎖核心。',[
+ {tag:'SYNERGY',name:'🏹 星燭花園',desc:'保證取得脈衝弓＋生日蠟燭。箭矢命中會引爆燭火連鎖。',cls:'safe',apply:()=>{if(!weapons.bow.unlocked)unlockWeapon('bow');orbitLevel=Math.max(1,orbitLevel);activeWeapon='bow';weaponIndex=weaponOrder.indexOf('bow');banner('SYNERGY','星燭連鎖','遠程命中會炸出第二段範圍傷害。')}},
+ {tag:'SYNERGY',name:'🔨 重力廢墟',desc:'保證取得重力槌＋殘影爆破。DASH 後下一槌升級成重力崩塌。',cls:'risk',apply:()=>{if(!weapons.hammer.unlocked)unlockWeapon('hammer');p.dashShock=Math.max(1,p.dashShock);activeWeapon='hammer';weaponIndex=weaponOrder.indexOf('hammer');banner('SYNERGY','重力崩塌','DASH → 下一槌，請自己試。')}},
+ {tag:'SYNERGY',name:'⚔️ 時停劍域',desc:'直接喚醒流星刃。PERFECT DODGE 後 3 秒進入高速劍域。',cls:'chaos',apply:()=>{let w=weapons.sword;w.level=Math.max(3,w.level);w.evolved=true;w.name='流星刃';w.skill='流星裂空';activeWeapon='sword';weaponIndex=weaponOrder.indexOf('sword');v8BladeRushT=1;banner('SYNERGY','時停劍域','完美閃避之後，攻速會突然失控。')}}
+ ])}
+function v8RandomChaos(){
+  const n=Math.floor(Math.random()*4);
+  if(n===0){banner('CHAOS EVENT','蛋糕狂暴模式','10 秒攻速 ×1.8，但敵人也一起暴走');p.attackSpeed*=1.8;v8EnemySpeedMul*=1.20;v8ChaosT=10;v8ChaosRevert=()=>{p.attackSpeed/=1.8;v8EnemySpeedMul/=1.20}}
+  else if(n===1){banner('CHAOS EVENT','今天規則不重要','8 秒無敵＋技能冷卻加速');p.inv=8;p.skillRate*=1.8;v8ChaosT=8;v8ChaosRevert=()=>p.skillRate/=1.8}
+  else if(n===2){banner('CHAOS EVENT','禮物還是炸彈？','畫面同時出現禮物與隕石，自己判斷要不要貪');triggerGiftRush();triggerMeteor();v8AddBreak(20)}
+  else{banner('CHAOS EVENT','全員縮小啦','怪物碰撞範圍縮小，但移動速度暴增 9 秒');enemies.forEach(e=>{if(e.kind!=='core')e.r*=.68});v8EnemySpeedMul*=1.35;v8ChaosT=9;v8ChaosRevert=()=>{enemies.forEach(e=>{if(e.kind!=='core')e.r/=.68});v8EnemySpeedMul/=1.35}}
+}
+function checkSynergies(){
+  if(weapons.bow.unlocked&&orbitLevel>0)v8Synergies.add('🏹🕯️ 星燭連鎖');
+  if(weapons.hammer.unlocked&&p.dashShock>0)v8Synergies.add('🔨💨 重力崩塌');
+  if(weapons.sword.evolved)v8Synergies.add('⚔️⏱️ 時停劍域');
+  const e=$('#synergyBadge');if(v8Synergies.size){e.textContent='SYNERGY｜'+[...v8Synergies].join('　');e.classList.add('show')}else e.classList.remove('show');
+}
+function v8AreaDamage(x,y,r,dmg){enemies.forEach(e=>{if(e.hp>0&&Math.hypot(e.x-x,e.y-y)<r+e.r)damageEnemy(e,dmg,25)});if(boss&&boss.alive&&Math.hypot(boss.x-x,boss.y-y)<r+boss.r)damageBoss(dmg)}
+function useBirthdayBreak(){
+  if(paused||finished)return;if(v8Break<100){toast(`🎂 BIRTHDAY BREAK ${Math.floor(v8Break)}%`);return}
+  v8Break=0;v8BreakFX=2.8;p.inv=Math.max(p.inv,3);p.skillCd=0;enemyShots=[];hazards=[];sfx('fever');vib([30,30,70,50,120]);flash();banner('ULTIMATE','BIRTHDAY BREAK','今天你生日。規則暫停。');
+  for(let i=0;i<5;i++)shockwaves.push({x:p.x,y:p.y,r:20+i*20,max:220+i*95,t:.85,c:i%2?'#ff9ed4':'#ffe275'});
+  enemies.slice().forEach(e=>damageEnemy(e,e.kind==='core'?999:Math.max(16,e.maxhp*.78),90));
+  if(boss&&boss.alive)damageBoss(boss.max*.17);
+  addFever(100);p.score+=1800;
+}
+$('#breakBtn').addEventListener('pointerdown',()=>useBirthdayBreak());
+
+const v7SpawnEnemy=spawnEnemy;
+spawnEnemy=function(kind='chaser',elite=false){v7SpawnEnemy(kind,elite);const e=enemies[enemies.length-1];if(e&&e.kind!=='core'){e.hp*=v8EnemyHpMul;e.maxhp*=v8EnemyHpMul}}
+const v7AddKill=addKill;
+addKill=function(e){v7AddKill(e);v8AddBreak((e.elite?14:4)*v8RewardMul);if(v8RewardMul>1){let extra=Math.floor((v8RewardMul-1)*(e.elite?8:2));for(let i=0;i<extra;i++)xpOrbs.push({x:e.x+rand(-18,18),y:e.y+rand(-18,18),v:0,value:1})}}
+const v7DamageEnemy=damageEnemy;
+damageEnemy=function(e,dmg,knock=0){const was=e.hp>0;v7DamageEnemy(e,dmg,knock);if(was&&e.kind==='core'&&e.hp<=0){sfx('boss');vib([20,20,40]);if(!enemies.some(x=>x.kind==='core'&&x.hp>0)){v8BossShieldBroken=true;banner('SHIELD BREAK','帳單核心全數破壞','Boss 防禦解除！現在才是真的輸出時間。');v8AddBreak(25)}}}
+
+damageBoss=function(dmg){
+  if(!boss||!boss.alive)return;let crit=Math.random()<p.crit,mult=v8BossShieldBroken?1:.16;if(!v8BossShieldBroken&&v8ShieldToast<=0){toast('🛡️ Boss 有護盾！先打掉環繞的帳單核心');v8ShieldToast=1.2}
+  boss.hp-=dmg*p.damageMul*(crit?1.85:1)*mult;burst(boss.x,boss.y,crit?'#ffd369':'#ff95aa',crit?10:5,150);if(boss.hp<=0){boss.alive=false;finishRun()}
+}
+const v7SpawnBoss=spawnBoss;
+spawnBoss=function(){
+  v7SpawnBoss();boss.hp=boss.max=300;boss.x=900;boss.y=760;v8BossShieldBroken=false;
+  for(let i=0;i<3;i++){let a=i*Math.PI*2/3;enemies.push({x:boss.x+Math.cos(a)*170,y:boss.y+Math.sin(a)*170,r:26,hp:24,maxhp:24,v:0,kind:'core',shotCd:1,stun:0,elite:false,id:Math.random(),coreAngle:a})}
+  banner('FINAL BOSS','時間吞噬者','別硬砍。先找出它的破解方式。');
+}
+const v7UpdateEnemies=updateEnemies;
+updateEnemies=function(dt){
+  let enemySlow=p.feverT>0?.72:1;enemies.forEach(e=>{if(e.hp<=0||e.kind==='core')return;if(e.stun>0){e.stun-=dt;return}let d=dist(e,p),dx=(p.x-e.x)/(d||1),dy=(p.y-e.y)/(d||1),speedMul=v8EnemySpeedMul*(v8CurseT>0?1.35:1);if(e.kind==='shooter'||e.kind==='elite'){if(d>250){e.x+=dx*e.v*enemySlow*speedMul*dt;e.y+=dy*e.v*enemySlow*speedMul*dt}else if(d<155){e.x-=dx*e.v*.7*enemySlow*speedMul*dt;e.y-=dy*e.v*.7*enemySlow*speedMul*dt}e.shotCd-=dt;if(e.shotCd<=0){e.shotCd=e.kind==='elite'?.62:1.28;let a=Math.atan2(p.y-e.y,p.x-e.x),n=e.kind==='elite'?6:1;for(let i=0;i<n;i++){let aa=a+(i-(n-1)/2)*.17;enemyShots.push({x:e.x,y:e.y,vx:Math.cos(aa)*235*speedMul,vy:Math.sin(aa)*235*speedMul,r:e.kind==='elite'?9:7,t:4})}}}else{e.x+=dx*e.v*enemySlow*speedMul*dt;e.y+=dy*e.v*enemySlow*speedMul*dt}if(d<e.r+p.r+4)hitPlayer()});enemies=enemies.filter(e=>e.hp>0)
+}
+const v7UpdateBoss=updateBoss;
+updateBoss=function(dt){v7UpdateBoss(dt);if(boss&&boss.alive){enemies.filter(e=>e.kind==='core'&&e.hp>0).forEach(e=>{e.coreAngle+=dt*.85;e.x=boss.x+Math.cos(e.coreAngle)*168;e.y=boss.y+Math.sin(e.coreAngle)*168})}}
+const v7BossPhaseCheck=bossPhaseCheck;
+bossPhaseCheck=function(){if(!boss||!boss.alive)return;const before=boss.phase;v7BossPhaseCheck();if(boss.phase!==before){if(boss.phase===2){for(let i=0;i<6;i++)spawnEnemy(i%2?'runner':'shooter');banner('BOSS MECHANIC','購物慾增援','Phase 2：Boss 叫來一堆你根本不需要的東西。')}if(boss.phase===3){v8AddBreak(35);banner('FINAL PHASE','時間暴走','BREAK 能量 +35。活著把大招開出來。')}}}
+
+const v7Attack=attack;
+attack=function(target=null){
+  const before=p.attackCd;target=target||findNearestTarget(autoAttackRange());const wt=activeWeapon;v7Attack(target);if(before>0||p.attackCd<=0||!target)return;
+  if(v8Synergies.has('🏹🕯️ 星燭連鎖')&&wt==='bow'&&v8StarProcCd<=0){v8StarProcCd=.55;shockwaves.push({x:target.x,y:target.y,r:8,max:95+orbitLevel*16,t:.25,c:'#ffe07a'});v8AreaDamage(target.x,target.y,80+orbitLevel*12,1.5+.55*orbitLevel);burst(target.x,target.y,'#ffe58c',9,170)}
+  if(v8Synergies.has('🔨💨 重力崩塌')&&wt==='hammer'&&v8HammerPrimed){v8HammerPrimed=false;shockwaves.push({x:p.x,y:p.y,r:20,max:310,t:.55,c:'#a993ff'});v8AreaDamage(p.x,p.y,285,7+weapons.hammer.level*1.2);toast('🌀 重力崩塌！DASH 連鎖成功');v8AddBreak(8)}
+  if(v8Synergies.has('⚔️⏱️ 時停劍域')&&wt==='sword'&&v8BladeRushT>0){p.attackCd*=.38;let a=Math.atan2(p.dirY,p.dirX)+Math.PI/2;projectiles.push({x:p.x,y:p.y,vx:Math.cos(a)*520,vy:Math.sin(a)*520,r:8,t:.85,dmg:2.4,pierce:3,c:'#eac8ff'});projectiles.push({x:p.x,y:p.y,vx:-Math.cos(a)*520,vy:-Math.sin(a)*520,r:8,t:.85,dmg:2.4,pierce:3,c:'#eac8ff'})}
+}
+const v7Dash=dash;
+dash=function(){const ready=p.dashCd<=0;v7Dash();if(ready&&v8Synergies.has('🔨💨 重力崩塌'))v8HammerPrimed=true}
+const v7Perfect=perfectDodge;
+perfectDodge=function(q){v7Perfect(q);v8AddBreak(16);if(v8Synergies.has('⚔️⏱️ 時停劍域')){v8BladeRushT=3;toast('⏱️ PERFECT → 時停劍域 3 秒！')}}
+
+const v7DrawEnemy=drawEnemy;
+drawEnemy=function(e){
+  if(e.kind!=='core'){v7DrawEnemy(e);return}
+  ctx.save();ctx.translate(e.x,e.y);let pulse=1+Math.sin(performance.now()/120+e.coreAngle)*.08;ctx.scale(pulse,pulse);ctx.strokeStyle='#ffcf6bcc';ctx.lineWidth=4;ctx.beginPath();ctx.arc(0,0,e.r+8,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#5e2833';ctx.beginPath();ctx.roundRect(-24,-17,48,34,8);ctx.fill();ctx.fillStyle='#ffe7a7';ctx.font='900 20px system-ui';ctx.textAlign='center';ctx.fillText('💳',0,8);ctx.fillStyle='#1d0b10';ctx.fillRect(-28,-34,56,6);ctx.fillStyle='#ffd067';ctx.fillRect(-28,-34,56*(e.hp/e.maxhp),6);ctx.restore()
+}
+const v7DrawBoss=drawBoss;
+drawBoss=function(){v7DrawBoss();if(boss&&boss.alive&&!v8BossShieldBroken){ctx.save();ctx.translate(boss.x,boss.y);ctx.strokeStyle='rgba(255,211,110,.55)';ctx.lineWidth=6;ctx.setLineDash([14,10]);ctx.beginPath();ctx.arc(0,0,112+Math.sin(performance.now()/160)*5,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.restore()}}
+const v7Draw=draw;
+draw=function(){v7Draw();if(v8BreakFX>0){ctx.save();let a=Math.min(1,v8BreakFX/1.1);ctx.globalAlpha=.13*a;ctx.fillStyle='#fff3a6';ctx.fillRect(0,0,W,H);ctx.globalAlpha=.45*a;ctx.strokeStyle='#ffd66f';ctx.lineWidth=5;for(let i=0;i<3;i++){ctx.beginPath();ctx.arc(W/2,H/2,90+i*80+(2.8-v8BreakFX)*260,0,Math.PI*2);ctx.stroke()}ctx.globalAlpha=.9*a;ctx.fillStyle='#fff6c4';ctx.font='1000 30px system-ui';ctx.textAlign='center';ctx.fillText('BIRTHDAY BREAK',W/2,H*.42);ctx.restore()}}
+
+const v7UpdateHUD=updateHUD;
+updateHUD=function(){
+  v7UpdateHUD();$('#breakTxt').textContent=Math.floor(v8Break)+'%';$('#breakBtn').style.setProperty('--break',Math.floor(v8Break)+'%');$('#breakBtn').classList.toggle('ready',v8Break>=100);
+  $('#routeBadge').textContent=v8CurseT>0?`CURSE｜${Math.ceil(v8CurseT)}s`:v8RouteHistory.length?`ROUTE｜${v8RouteHistory[v8RouteHistory.length-1]}`:'ROUTE｜尚未選擇';
+  const cores=enemies.filter(e=>e.kind==='core'&&e.hp>0).length;$('#bossMechanic').classList.toggle('show',!!(boss&&boss.alive&&!v8BossShieldBroken));if(cores)$('#bossMechanic').textContent=`🛡️ 帳單核心 ${cores}/3｜Boss 傷害僅 16%`;
+  checkSynergies();
+}
+const v7FinishRun=finishRun;
+finishRun=function(){v7FinishRun();const sy=v8Synergies.size?[...v8Synergies].join(' ｜ '):'尚未形成';$('#buildTxt').innerHTML+=`<br><br><b>v8 Chaos 路線</b><br>${v8RouteHistory.join(' → ')||'無'}<br><b>連鎖</b><br>${sy}`}
+
+update=function(dt){
+  if(!started||paused||finished)return;
+  const rawDt=dt;v8GameTime+=rawDt;runSeconds=v8GameTime;
+  if(v8ShieldToast>0)v8ShieldToast-=rawDt;if(v8StarProcCd>0)v8StarProcCd-=rawDt;if(v8BladeRushT>0)v8BladeRushT-=rawDt;if(v8BreakFX>0)v8BreakFX-=rawDt;
+  if(v8CurseT>0){v8CurseT-=rawDt;if(v8CurseT<=0&&v8CurseReward){v8CurseReward=false;p.damageMul*=1.28;p.crit+=.12;v8AddBreak(40);banner('CURSE CLEARED','詛咒撐過去了','永久傷害 +28%｜暴擊 +12%｜BREAK +40')}}
+  if(v8ChaosT>0){v8ChaosT-=rawDt;if(v8ChaosT<=0&&v8ChaosRevert){v8ChaosRevert();v8ChaosRevert=null;toast('CHAOS EVENT 結束')}}
+  if(slowT>0){slowT-=dt;if(slowT<=0)timeScale=1}dt*=timeScale;
+  p.inv=Math.max(0,p.inv-dt);p.dash=Math.max(0,p.dash-dt);p.dashCd=Math.max(0,p.dashCd-dt);p.attackCd=Math.max(0,p.attackCd-dt);p.skillCd=Math.max(0,p.skillCd-dt);p.comboT=Math.max(0,p.comboT-dt);if(p.comboT<=0)p.combo=0;if(p.feverT>0){p.feverT-=dt;p.spd=315}else p.spd=270;
+  let dx=keys.right-keys.left+joy.x,dy=keys.down-keys.up+joy.y,m=Math.hypot(dx,dy);if(m>1){dx/=m;dy/=m}let sp=p.spd*(p.dash>0?2.65:1);p.x=Math.max(55,Math.min(world.w-55,p.x+dx*sp*dt));p.y=Math.max(55,Math.min(world.h-55,p.y+dy*sp*dt));if(m>.08&&!autoTarget){p.dirX=dx;p.dirY=dy}autoTarget=findNearestTarget(autoAttackRange());if(autoTarget){faceTarget(autoTarget);attack(autoTarget)}
+  spawnT-=dt;if(spawnT<=0&&!bossSpawned){spawnT=Math.max(.20,.86-runSeconds*.0046)/(Math.max(1,v8EnemySpeedMul*.92));let count=1+(runSeconds>52?1:0)+(runSeconds>78?1:0)+(v8CurseT>0?1:0);for(let i=0;i<count;i++){let r=Math.random();spawnEnemy(runSeconds>70&&r<.22?'brute':runSeconds>36&&r<.43?'shooter':r<.24?'runner':'chaser')}}
+  if(runSeconds>=nextEliteT&&!bossSpawned&&!enemies.some(e=>e.elite)){spawnElite();nextEliteT+=34}
+  if(!armory1&&kills>=8){armory1=true;weaponDrops.push({x:p.x+180,y:p.y-120,type:'bow',taken:false});toast('🏹 新武器掉落：脈衝弓')}
+  if(!armory2&&kills>=22){armory2=true;weaponDrops.push({x:p.x-180,y:p.y+140,type:'hammer',taken:false});toast('🔨 新武器掉落：重力槌')}
+  weaponDrops.forEach(w=>{if(!w.taken&&dist(w,p)<40){w.taken=true;if(!weapons[w.type].unlocked)unlockWeapon(w.type)}});if(eliteChest&&!eliteChest.open&&dist(eliteChest,p)<44){openChest();v8AddBreak(18)}
+  if(!v8Route1&&runSeconds>=20&&!bossSpawned)v8RouteOne();
+  if(!v8CurseOffer&&runSeconds>=40&&!bossSpawned)v8CurseChoice();
+  if(!v8Route2&&runSeconds>=61&&!bossSpawned)v8RouteTwo();
+  if(!v8ChaosEvent&&runSeconds>=80&&!bossSpawned){v8ChaosEvent=true;v8RandomChaos()}
+  if(runSeconds>=100&&!bossSpawned)spawnBoss();
+  updateEnemies(dt);updateBoss(dt);updateProjectiles(dt);updateHazards(dt);updateOrbit(dt);updateXp(dt);updateGifts(dt);
+  shockwaves.forEach(s=>{s.r+=(s.max-s.r)*Math.min(1,dt*12);s.t-=dt});shockwaves=shockwaves.filter(s=>s.t>0);slashes.forEach(s=>s.t-=dt);slashes=slashes.filter(s=>s.t>0);particles.forEach(q=>{q.x+=q.vx*dt;q.y+=q.vy*dt;q.vx*=.95;q.vy*=.95;q.t-=dt});particles=particles.filter(q=>q.t>0);cam.x=Math.max(0,Math.min(world.w-W,p.x-W/2));cam.y=Math.max(0,Math.min(world.h-H,p.y-H*.56));wave=1+Math.floor(runSeconds/22);checkSynergies();updateHUD()
+}
+
 function loop(now){let dt=Math.min(.032,(now-last)/1000);last=now;update(dt);draw();requestAnimationFrame(loop)}requestAnimationFrame(loop);
 addEventListener('keydown',e=>{if(e.key==='a'||e.key==='ArrowLeft')keys.left=1;if(e.key==='d'||e.key==='ArrowRight')keys.right=1;if(e.key==='w'||e.key==='ArrowUp')keys.up=1;if(e.key==='s'||e.key==='ArrowDown')keys.down=1;if(e.key==='Shift')dash();if(e.key==='e')useSkill();if(e.key==='q')switchWeapon()});addEventListener('keyup',e=>{if(e.key==='a'||e.key==='ArrowLeft')keys.left=0;if(e.key==='d'||e.key==='ArrowRight')keys.right=0;if(e.key==='w'||e.key==='ArrowUp')keys.up=0;if(e.key==='s'||e.key==='ArrowDown')keys.down=0});
 const base=$('#joyBase'),stick=$('#joyStick');function joyMove(e){const r=base.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=e.clientX-cx,dy=e.clientY-cy,max=40,m=Math.hypot(dx,dy)||1;if(m>max){dx=dx/m*max;dy=dy/m*max}stick.style.transform=`translate(${dx}px,${dy}px)`;joy.x=dx/max;joy.y=dy/max}function joyEnd(){joyId=null;joy.x=joy.y=0;stick.style.transform='translate(0,0)'}base.addEventListener('pointerdown',e=>{joyId=e.pointerId;base.setPointerCapture(joyId);joyMove(e)});base.addEventListener('pointermove',e=>{if(e.pointerId===joyId)joyMove(e)});base.addEventListener('pointerup',joyEnd);base.addEventListener('pointercancel',joyEnd);
 [['skill',useSkill],['dash',dash],['swap',switchWeapon]].forEach(([id,fn])=>{const b=$('#'+id);b.addEventListener('pointerdown',()=>{b.classList.add('active');fn()});b.addEventListener('pointerup',()=>b.classList.remove('active'));b.addEventListener('pointercancel',()=>b.classList.remove('active'))});
-$('#startBtn').onclick=()=>{audioCtx=new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume();started=true;t0=performance.now();$('#start').style.display='none';startBgm();for(let i=0;i<6;i++)spawnEnemy(i===3?'runner':'chaser');banner('BIRTHDAY RUSH','生日暴走開始','不要按普攻，只管走位、閃避與 Build');updateHUD()};
+$('#startBtn').onclick=()=>{audioCtx=new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume();started=true;t0=performance.now();event1=event2=event3=true;$('#start').style.display='none';startBgm();for(let i=0;i<6;i++)spawnEnemy(i===3?'runner':'chaser');banner('BIRTHDAY CHAOS','這一局不會照劇本走','自動攻擊｜你負責走位、選路、賭風險、放大招');updateHUD()};
 </script>
 </body></html>
