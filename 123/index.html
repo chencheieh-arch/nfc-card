@@ -67,12 +67,12 @@ canvas{width:min(100vw,480px);height:var(--app-height);max-height:920px;backgrou
   <div class="feverText" id="feverText">PARTY FEVER!</div>
   <div class="banner" id="banner"><div class="k" id="bannerK">EVENT</div><div class="t" id="bannerT">PARTY RUSH</div><div class="s" id="bannerS">刺激事件啟動</div></div>
   <div class="toast" id="toast">AUTO ATTACK ON</div>
-  <div class="controls"><div class="joyBase" id="joyBase"><div class="joyStick" id="joyStick"></div></div><div class="btn" id="swap">SWAP</div><div class="btn" id="skill">SKILL</div><div class="btn" id="dash">DASH</div></div>
+  <div class="controls"><div class="joyBase" id="joyBase"><div class="joyStick" id="joyStick"></div></div><div class="btn" id="swap">換<br>武器</div><div class="btn" id="skill">技<br>能</div><div class="btn" id="dash">瞬<br>移</div></div>
 
   <div id="routeBadge">ROUTE｜尚未選擇</div>
   <div id="synergyBadge">SYNERGY</div>
   <div id="bossMechanic">🛡️ 先破壞帳單核心</div>
-  <div id="breakBtn"><span>BIRTHDAY BREAK<br><small id="breakTxt">0%</small></span></div>
+  <div id="breakBtn"><span>🎂 生日大絕<br><small id="breakTxt">0%</small></span></div>
   <div id="decision"><div class="card"><div class="eyebrow" id="decisionK">ROUTE SELECT</div><div class="decisionIcon" id="decisionIcon">🚪</div><div class="picktitle" id="decisionTitle">選一條路</div><div class="decisionLead" id="decisionLead">選擇會改變這一局後面的風險與 Build。</div><div class="choices" id="decisionChoices"></div></div></div>
 
   <div id="allyBadge">✦ UNKNOWN PLAYER｜ONLINE</div>
@@ -86,7 +86,7 @@ canvas{width:min(100vw,480px);height:var(--app-height);max-height:920px;backgrou
     <button class="storyBtn" id="storyBtn">繼續</button>
   </div></div>
   <div class="flash" id="flash"></div>
-  <div id="start"><div class="card"><div class="eyebrow">LEVEL +1｜STORY REWRITE</div><h1>v9.2</h1><div class="sub">有些東西，不該被清掉。</div><div class="lead">爽度保留，故事整條重寫。這次不是打敗時間，而是<b>把值得留下的東西帶去下一個 LEVEL。</b></div><div class="storyInputs"><label>測試壽星</label><input id="testPlayer" value="壽星勇者" maxlength="18"><label>測試送禮人</label><input id="testGiver" value="神秘送禮人" maxlength="18"><label>最終實體禮物</label><input id="testGift" value="神秘生日禮物" maxlength="28"><label>禮物提示</label><input id="testGiftHint" value="請抬頭看看送禮人的手上。" maxlength="38"><label>送禮人的最後一句話</label><input id="testBlessing" value="下一歲也要好好玩、好好生活。" maxlength="52"></div><button class="startbtn" id="startBtn">🎧 啟動生日升級程序</button><div class="hint">左手移動｜自動攻擊｜SKILL｜DASH｜SWAP｜BIRTHDAY BREAK<br>建議開聲音；正式版會改成客戶提交資料自動帶入。</div></div></div>
+  <div id="start"><div class="card"><div class="eyebrow">LEVEL +1｜STORY REWRITE</div><h1>v9.6</h1><div class="sub">Friendly Run｜第一次玩也能順利破關</div><div class="lead">爽度保留，故事整條重寫。這次不是打敗時間，而是<b>把值得留下的東西帶去下一個 LEVEL。</b></div><div class="storyInputs"><label>測試壽星</label><input id="testPlayer" value="壽星勇者" maxlength="18"><label>測試送禮人</label><input id="testGiver" value="神秘送禮人" maxlength="18"><label>最終實體禮物</label><input id="testGift" value="神秘生日禮物" maxlength="28"><label>禮物提示</label><input id="testGiftHint" value="請抬頭看看送禮人的手上。" maxlength="38"><label>送禮人的最後一句話</label><input id="testBlessing" value="下一歲也要好好玩、好好生活。" maxlength="52"></div><button class="startbtn" id="startBtn">🎧 啟動生日升級程序</button><div class="hint">左手移動｜自動攻擊｜技能｜瞬移｜換武器｜生日大絕<br>建議開聲音；正式版會改成客戶提交資料自動帶入。</div></div></div>
   <div id="levelup"><div class="card"><div class="eyebrow">LEVEL UP</div><div class="picktitle">三選一，Build 立即改變</div><div class="lead">能力會真的改變攻擊方式，不只加數字。</div><div class="choices" id="choices"></div></div></div>
   <div id="evolve"><div class="card evolveCard"><div class="eyebrow">WEAPON EVOLUTION</div><div class="picktitle" id="evolveTitle">武器進化！</div><div class="lead" id="evolveDesc">攻擊模式會直接變形。</div><div class="choices" id="evolveChoices"></div></div></div>
   <div id="end"><div class="card"><div class="eyebrow">RUN COMPLETE</div><div class="grade" id="grade">S</div><h2 style="margin:0 0 8px">這一局打完了。</h2><div class="lead">這次真正的重玩點是：不同路線、詛咒選擇與 Build 連鎖，會讓每局打法都不一樣。</div><div class="stats"><div class="stat">擊倒<br><b id="kills">0</b></div><div class="stat">完美閃避<br><b id="dodges">0</b></div><div class="stat">最高連擊<br><b id="maxCombo">0</b></div><div class="stat">等級<br><b id="finalLv">1</b></div></div><div class="build" id="buildTxt"></div><button class="startbtn" onclick="location.reload()">再開一局走別條路</button></div></div>
@@ -1203,4 +1203,168 @@ const v95OldArchiveMessage=v92ArchiveMessage;
 // Reset test-state fields when starting a new run.
 $('#startBtn').addEventListener('click',()=>{v95BossVictory=false;v95BossDelayedToast=false;v95RelaySuccessLock=false});
 </script>
+
+<style>
+/* ===== v9.6 FRIENDLY RUN / FULL CHINESE UX ===== */
+#guideBtn{pointer-events:auto;position:absolute;right:14px;top:max(96px,calc(env(safe-area-inset-top) + 83px));z-index:26;border:1px solid #ffffff26;background:#07101ddd;color:#fff;border-radius:999px;padding:8px 11px;font-size:11px;font-weight:900;box-shadow:0 8px 24px #0007;backdrop-filter:blur(10px);touch-action:manipulation}
+#missionHud{position:absolute;left:50%;top:max(128px,calc(env(safe-area-inset-top) + 116px));transform:translateX(-50%);width:min(92%,430px);z-index:11;pointer-events:none;display:none}
+#missionHud.show{display:block}.missionCard{background:#07101dde;border:1px solid #ffffff18;border-radius:15px;padding:9px 12px;box-shadow:0 10px 28px #0007;backdrop-filter:blur(10px)}.missionPhase{font-size:9px;letter-spacing:.2em;opacity:.6}.missionText{font-size:12px;font-weight:900;line-height:1.45;margin-top:2px}.missionWin{font-size:9px;opacity:.62;margin-top:4px}
+#guideOverlay{position:absolute;inset:0;z-index:90;display:none;place-items:center;padding:max(14px,env(safe-area-inset-top)) 16px max(14px,env(safe-area-inset-bottom));background:radial-gradient(circle at 50% 18%,#1b2849f3,#050810fa 67%);pointer-events:auto;overscroll-behavior:contain}
+#guideOverlay.show{display:grid}.guideCard{width:min(405px,94vw);max-height:88dvh;display:flex;flex-direction:column;overflow:hidden;border-radius:28px;background:linear-gradient(180deg,#101b31f7,#07101cf7);border:1px solid #ffffff1b;box-shadow:0 30px 110px #000e}.guideHead{padding:20px 20px 12px;text-align:center;flex:0 0 auto}.guideHead .k{font-size:9px;letter-spacing:.28em;opacity:.6}.guideHead h2{margin:5px 0 4px;font-size:25px}.guideHead p{margin:0;font-size:12px;opacity:.7;line-height:1.55}.guideBody{padding:0 18px 10px;overflow-y:auto;-webkit-overflow-scrolling:touch}.guideStage{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:10px 0;border-top:1px solid #ffffff0d}.guideNo{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#ffffff0d;border:1px solid #ffffff14;font-weight:1000}.guideStage b{font-size:13px}.guideStage div div{font-size:11px;opacity:.7;line-height:1.55;margin-top:3px}.controlGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:9px 0 3px}.controlItem{padding:10px;border-radius:13px;background:#ffffff08;border:1px solid #ffffff0e;font-size:11px;line-height:1.45}.controlItem b{display:block;color:#fff;margin-bottom:2px}.guideFooter{padding:10px 18px 18px;flex:0 0 auto}.guideClose{width:100%;min-height:50px;border:0;border-radius:17px;background:linear-gradient(180deg,#eff9ff,#bee8ff);color:#071019;font-weight:1000;font-size:14px;touch-action:manipulation}
+#candlesHud{font-size:10px!important}.v96Mercy{color:#ffe08c;font-weight:900}
+.btn{font-size:10px!important;line-height:1.05!important}#skill{font-size:11px!important}#dash,#swap{font-size:10px!important}
+@media(max-height:700px){#missionHud{top:max(115px,calc(env(safe-area-inset-top) + 104px))}#guideBtn{top:max(86px,calc(env(safe-area-inset-top) + 75px))}.guideHead{padding-top:15px}.guideStage{padding:8px 0}}
+</style>
+<script>
+/* =========================
+   v9.6 FRIENDLY RUN
+   1) Story Mode cannot hard-lock inexperienced players.
+   2) All core controls are Chinese.
+   3) Persistent mission HUD + full "how to clear" guide.
+   ========================= */
+let v96MercyCount=0,v96GuideContinuation=null,v96GuideShown=false;
+(function(){
+  const frame=document.querySelector('.frame'); if(!frame)return;
+  const gbtn=document.createElement('button');gbtn.id='guideBtn';gbtn.textContent='？玩法';frame.appendChild(gbtn);
+  const mh=document.createElement('div');mh.id='missionHud';mh.innerHTML='<div class="missionCard"><div class="missionPhase" id="missionPhase">STORY RUN</div><div class="missionText" id="missionText">準備開始</div><div class="missionWin" id="missionWin">破關條件會一直顯示在這裡</div></div>';frame.appendChild(mh);
+  const go=document.createElement('div');go.id='guideOverlay';go.innerHTML=`<div class="guideCard">
+    <div class="guideHead"><div class="k">LEVEL +1｜玩法說明</div><h2>這局到底要做什麼？</h2><p>不用記英文，也不用猜規則。整局只有四個階段。</p></div>
+    <div class="guideBody">
+      <div class="guideStage"><span class="guideNo">1</span><div><b>清除上一年度殘留</b><div>左手走位，角色會<strong>自動攻擊</strong>。撿 EXP 升級、選 Build、收集 3 個 MEMORY。沿途可以換武器、放技能與生日大絕。</div></div></div>
+      <div class="guideStage"><span class="guideNo">2</span><div><b>擊敗「年度殘留獸」</b><div>Boss 出現後，先打掉環繞它的 <strong>3 個帳單核心</strong>，護盾解除後再把 Boss 擊倒。打贏才會進最後章節。</div></div></div>
+      <div class="guideStage"><span class="guideNo">3</span><div><b>把 3 個 MEMORY 送過時間</b><div>每一段都是：<strong>撿 MEMORY → 送到上方藍色封存點</strong>。畫面顯示「MEMORY SECURED」才算完成。被 TIME 追到只重跑當段，不重打 Boss。</div></div></div>
+      <div class="guideStage"><span class="guideNo">4</span><div><b>進入金色傳送門＝正式破關</b><div>3 個 MEMORY 都封存後，PLAYER 2 會加入，金色 ARCHIVE GATE 開啟。走進去才會看到 LEVEL UP、送禮人與最終禮物。</div></div></div>
+      <div class="controlGrid">
+        <div class="controlItem"><b>🕹️ 左側搖桿</b>只要負責移動／走位，普攻完全自動。</div>
+        <div class="controlItem"><b>✨ 技能</b>目前武器的主動技能，有冷卻時間。</div>
+        <div class="controlItem"><b>💨 瞬移</b>快速閃開攻擊；抓準時機會觸發完美閃避。</div>
+        <div class="controlItem"><b>🔄 換武器</b>切換已取得的武器，每把攻擊模式不同。</div>
+        <div class="controlItem"><b>🎂 生日大絕</b>能量 100% 後可施放，清彈幕＋爆發輸出。</div>
+        <div class="controlItem"><b>🕯️ 生日蠟燭</b>倒下時用來續命；用完仍有「壽星特赦」，故事模式不會卡死。</div>
+      </div>
+    </div>
+    <div class="guideFooter"><button class="guideClose" id="guideClose">我懂了，開始玩</button></div>
+  </div>`;frame.appendChild(go);
+  gbtn.addEventListener('pointerup',e=>{e.preventDefault();v96ShowGuide();});
+  $('#guideClose').addEventListener('pointerup',e=>{e.preventDefault();v96CloseGuide();});
+})();
+function v96ShowGuide(after=null){
+  v96GuideContinuation=after; paused=true; $('#guideOverlay').classList.add('show'); joyId=null;joy.x=joy.y=0;stick.style.transform='translate(0,0)';
+}
+function v96CloseGuide(){
+  $('#guideOverlay').classList.remove('show'); const next=v96GuideContinuation;v96GuideContinuation=null; paused=false; if(next)next();
+}
+// Auto-show once, immediately before gameplay actually begins.
+const v96BeginGameplayBase=v9BeginGameplay;
+v9BeginGameplay=function(){ if(!v96GuideShown){v96GuideShown=true;v96ShowGuide(()=>v96BeginGameplayBase());return;} v96BeginGameplayBase(); };
+
+// Full Chinese labels, including dynamically updated widgets.
+function v96ChineseUI(){
+  if($('#swap'))$('#swap').innerHTML='換<br>武器';
+  if($('#skill'))$('#skill').innerHTML='技<br>能';
+  if($('#dash'))$('#dash').innerHTML='瞬<br>移';
+  if($('#breakBtn'))$('#breakBtn').innerHTML='<span>🎂 生日大絕<br><small id="breakTxt">'+Math.floor(typeof v8Break==='number'?v8Break:0)+'%</small></span>';
+  if($('#candlesHud'))$('#candlesHud').innerHTML='續命｜生日蠟燭 <b id="candleCount">🕯️🕯️🕯️</b>';
+}
+v96ChineseUI();
+
+// Story mode accessibility: 3 candles, then unlimited birthday mercy instead of forced restart.
+v94Candles=3;
+function v94UpdateCandles(){
+  const e=$('#candleCount');if(!e)return;
+  if(v94Candles>0)e.textContent='🕯️'.repeat(v94Candles)+'·'.repeat(Math.max(0,3-v94Candles));
+  else e.innerHTML='<span class="v96Mercy">壽星特赦 ON</span>';
+}
+const v96Taunts=[
+  '系統：今天你生日，技術問題我們晚點再談。',
+  'Boss：蛤？他怎麼又站起來了？',
+  '系統判定：不是你太菜，是怪今天太不給面子。',
+  'PLAYER 2 偷改了死亡判定：「再給他一次。」',
+  '生日當天禁止 Game Over。這條規則剛剛才新增。',
+  '系統：先復活。尊嚴的部分等等再撿。',
+  '你倒下了。蛋糕沒有。先送你一次復活。'
+];
+function v96Revive(mercy=false){
+  if(!mercy)v94Candles--;
+  else{
+    v96MercyCount++;
+    // Adaptive assistance: story must remain finishable without becoming a no-risk auto-win.
+    p.damageMul*=1.06; p.skillRate*=1.04;
+    enemies.forEach(e=>{if(e&&e.v)e.v*=.93});
+    if(boss&&boss.alive)boss.v*=.96;
+  }
+  v94UpdateCandles();p.hp=p.maxhp;p.inv=2.8;p.combo=0;p.comboT=0;
+  enemyShots=[];hazards=[];
+  enemies.forEach(e=>{let dx=e.x-p.x,dy=e.y-p.y,m=Math.hypot(dx,dy)||1;e.x+=dx/m*135;e.y+=dy/m*135});
+  $('#downedOverlay').classList.remove('show');paused=false;sfx('fever');vib([20,30,70]);
+  const line=v96Taunts[Math.floor(Math.random()*v96Taunts.length)];
+  toast(mercy?`🎂 壽星特赦 #${v96MercyCount}｜難度偷偷降低`:`🕯️ 復活｜剩 ${v94Candles} 根蠟燭`);
+  setTimeout(()=>banner(mercy?'BIRTHDAY MERCY':'CONTINUE',mercy?'壽星特赦復活':line,line),220);
+}
+function v94ShowDowned(){
+  paused=true;const can=v94Candles>0;
+  $('#downedOverlay').classList.add('show');
+  $('#downedTitle').textContent=can?'你倒下了':'蠟燭用完了…但是！';
+  const line=v96Taunts[Math.floor(Math.random()*v96Taunts.length)];
+  $('#downedText').innerHTML=can?`${line}<br><br>消耗 1 根 <b>生日蠟燭</b>即可滿血續命。<br>剩餘：<b>${v94Candles}</b>`:`本來照規則應該整局重來。<br><br><b>${v9Giver||'PLAYER 2'}：</b>「他今天生日欸，開後門啦。」<br><br><span class="v96Mercy">故事模式啟動「壽星特赦」：繼續遊戲，並偷偷降低一點難度。</span>`;
+  $('#continueBtn').style.display='block';
+  $('#continueBtn').textContent=can?`🕯️ 點燃生日蠟燭復活（剩 ${v94Candles}）`:'🎂 啟動壽星特赦復活';
+  $('#continueBtn').onclick=()=>v96Revive(!can);
+  $('#restartBtn').style.display='block';$('#restartBtn').textContent='我偏要重新挑戰這一局';
+}
+
+// Chinese TIME relay HUD.
+const v96RelayHudBase=v94RelayUpdateHud;
+v94RelayUpdateHud=function(){
+  v96RelayHudBase();
+  if(v94RelayFinalGate){$('#relayStep').textContent='最後一步｜進入傳送門';$('#relayGoal').textContent='走進金色傳送門，完成 LEVEL +1';}
+  else{$('#relayStep').textContent=`回憶封存｜第 ${v94RelayStage} / 3 段`;$('#relayGoal').textContent=v94RelayCarrying?`把 MEMORY 0${v94RelayStage} 送到上方藍色封存點`:`先撿起 MEMORY 0${v94RelayStage}`;}
+  const gap=Math.round(v92TimeLine-v92Runner.y);$('#relayGap').textContent=gap<95?'危險':gap<170?'接近':'安全';
+  $('#relayArchived').textContent=`${v94RelayArchived}/3`;
+  $('#relayArrowTxt').textContent=v94RelayFinalGate?'進入金色傳送門':v94RelayCarrying?'送到藍色封存點':'前往 MEMORY';
+};
+// Chinese relay fail text.
+const v96RelayFailBase=v94RelayFail;
+v94RelayFail=function(){
+  v96RelayFailBase();
+  if($('#relayFail .relayFailK'))$('#relayFail .relayFailK').textContent='被時間追上了';
+  if($('#relayRetryBtn'))$('#relayRetryBtn').textContent='從上一個封存點重新挑戰這一段';
+};
+// Clearer final chapter instructions.
+v92BeginArchiveGate=function(){
+  v9StoryScene('最後章節','⏳','Boss 打完了，現在把回憶帶過時間',
+    `這裡不需要打 TIME。<br><br>每一段只做兩件事：<br><br><b>① 撿起 MEMORY<br>② 送到畫面上方的藍色封存點</b><br><br>看到「MEMORY SECURED」才算這段完成。<br>完成 3 次後，<span class="storyAccent">金色傳送門</span>會出現；走進去就是正式破關。<br><br>被 TIME 追到只會重跑目前這一段，<b>不會回去重打 Boss。</b>`,
+    '開始最後封存',()=>v92StartArchiveRun(),true);
+};
+
+// Persistent mission / victory-condition HUD.
+function v96UpdateMission(){
+  const h=$('#missionHud');if(!h)return;
+  if(!started||finished){h.classList.remove('show');return;}h.classList.add('show');
+  let phase='',text='',win='';
+  if(v92ArchiveMode){
+    phase='③ 最後章節｜回憶封存';
+    text=v94RelayFinalGate?'3 個 MEMORY 已完成｜現在走進金色傳送門':v94RelayCarrying?`MEMORY 0${v94RelayStage} 已取得｜送到上方藍色封存點`:`找到並撿起 MEMORY 0${v94RelayStage}`;
+    win='破關：3 次封存完成 → 進入金色傳送門';
+  }else if(boss&&boss.alive){
+    const cores=enemies.filter(e=>e.kind==='core'&&e.hp>0).length;
+    phase='② 年度 Boss｜年度殘留獸';
+    text=cores>0?`先破壞帳單核心｜剩 ${cores} 個`:'護盾已解除｜集中火力擊敗 Boss';
+    win='Boss 擊敗後，才會進入 TIME 最後章節';
+  }else if(v95BossVictory){
+    phase='② Boss CLEAR';text='年度殘留獸已清除｜準備處理 MEMORY';win='接下來進入最後封存章節';
+  }else{
+    phase='① 清除上一年度殘留';
+    text=`自動攻擊｜撿 EXP 升級｜MEMORY ${Math.min(v9MemorySeen,3)}/3`;
+    win='目標：取得 3 個 MEMORY，最後擊敗年度 Boss';
+  }
+  $('#missionPhase').textContent=phase;$('#missionText').textContent=text;$('#missionWin').textContent=win;
+}
+setInterval(v96UpdateMission,180);
+
+// Reset friendly resources on new run.
+$('#startBtn').addEventListener('click',()=>{v94Candles=3;v96MercyCount=0;v96GuideShown=false;v94UpdateCandles();v96ChineseUI();});
+v94UpdateCandles();
+</script>
+
 </body></html>
