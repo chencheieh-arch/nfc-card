@@ -66,6 +66,15 @@
   .wave i:nth-child(2n){animation-delay:.15s}.wave i:nth-child(3n){animation-delay:.3s}.wave i:nth-child(5n){animation-delay:.45s}
   @keyframes wave{0%,100%{height:5px;opacity:.45}50%{height:23px;opacity:1}}
 
+  .driveFallback{display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.14)}
+  .driveFallback.show{display:block}
+  .driveFallbackNote{font-size:11px;line-height:1.55;color:rgba(255,255,255,.72);margin:0 0 8px}
+  .driveFrameWrap{height:82px;border-radius:14px;overflow:hidden;background:rgba(255,255,255,.08)}
+  .driveFrameWrap iframe{width:100%;height:118px;border:0;transform:translateY(-18px);background:transparent}
+  .player.fallback .playBtn,.player.fallback .progressWrap{display:none}
+  .player.fallback .now{text-align:center;margin-bottom:2px}
+  .player.fallback .wave{margin-top:4px}
+
   .ending{z-index:15;display:grid;place-items:center;padding:26px;text-align:center;background:rgba(10,7,6,.12);opacity:0;visibility:hidden;transition:opacity 1.2s ease,background 1.5s ease,visibility 1.2s}
   .ending.show{opacity:1;visibility:visible;background:rgba(10,7,6,.72)}
   .endInner{position:relative;z-index:3;max-width:720px}
@@ -137,6 +146,10 @@
           <div class="wave" aria-hidden="true">
             <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
           </div>
+          <div class="driveFallback" id="driveFallback">
+            <div class="driveFallbackNote">語音由客戶的 Google Drive 直接播放。若沒有自動開始，請點一下下方播放器的 ▶。</div>
+            <div class="driveFrameWrap"><iframe id="driveFrame" title="Google Drive 語音播放器" allow="autoplay"></iframe></div>
+          </div>
         </div>
       </div>
     </div>
@@ -158,21 +171,28 @@
 <script>
 (() => {
   // ===== 客戶提供的 Google Drive 檔案 =====
-  // 必須把三個檔案權限設成「知道連結的任何人都可以查看」。
+  // 建議一般存取權設成「知道連結的任何人」＋「檢視者」。
   const DRIVE = {
     image1: '1Y7KzoFhYW5VRgTulzJdeY5Jgv_5z7uS_',
     image2: '1k6zrWmi5CMFw9GJ8goPyPS9R3Q_0Bns1',
     audio:  '1-KSYEJsA1041b_q4fCIAAJm100Ulf8kU'
   };
 
+  // 你的音檔約 8:34。Google Drive 預覽播放器無法讓外部網頁讀取播放秒數，
+  // 所以只有在「Drive 預覽備援模式」才會用這個時間跑畫面動畫。
+  const FALLBACK_DURATION_SECONDS = 8 * 60 + 34;
+
   const imageCandidates = id => [
     `https://drive.google.com/thumbnail?id=${id}&sz=w2000`,
     `https://lh3.googleusercontent.com/d/${id}=w2000`,
     `https://drive.google.com/uc?export=view&id=${id}`
   ];
+
+  // Google 曾更改 uc 直連行為，因此先嘗試可串流格式；失敗會自動改用官方預覽播放器。
   const audioCandidates = id => [
-    `https://drive.usercontent.google.com/download?id=${id}&export=download&confirm=t`,
-    `https://drive.google.com/uc?export=download&id=${id}`
+    `https://drive.google.com/uc?export=open&id=${id}`,
+    `https://docs.google.com/uc?export=open&id=${id}`,
+    `https://drive.usercontent.google.com/download?id=${id}&export=download&confirm=t`
   ];
 
   const $ = s => document.querySelector(s);
@@ -195,12 +215,19 @@
   const slide2 = $('#slide2');
   const bg = $('#bg');
   const errorToast = $('#errorToast');
+  const driveFallback = $('#driveFallback');
+  const driveFrame = $('#driveFrame');
 
   let audioIndex = 0;
+  let directReady = false;
+  let mode = 'probing'; // probing | direct | fallback
   let started = false;
   let endingStarted = false;
   let surpriseShown = false;
   let quoteTimer = null;
+  let lastQuote = -1;
+  let fallbackStart = 0;
+  let fallbackRAF = 0;
 
   function setImageWithFallback(img, id, onReady){
     const urls = imageCandidates(id);
@@ -217,27 +244,6 @@
   setImageWithFallback($('#img1'), DRIVE.image1, src => { bg.style.backgroundImage = `url("${src}")`; });
   setImageWithFallback($('#img2'), DRIVE.image2);
 
-  function setAudioSource(index){
-    const urls = audioCandidates(DRIVE.audio);
-    audioIndex = index;
-    if(index >= urls.length){
-      showError('音檔目前無法從 Google Drive 讀取。請確認音檔分享權限已設為「知道連結的任何人」，再重新整理頁面。');
-      openBtn.disabled = false;
-      status.textContent = '音檔連線失敗，請確認 Google Drive 分享權限。';
-      return;
-    }
-    audio.src = urls[index];
-    audio.load();
-  }
-  setAudioSource(0);
-
-  audio.addEventListener('error', () => {
-    if(!started){
-      status.textContent = '正在嘗試另一個 Google Drive 音檔連線…';
-      setAudioSource(audioIndex + 1);
-    }
-  });
-
   function fmt(sec){
     if(!Number.isFinite(sec)) return '--:--';
     const m = Math.floor(sec/60), s = Math.floor(sec%60);
@@ -251,34 +257,49 @@
     showError.t = setTimeout(()=>errorToast.classList.remove('show'), 7000);
   }
 
-  async function startExperience(){
-    openBtn.disabled = true;
-    status.textContent = '正在開啟祝福…';
-    try{
-      await audio.play();
-      started = true;
-      status.textContent = '';
-      cover.classList.add('hide');
-      playerPage.classList.add('show');
-      player.classList.add('playing');
-      playBtn.textContent = '❚❚';
-    }catch(err){
+  function setAudioSource(index){
+    const urls = audioCandidates(DRIVE.audio);
+    audioIndex = index;
+    directReady = false;
+    if(index >= urls.length){
+      mode = 'fallback';
+      status.textContent = '語音將使用 Google Drive 播放器。';
       openBtn.disabled = false;
-      status.textContent = '音檔尚未能播放，請確認 Google Drive 分享權限後再試一次。';
-      showError('Google Drive 音檔必須開啟「知道連結的任何人都可以查看」。若剛修改權限，請重新整理後再試。');
+      return;
     }
+    audio.src = urls[index];
+    audio.load();
   }
-  openBtn.addEventListener('click', startExperience);
 
-  playBtn.addEventListener('click', async () => {
-    if(audio.paused){
-      try{ await audio.play(); }catch(e){ showError('目前無法繼續播放音檔，請重新整理後再試。'); }
-    }else audio.pause();
+  // 預先測試能否直接串流。不能的話，不再把它誤判成「分享權限錯誤」。
+  audio.addEventListener('loadedmetadata', () => {
+    directReady = true;
+    mode = 'direct';
+    duration.textContent = fmt(audio.duration);
+    status.textContent = '';
+    openBtn.disabled = false;
+  });
+  audio.addEventListener('canplay', () => {
+    directReady = true;
+    mode = 'direct';
+    status.textContent = '';
+    openBtn.disabled = false;
+  });
+  audio.addEventListener('error', () => {
+    if(!started && mode !== 'fallback') setAudioSource(audioIndex + 1);
   });
 
-  audio.addEventListener('play',()=>{ player.classList.add('playing'); playBtn.textContent='❚❚'; });
-  audio.addEventListener('pause',()=>{ player.classList.remove('playing'); playBtn.textContent='▶'; });
-  audio.addEventListener('loadedmetadata',()=>{ duration.textContent=fmt(audio.duration); });
+  // 不讓使用者一直卡在「準備中」；6 秒後若 Google 仍不給直連，就直接用預覽播放器。
+  openBtn.disabled = true;
+  status.textContent = '正在準備語音…';
+  setAudioSource(0);
+  setTimeout(() => {
+    if(!directReady && !started){
+      mode = 'fallback';
+      status.textContent = '語音將使用 Google Drive 播放器。';
+      openBtn.disabled = false;
+    }
+  }, 6000);
 
   const quotes = [
     [0.08,'今天，請把一些時間留給自己。'],
@@ -287,7 +308,6 @@
     [0.76,'願你被溫柔對待，也保有喜歡生活的方式。'],
     [0.89,'最後一點點了，繼續聽下去吧。']
   ];
-  let lastQuote = -1;
 
   function showQuote(text, index){
     if(index === lastQuote) return;
@@ -322,26 +342,84 @@
     setTimeout(()=>{ ending.classList.add('stage2'); makeConfetti(); }, 2500);
   }
 
-  audio.addEventListener('timeupdate',()=>{
-    current.textContent=fmt(audio.currentTime);
-    if(!audio.duration) return;
-    const p = audio.currentTime/audio.duration;
-    fill.style.width=`${Math.min(100,p*100)}%`;
-
+  function updateVisuals(sec, total){
+    current.textContent = fmt(sec);
+    duration.textContent = fmt(total);
+    if(!total) return;
+    const p = Math.max(0, Math.min(1, sec/total));
+    fill.style.width = `${p*100}%`;
     switchPhoto(p < .47 ? 1 : 2);
-
-    quotes.forEach(([at,text],i)=>{
-      if(p >= at && p < at+.055) showQuote(text,i);
-    });
-
+    quotes.forEach(([at,text],i)=>{ if(p >= at && p < at+.055) showQuote(text,i); });
     if(p >= .64 && p < .71) showSurprise();
     if(p >= .96) beginEnding();
-  });
+  }
 
+  audio.addEventListener('timeupdate',()=>{
+    if(mode === 'direct') updateVisuals(audio.currentTime, audio.duration || FALLBACK_DURATION_SECONDS);
+  });
   audio.addEventListener('ended', beginEnding);
 
+  function startFallbackVisualClock(){
+    cancelAnimationFrame(fallbackRAF);
+    fallbackStart = performance.now();
+    const tick = now => {
+      if(mode !== 'fallback' || endingStarted) return;
+      const sec = Math.min(FALLBACK_DURATION_SECONDS,(now-fallbackStart)/1000);
+      updateVisuals(sec,FALLBACK_DURATION_SECONDS);
+      if(sec < FALLBACK_DURATION_SECONDS) fallbackRAF = requestAnimationFrame(tick);
+      else beginEnding();
+    };
+    fallbackRAF = requestAnimationFrame(tick);
+  }
+
+  function activateFallback(){
+    mode = 'fallback';
+    player.classList.add('fallback','playing');
+    driveFallback.classList.add('show');
+    // Google 官方預覽播放器。這是 Drive 在網站中播放音訊最穩定的方式。
+    // autoplay 若被瀏覽器阻擋，播放器仍會顯示，收禮人只要再點一次 ▶ 即可。
+    driveFrame.src = `https://drive.google.com/file/d/${DRIVE.audio}/preview?autoplay=1`;
+    startFallbackVisualClock();
+  }
+
+  async function startExperience(){
+    openBtn.disabled = true;
+    status.textContent = '正在開啟祝福…';
+
+    cover.classList.add('hide');
+    playerPage.classList.add('show');
+    started = true;
+
+    if(mode === 'direct' && directReady){
+      try{
+        await audio.play();
+        status.textContent = '';
+        player.classList.add('playing');
+        playBtn.textContent = '❚❚';
+        return;
+      }catch(err){
+        // 不是權限錯誤：Google Drive 可能拒絕把公開檔案當第三方串流來源。
+        activateFallback();
+        return;
+      }
+    }
+    activateFallback();
+  }
+  openBtn.addEventListener('click', startExperience);
+
+  playBtn.addEventListener('click', async () => {
+    if(mode !== 'direct') return;
+    if(audio.paused){
+      try{ await audio.play(); }
+      catch(e){ activateFallback(); }
+    } else audio.pause();
+  });
+
+  audio.addEventListener('play',()=>{ if(mode==='direct'){player.classList.add('playing'); playBtn.textContent='❚❚';} });
+  audio.addEventListener('pause',()=>{ if(mode==='direct'){player.classList.remove('playing'); playBtn.textContent='▶';} });
+
   track.addEventListener('click',e=>{
-    if(!audio.duration) return;
+    if(mode !== 'direct' || !audio.duration) return;
     const r=track.getBoundingClientRect();
     audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration;
   });
@@ -368,8 +446,16 @@
     ending.className='ending';
     $('#confetti').innerHTML='';
     switchPhoto(1);
-    audio.currentTime=0;
-    try{ await audio.play(); }catch(e){ showError('無法重新播放音檔，請重新整理頁面後再試。'); }
+
+    if(mode==='direct'){
+      audio.currentTime=0;
+      try{ await audio.play(); }
+      catch(e){ activateFallback(); }
+    }else{
+      driveFrame.src='about:blank';
+      setTimeout(()=>{ driveFrame.src=`https://drive.google.com/file/d/${DRIVE.audio}/preview?autoplay=1`; },80);
+      startFallbackVisualClock();
+    }
   });
 })();
 </script>
