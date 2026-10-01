@@ -1,357 +1,377 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f5e6cf" />
-  <title>生日快樂｜專屬生日祝福</title>
-  <style>
-    :root{
-      --bg:#f8f1e7;
-      --text:#5c4737;
-      --muted:#8b7667;
-      --card:rgba(255,255,255,.76);
-      --line:rgba(255,255,255,.75);
-      --shadow:0 20px 60px rgba(78,51,29,.22);
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;width:100%;height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--text);overflow:hidden}
-    button{font:inherit}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#fff7ef" />
+<title>生日快樂</title>
+<style>
+  :root{
+    --ink:#fffaf4;
+    --gold:#ffd994;
+    --glass:rgba(26,18,16,.36);
+    --line:rgba(255,255,255,.34);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#17100e;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:white}
+  button{font:inherit}
+  .app{position:relative;width:100%;height:100%;isolation:isolate;background:#17100e}
+  .bg,.slide,.veil,.cover,.playerPage,.ending{position:absolute;inset:0}
+  .bg{z-index:-4;background-position:center;background-size:cover;filter:blur(26px) brightness(.52) saturate(1.05);transform:scale(1.13);transition:background-image 1.4s ease,filter 1.4s ease}
+  .bg::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 35%,rgba(255,228,190,.18),transparent 44%),linear-gradient(to bottom,rgba(20,12,10,.04),rgba(17,9,8,.42))}
+  .slide{z-index:-3;opacity:0;transition:opacity 1.8s ease;overflow:hidden;display:grid;place-items:center}
+  .slide.active{opacity:1}
+  .slide img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 20px 50px rgba(0,0,0,.28));animation:kenburns 24s ease-in-out infinite alternate;will-change:transform}
+  @keyframes kenburns{0%{transform:scale(1.01) translate3d(-.7%,.4%,0)}100%{transform:scale(1.075) translate3d(.8%,-.5%,0)}}
+  .veil{z-index:-2;background:linear-gradient(to bottom,rgba(6,4,3,.08),rgba(8,5,4,.18) 45%,rgba(8,5,4,.58));pointer-events:none}
 
-    .app{position:relative;width:100%;height:100%;isolation:isolate;background:#eadcc8}
-    .bg{
-      position:absolute;inset:-5%;z-index:-3;
-      background:center/cover no-repeat;
-      filter:blur(26px) brightness(.9) saturate(.95);
-      transform:scale(1.12);
-      transition:background-image 1.6s ease, filter 1.2s ease;
-    }
-    .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,248,239,.2),rgba(69,42,24,.16))}
+  .cover{z-index:20;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 28%,rgba(255,224,177,.22),transparent 38%),linear-gradient(180deg,rgba(24,14,11,.28),rgba(16,10,9,.66));transition:opacity 1s ease,visibility 1s ease}
+  .cover.hide{opacity:0;visibility:hidden;pointer-events:none}
+  .coverCard{width:min(92vw,520px);padding:32px 26px 28px;text-align:center;border:1px solid var(--line);border-radius:28px;background:rgba(47,30,26,.34);backdrop-filter:blur(16px);box-shadow:0 30px 80px rgba(0,0,0,.24)}
+  .tiny{font-size:13px;letter-spacing:.18em;opacity:.74;text-transform:uppercase}
+  .cover h1{margin:12px 0 10px;font-size:clamp(38px,10vw,66px);font-weight:750;letter-spacing:.06em;text-shadow:0 6px 24px rgba(0,0,0,.25)}
+  .cover p{margin:0 auto 20px;max-width:390px;line-height:1.9;font-size:16px;color:rgba(255,255,255,.9)}
+  .headphone{display:inline-flex;gap:8px;align-items:center;margin:3px 0 22px;padding:9px 13px;border-radius:999px;background:rgba(255,255,255,.09);font-size:13px;color:rgba(255,255,255,.88)}
+  .openBtn,.replayBtn{border:0;border-radius:999px;padding:15px 24px;font-weight:700;letter-spacing:.04em;cursor:pointer;background:linear-gradient(135deg,#fff1d1,#ffd08a);color:#4c3328;box-shadow:0 10px 32px rgba(255,195,108,.25);transition:.2s transform,.2s filter}
+  .openBtn:active,.replayBtn:active{transform:scale(.98)}
+  .openBtn[disabled]{opacity:.65;cursor:wait}
+  .status{min-height:20px;margin-top:14px;font-size:12px;color:#ffe5c3;line-height:1.55}
 
-    .grain{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.18;background-image:radial-gradient(rgba(255,255,255,.95) .7px,transparent .8px);background-size:9px 9px;mix-blend-mode:soft-light}
-    .vignette{position:absolute;inset:0;pointer-events:none;z-index:4;background:radial-gradient(circle at 50% 45%,transparent 48%,rgba(65,38,20,.18) 130%)}
+  .playerPage{z-index:5;opacity:0;pointer-events:none;transition:opacity 1s ease}
+  .playerPage.show{opacity:1;pointer-events:auto}
+  .topLabel{position:absolute;top:max(18px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);padding:8px 12px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(25,16,14,.24);backdrop-filter:blur(12px);font-size:12px;letter-spacing:.08em;color:rgba(255,255,255,.82);white-space:nowrap}
+  .quote{position:absolute;left:50%;top:20%;transform:translate(-50%,12px);width:min(86vw,650px);text-align:center;font-size:clamp(19px,4.7vw,30px);font-weight:650;line-height:1.65;letter-spacing:.04em;text-shadow:0 5px 22px rgba(0,0,0,.48);opacity:0;transition:opacity .7s ease,transform .8s ease}
+  .quote.show{opacity:1;transform:translate(-50%,0)}
 
-    .screen{position:absolute;inset:0;display:grid;place-items:center;padding:22px;transition:opacity .8s ease,visibility .8s ease}
-    .hidden{opacity:0;visibility:hidden;pointer-events:none}
+  .surprise{position:absolute;left:50%;top:50%;transform:translate(-50%,-45%) scale(.92);width:min(84vw,430px);padding:22px 20px;text-align:center;border:1px solid rgba(255,255,255,.28);border-radius:24px;background:rgba(32,21,19,.44);backdrop-filter:blur(15px);box-shadow:0 24px 70px rgba(0,0,0,.22);opacity:0;visibility:hidden;transition:.6s ease}
+  .surprise.show{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1)}
+  .surprise .gift{font-size:38px;display:block;margin-bottom:7px;animation:float 1.8s ease-in-out infinite}
+  .surprise strong{font-size:20px;display:block;margin-bottom:7px}
+  .surprise span{font-size:14px;line-height:1.7;color:rgba(255,255,255,.86)}
+  @keyframes float{50%{transform:translateY(-6px) rotate(2deg)}}
 
-    .intro{z-index:10;background:linear-gradient(180deg,rgba(255,248,240,.42),rgba(110,75,45,.22));backdrop-filter:blur(4px)}
-    .intro-card{width:min(520px,92vw);padding:34px 26px 30px;border:1px solid var(--line);border-radius:28px;background:var(--card);box-shadow:var(--shadow);text-align:center;backdrop-filter:blur(15px)}
-    .tiny{font-size:13px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:12px}
-    h1{margin:0 0 14px;font-size:clamp(31px,8vw,52px);font-family:"Noto Serif TC","Songti TC",serif;font-weight:700;letter-spacing:.06em}
-    .sub{margin:0 auto 24px;max-width:390px;line-height:1.85;color:#6f5a4a;font-size:15px}
-    .headphone{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border-radius:999px;background:rgba(255,255,255,.64);font-size:13px;color:#7c6758;margin-bottom:18px}
-    .start-btn{appearance:none;border:none;border-radius:999px;padding:15px 28px;min-width:220px;background:#5d4636;color:white;font-weight:700;letter-spacing:.06em;box-shadow:0 10px 30px rgba(63,42,27,.24);cursor:pointer;transition:transform .2s ease,box-shadow .2s ease}
-    .start-btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(63,42,27,.30)}
-    .start-btn:active{transform:scale(.98)}
+  .player{position:absolute;left:50%;bottom:max(22px,calc(env(safe-area-inset-bottom) + 14px));transform:translateX(-50%);width:min(92vw,640px);padding:14px 16px 13px;border:1px solid rgba(255,255,255,.24);border-radius:22px;background:rgba(25,16,14,.42);backdrop-filter:blur(18px);box-shadow:0 18px 55px rgba(0,0,0,.24)}
+  .playerRow{display:flex;align-items:center;gap:12px}
+  .playBtn{width:44px;height:44px;flex:0 0 44px;border:0;border-radius:50%;background:rgba(255,255,255,.92);color:#3f2a21;font-size:18px;cursor:pointer;display:grid;place-items:center}
+  .playerMeta{min-width:0;flex:1}
+  .now{font-size:13px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px}
+  .progressWrap{display:flex;align-items:center;gap:9px}
+  .time{font-variant-numeric:tabular-nums;font-size:11px;color:rgba(255,255,255,.75);width:38px}
+  .time.end{text-align:right}
+  .track{position:relative;height:5px;flex:1;background:rgba(255,255,255,.22);border-radius:999px;overflow:hidden;cursor:pointer}
+  .fill{position:absolute;inset:0 auto 0 0;width:0%;background:linear-gradient(90deg,#fff0c8,#ffd28f);border-radius:inherit}
+  .wave{height:26px;display:flex;align-items:center;justify-content:center;gap:4px;margin-top:8px;opacity:.7}
+  .wave i{display:block;width:3px;height:7px;border-radius:3px;background:rgba(255,255,255,.82);animation:wave 1s ease-in-out infinite;animation-play-state:paused}
+  .playing .wave i{animation-play-state:running}
+  .wave i:nth-child(2n){animation-delay:.15s}.wave i:nth-child(3n){animation-delay:.3s}.wave i:nth-child(5n){animation-delay:.45s}
+  @keyframes wave{0%,100%{height:5px;opacity:.45}50%{height:23px;opacity:1}}
 
-    .stage{position:absolute;inset:0;display:grid;place-items:center;padding:20px 20px 108px}
-    .photo-wrap{position:relative;width:min(1080px,94vw);height:min(72vh,760px);display:grid;place-items:center}
-    .photo{
-      position:absolute;max-width:100%;max-height:100%;object-fit:contain;border-radius:24px;
-      box-shadow:0 22px 70px rgba(50,28,14,.26);
-      opacity:0;transform:scale(1.02);transition:opacity 1.7s ease,transform 10s ease;
-      user-select:none;-webkit-user-drag:none;background:rgba(255,255,255,.18)
-    }
-    .photo.active{opacity:1;transform:scale(1.075)}
-    .photo.second.active{transform:scale(1.055) translateY(-.4%)}
+  .ending{z-index:15;display:grid;place-items:center;padding:26px;text-align:center;background:rgba(10,7,6,.12);opacity:0;visibility:hidden;transition:opacity 1.2s ease,background 1.5s ease,visibility 1.2s}
+  .ending.show{opacity:1;visibility:visible;background:rgba(10,7,6,.72)}
+  .endInner{position:relative;z-index:3;max-width:720px}
+  .lastLine{font-size:clamp(17px,4.3vw,24px);line-height:1.75;opacity:0;transform:translateY(12px);transition:.8s ease;color:rgba(255,255,255,.9)}
+  .ending.stage1 .lastLine{opacity:1;transform:none}
+  .birthday{margin:16px 0 12px;font-size:clamp(48px,13vw,92px);font-weight:800;letter-spacing:.04em;line-height:1.08;opacity:0;transform:scale(.92);text-shadow:0 8px 38px rgba(0,0,0,.32);transition:.8s cubic-bezier(.2,.9,.25,1.15)}
+  .ending.stage2 .birthday{opacity:1;transform:scale(1)}
+  .endSub{font-size:15px;line-height:1.8;color:rgba(255,255,255,.84);opacity:0;transition:.7s ease .2s}
+  .ending.stage2 .endSub{opacity:1}
+  .replayBtn{margin-top:25px;opacity:0;transform:translateY(8px);transition:.6s ease .45s}
+  .ending.stage2 .replayBtn{opacity:1;transform:none}
+  .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+  .confetti b{position:absolute;top:-9vh;width:8px;height:13px;border-radius:2px;background:hsl(var(--h),78%,72%);opacity:.92;animation:fall var(--d) linear var(--delay) infinite;transform:rotate(var(--r))}
+  @keyframes fall{to{transform:translate3d(var(--x),115vh,0) rotate(680deg)}}
 
-    .sparkles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-    .spark{position:absolute;width:7px;height:7px;border-radius:50%;background:rgba(255,248,204,.9);box-shadow:0 0 14px rgba(255,244,178,.95);animation:floatUp 9s linear infinite;opacity:0}
-    @keyframes floatUp{0%{transform:translateY(20px) scale(.5);opacity:0}15%{opacity:.85}80%{opacity:.45}100%{transform:translateY(-120px) scale(1.2);opacity:0}}
+  .errorToast{position:absolute;z-index:30;left:50%;bottom:22px;transform:translateX(-50%);width:min(90vw,560px);padding:13px 16px;background:rgba(74,25,20,.9);border:1px solid rgba(255,255,255,.2);border-radius:14px;text-align:center;font-size:13px;line-height:1.6;display:none}
+  .errorToast.show{display:block}
 
-    .caption{position:absolute;left:50%;bottom:122px;transform:translateX(-50%) translateY(12px);width:min(90vw,760px);padding:13px 18px;border-radius:18px;background:rgba(255,255,255,.70);border:1px solid rgba(255,255,255,.72);backdrop-filter:blur(10px);box-shadow:0 12px 32px rgba(62,37,23,.12);text-align:center;font-family:"Noto Serif TC","Songti TC",serif;font-size:clamp(15px,4vw,20px);letter-spacing:.04em;opacity:0;transition:opacity .8s ease,transform .8s ease;pointer-events:none}
-    .caption.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-    .player{position:absolute;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(680px,92vw);padding:14px 16px 15px;border-radius:22px;background:rgba(255,255,255,.80);border:1px solid rgba(255,255,255,.82);box-shadow:0 14px 40px rgba(61,40,25,.18);backdrop-filter:blur(15px);z-index:6}
-    .player-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-    .play-btn{width:38px;height:38px;border:none;border-radius:50%;background:#5d4636;color:white;display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
-    .now{min-width:0;flex:1}
-    .now-title{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .now-sub{font-size:11px;color:var(--muted);margin-top:2px}
-    .bars{display:flex;align-items:end;gap:3px;height:24px;width:44px;justify-content:center}
-    .bar{width:3px;height:7px;border-radius:99px;background:#876b58;animation:eq .9s ease-in-out infinite alternate;animation-play-state:paused;opacity:.72}
-    .playing .bar{animation-play-state:running}
-    .bar:nth-child(2){animation-delay:.15s}.bar:nth-child(3){animation-delay:.3s}.bar:nth-child(4){animation-delay:.05s}.bar:nth-child(5){animation-delay:.22s}
-    @keyframes eq{from{height:6px}to{height:22px}}
-    .progress-row{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:8px;font-size:11px;color:#796556}
-    .track{height:5px;border-radius:999px;background:rgba(87,66,51,.16);overflow:hidden;cursor:pointer;position:relative}
-    .fill{height:100%;width:0;background:#6b5241;border-radius:inherit}
-
-    .ending{z-index:12;background:rgba(69,44,29,.42);backdrop-filter:blur(8px)}
-    .ending-card{width:min(500px,90vw);text-align:center;padding:34px 24px;border-radius:28px;background:rgba(255,251,246,.9);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.8)}
-    .ending-card .eyebrow{font-size:13px;letter-spacing:.15em;color:#8b7667;margin-bottom:10px}
-    .ending-card h2{font-family:"Noto Serif TC","Songti TC",serif;font-size:clamp(38px,11vw,66px);margin:0 0 10px;letter-spacing:.08em}
-    .ending-card p{margin:0 0 22px;color:#735e50;line-height:1.7}
-    .again{border:1px solid rgba(93,70,54,.24);background:white;color:#5d4636;border-radius:999px;padding:12px 22px;font-weight:700;cursor:pointer}
-
-    .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-    .confetti i{position:absolute;top:-12%;width:8px;height:16px;border-radius:2px;opacity:.86;animation:fall 5.5s linear forwards}
-    @keyframes fall{to{transform:translate3d(var(--drift),115vh,0) rotate(720deg)}}
-
-    @media (max-width:720px){
-      .stage{padding:14px 10px 108px}
-      .photo-wrap{width:96vw;height:68vh}
-      .photo{border-radius:18px}
-      .caption{bottom:116px;font-size:15px;padding:11px 14px}
-      .intro-card{padding:30px 20px 26px}
-    }
-    @media (prefers-reduced-motion: reduce){
-      *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.2s!important}
-      .photo.active{transform:none}
-    }
-  </style>
+  @media (max-width:600px){
+    .coverCard{padding:28px 20px 25px;border-radius:24px}
+    .quote{top:18%}
+    .slide img{object-fit:contain}
+    .player{bottom:max(14px,calc(env(safe-area-inset-bottom) + 8px));padding:12px 13px}
+    .now{font-size:12px}.wave{height:20px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .slide img,.wave i,.surprise .gift,.confetti b{animation:none!important}
+  }
+</style>
 </head>
 <body>
-  <main class="app" id="app">
-    <div class="bg" id="bg"></div>
-    <div class="grain"></div>
-    <div class="sparkles" id="sparkles"></div>
-    <div class="vignette"></div>
+<div class="app" id="app">
+  <div class="bg" id="bg"></div>
+  <div class="slide active" id="slide1"><img id="img1" alt="生日祝福圖片一"></div>
+  <div class="slide" id="slide2"><img id="img2" alt="生日祝福圖片二"></div>
+  <div class="veil"></div>
 
-    <section class="screen intro" id="intro">
-      <div class="intro-card">
-        <div class="tiny">A little birthday surprise</div>
-        <h1>生日快樂</h1>
-        <p class="sub">有一份生日祝福，想讓你慢慢聽完。</p>
-        <div class="headphone">🎧 建議戴上耳機</div><br />
-        <button class="start-btn" id="startBtn">開啟生日祝福</button>
-      </div>
-    </section>
+  <section class="cover" id="cover">
+    <div class="coverCard">
+      <div class="tiny">A BIRTHDAY MESSAGE</div>
+      <h1>生日快樂</h1>
+      <p>有一份生日祝福，想讓你慢慢聽完。</p>
+      <div class="headphone">🎧 建議戴上耳機</div><br>
+      <button class="openBtn" id="openBtn">開啟生日祝福</button>
+      <div class="status" id="status"></div>
+    </div>
+  </section>
 
-    <section class="stage" id="stage" aria-live="polite">
-      <div class="photo-wrap">
-        <img id="photo1" class="photo first active" alt="生日祝福圖片 1" />
-        <img id="photo2" class="photo second" alt="生日祝福圖片 2" />
-      </div>
-      <div class="caption" id="caption"></div>
-    </section>
+  <main class="playerPage" id="playerPage">
+    <div class="topLabel">🎧 正在播放一份給你的生日祝福</div>
+    <div class="quote" id="quote"></div>
 
-    <section class="player" id="player">
-      <div class="player-top">
-        <button class="play-btn" id="playBtn" aria-label="播放或暫停">▶</button>
-        <div class="now">
-          <div class="now-title">正在播放一份給你的生日祝福</div>
-          <div class="now-sub">慢慢聽，這幾分鐘是特別留給你的。</div>
+    <div class="surprise" id="surprise">
+      <span class="gift">🎁</span>
+      <strong>偷偷送你一個小小的生日加成</strong>
+      <span>願接下來的日子，多一點好運、多一點快樂，也多一點喜歡自己的時刻。</span>
+    </div>
+
+    <div class="player" id="player">
+      <div class="playerRow">
+        <button class="playBtn" id="playBtn" aria-label="播放或暫停">❚❚</button>
+        <div class="playerMeta">
+          <div class="now">給你的生日祝福</div>
+          <div class="progressWrap">
+            <span class="time" id="current">0:00</span>
+            <div class="track" id="track"><div class="fill" id="fill"></div></div>
+            <span class="time end" id="duration">--:--</span>
+          </div>
+          <div class="wave" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
         </div>
-        <div class="bars" aria-hidden="true">
-          <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
-        </div>
       </div>
-      <div class="progress-row">
-        <span id="current">0:00</span>
-        <div class="track" id="track" aria-label="音訊進度"><div class="fill" id="fill"></div></div>
-        <span id="duration">0:00</span>
-      </div>
-    </section>
-
-    <section class="screen ending hidden" id="ending">
-      <div class="confetti" id="confetti"></div>
-      <div class="ending-card">
-        <div class="eyebrow">最後，送你今天最重要的一句話</div>
-        <h2>生日快樂 🎂</h2>
-        <p>願這段祝福，陪你迎接新的一歲。</p>
-        <button class="again" id="againBtn">↻ 再聽一次</button>
-      </div>
-    </section>
-
-    <audio id="audio" preload="metadata"></audio>
+    </div>
   </main>
 
-  <script>
-    // ===== 此客戶素材已直接帶入，不需再修改 =====
-    const MEDIA = {
-      image1: 'https://drive.google.com/uc?export=view&id=1Y7KzoFhYW5VRgTulzJdeY5Jgv_5z7uS_',
-      image2: 'https://drive.google.com/uc?export=view&id=1k6zrWmi5CMFw9GJ8goPyPS9R3Q_0Bns1',
-      audio:  'https://drive.google.com/uc?export=download&id=1-KSYEJsA1041b_q4fCIAAJm100Ulf8kU'
+  <section class="ending" id="ending">
+    <div class="confetti" id="confetti"></div>
+    <div class="endInner">
+      <div class="lastLine">最後，送你今天最重要的一句話。</div>
+      <div class="birthday">HAPPY<br>BIRTHDAY 🎂</div>
+      <div class="endSub">願這段祝福，陪你迎接新的一歲。</div>
+      <button class="replayBtn" id="replayBtn">↻ 再聽一次</button>
+    </div>
+  </section>
+
+  <div class="errorToast" id="errorToast"></div>
+  <audio id="audio" preload="metadata" playsinline></audio>
+</div>
+<script>
+(() => {
+  // ===== 客戶提供的 Google Drive 檔案 =====
+  // 必須把三個檔案權限設成「知道連結的任何人都可以查看」。
+  const DRIVE = {
+    image1: '1Y7KzoFhYW5VRgTulzJdeY5Jgv_5z7uS_',
+    image2: '1k6zrWmi5CMFw9GJ8goPyPS9R3Q_0Bns1',
+    audio:  '1-KSYEJsA1041b_q4fCIAAJm100Ulf8kU'
+  };
+
+  const imageCandidates = id => [
+    `https://drive.google.com/thumbnail?id=${id}&sz=w2000`,
+    `https://lh3.googleusercontent.com/d/${id}=w2000`,
+    `https://drive.google.com/uc?export=view&id=${id}`
+  ];
+  const audioCandidates = id => [
+    `https://drive.usercontent.google.com/download?id=${id}&export=download&confirm=t`,
+    `https://drive.google.com/uc?export=download&id=${id}`
+  ];
+
+  const $ = s => document.querySelector(s);
+  const audio = $('#audio');
+  const cover = $('#cover');
+  const openBtn = $('#openBtn');
+  const status = $('#status');
+  const playerPage = $('#playerPage');
+  const player = $('#player');
+  const playBtn = $('#playBtn');
+  const track = $('#track');
+  const fill = $('#fill');
+  const current = $('#current');
+  const duration = $('#duration');
+  const quote = $('#quote');
+  const surprise = $('#surprise');
+  const ending = $('#ending');
+  const replayBtn = $('#replayBtn');
+  const slide1 = $('#slide1');
+  const slide2 = $('#slide2');
+  const bg = $('#bg');
+  const errorToast = $('#errorToast');
+
+  let audioIndex = 0;
+  let started = false;
+  let endingStarted = false;
+  let surpriseShown = false;
+  let quoteTimer = null;
+
+  function setImageWithFallback(img, id, onReady){
+    const urls = imageCandidates(id);
+    let i = 0;
+    const tryNext = () => {
+      if(i >= urls.length) return;
+      img.src = urls[i++];
     };
+    img.onload = () => onReady?.(img.currentSrc || img.src);
+    img.onerror = tryNext;
+    tryNext();
+  }
 
-    const app = document.getElementById('app');
-    const bg = document.getElementById('bg');
-    const intro = document.getElementById('intro');
-    const startBtn = document.getElementById('startBtn');
-    const playBtn = document.getElementById('playBtn');
-    const player = document.getElementById('player');
-    const audio = document.getElementById('audio');
-    const photo1 = document.getElementById('photo1');
-    const photo2 = document.getElementById('photo2');
-    const caption = document.getElementById('caption');
-    const current = document.getElementById('current');
-    const duration = document.getElementById('duration');
-    const fill = document.getElementById('fill');
-    const track = document.getElementById('track');
-    const ending = document.getElementById('ending');
-    const againBtn = document.getElementById('againBtn');
-    const sparkles = document.getElementById('sparkles');
+  setImageWithFallback($('#img1'), DRIVE.image1, src => { bg.style.backgroundImage = `url("${src}")`; });
+  setImageWithFallback($('#img2'), DRIVE.image2);
 
-    // 直接載入此客戶素材；圖片若 Drive 直連失敗，會自動切換備援網址
-    const IMAGE1_FALLBACK = 'https://lh3.googleusercontent.com/d/1Y7KzoFhYW5VRgTulzJdeY5Jgv_5z7uS_=w2000';
-    const IMAGE2_FALLBACK = 'https://lh3.googleusercontent.com/d/1k6zrWmi5CMFw9GJ8goPyPS9R3Q_0Bns1=w2000';
-    const AUDIO_FALLBACK  = 'https://drive.usercontent.google.com/download?id=1-KSYEJsA1041b_q4fCIAAJm100Ulf8kU&export=download&confirm=t';
-
-    photo1.src = MEDIA.image1;
-    photo2.src = MEDIA.image2;
-    audio.src = MEDIA.audio;
-    bg.style.backgroundImage = `url("${MEDIA.image1}")`;
-
-    photo1.addEventListener('error',()=>{ if(photo1.src !== IMAGE1_FALLBACK) photo1.src = IMAGE1_FALLBACK; });
-    photo2.addEventListener('error',()=>{ if(photo2.src !== IMAGE2_FALLBACK) photo2.src = IMAGE2_FALLBACK; });
-    audio.addEventListener('error',()=>{
-      if(audio.src !== AUDIO_FALLBACK){
-        const t = audio.currentTime || 0;
-        audio.src = AUDIO_FALLBACK;
-        audio.currentTime = t;
-      }
-    }, { once:true });
-
-    // 少量通用祝福，不預設送禮人與壽星關係
-    const messages = [
-      { p: .12, text: '今天，請把一些時間留給自己。' },
-      { p: .30, text: '願接下來的日子，有更多值得期待的事情。' },
-      { p: .52, text: '新的一歲，也要記得好好照顧自己。' },
-      { p: .72, text: '願你被溫柔對待，也保有喜歡生活的方式。' },
-      { p: .88, text: '最後一點點了，繼續聽下去吧。' }
-    ];
-    let shownMessage = -1;
-    let switched = false;
-    let endedShown = false;
-
-    function fmt(sec){
-      if(!Number.isFinite(sec)) return '0:00';
-      const m = Math.floor(sec/60);
-      const s = Math.floor(sec%60).toString().padStart(2,'0');
-      return `${m}:${s}`;
+  function setAudioSource(index){
+    const urls = audioCandidates(DRIVE.audio);
+    audioIndex = index;
+    if(index >= urls.length){
+      showError('音檔目前無法從 Google Drive 讀取。請確認音檔分享權限已設為「知道連結的任何人」，再重新整理頁面。');
+      openBtn.disabled = false;
+      status.textContent = '音檔連線失敗，請確認 Google Drive 分享權限。';
+      return;
     }
+    audio.src = urls[index];
+    audio.load();
+  }
+  setAudioSource(0);
 
-    function setPlayingUI(isPlaying){
-      playBtn.textContent = isPlaying ? 'Ⅱ' : '▶';
-      player.classList.toggle('playing', isPlaying);
+  audio.addEventListener('error', () => {
+    if(!started){
+      status.textContent = '正在嘗試另一個 Google Drive 音檔連線…';
+      setAudioSource(audioIndex + 1);
     }
+  });
 
-    async function startExperience(){
-      intro.classList.add('hidden');
-      try{
-        await audio.play();
-        setPlayingUI(true);
-      }catch(err){
-        console.warn('Audio play blocked or unavailable:', err);
-        setPlayingUI(false);
-      }
+  function fmt(sec){
+    if(!Number.isFinite(sec)) return '--:--';
+    const m = Math.floor(sec/60), s = Math.floor(sec%60);
+    return `${m}:${String(s).padStart(2,'0')}`;
+  }
+
+  function showError(msg){
+    errorToast.textContent = msg;
+    errorToast.classList.add('show');
+    clearTimeout(showError.t);
+    showError.t = setTimeout(()=>errorToast.classList.remove('show'), 7000);
+  }
+
+  async function startExperience(){
+    openBtn.disabled = true;
+    status.textContent = '正在開啟祝福…';
+    try{
+      await audio.play();
+      started = true;
+      status.textContent = '';
+      cover.classList.add('hide');
+      playerPage.classList.add('show');
+      player.classList.add('playing');
+      playBtn.textContent = '❚❚';
+    }catch(err){
+      openBtn.disabled = false;
+      status.textContent = '音檔尚未能播放，請確認 Google Drive 分享權限後再試一次。';
+      showError('Google Drive 音檔必須開啟「知道連結的任何人都可以查看」。若剛修改權限，請重新整理後再試。');
     }
+  }
+  openBtn.addEventListener('click', startExperience);
 
-    startBtn.addEventListener('click', startExperience);
+  playBtn.addEventListener('click', async () => {
+    if(audio.paused){
+      try{ await audio.play(); }catch(e){ showError('目前無法繼續播放音檔，請重新整理後再試。'); }
+    }else audio.pause();
+  });
 
-    playBtn.addEventListener('click', async()=>{
-      if(audio.paused){
-        try{ await audio.play(); setPlayingUI(true); }catch(e){ console.warn(e); }
-      }else{
-        audio.pause(); setPlayingUI(false);
-      }
+  audio.addEventListener('play',()=>{ player.classList.add('playing'); playBtn.textContent='❚❚'; });
+  audio.addEventListener('pause',()=>{ player.classList.remove('playing'); playBtn.textContent='▶'; });
+  audio.addEventListener('loadedmetadata',()=>{ duration.textContent=fmt(audio.duration); });
+
+  const quotes = [
+    [0.08,'今天，請把一些時間留給自己。'],
+    [0.26,'願接下來的日子，有更多值得期待的事情。'],
+    [0.53,'新的一歲，也要記得好好照顧自己。'],
+    [0.76,'願你被溫柔對待，也保有喜歡生活的方式。'],
+    [0.89,'最後一點點了，繼續聽下去吧。']
+  ];
+  let lastQuote = -1;
+
+  function showQuote(text, index){
+    if(index === lastQuote) return;
+    lastQuote = index;
+    clearTimeout(quoteTimer);
+    quote.classList.remove('show');
+    setTimeout(()=>{ quote.textContent=text; quote.classList.add('show'); },180);
+    quoteTimer = setTimeout(()=>quote.classList.remove('show'), 5200);
+  }
+
+  function switchPhoto(which){
+    const use2 = which === 2;
+    slide1.classList.toggle('active',!use2);
+    slide2.classList.toggle('active',use2);
+    const src = use2 ? $('#img2').src : $('#img1').src;
+    if(src) bg.style.backgroundImage = `url("${src}")`;
+  }
+
+  function showSurprise(){
+    if(surpriseShown) return;
+    surpriseShown = true;
+    surprise.classList.add('show');
+    setTimeout(()=>surprise.classList.remove('show'), 6500);
+  }
+
+  function beginEnding(){
+    if(endingStarted) return;
+    endingStarted = true;
+    quote.classList.remove('show');
+    surprise.classList.remove('show');
+    ending.classList.add('show','stage1');
+    setTimeout(()=>{ ending.classList.add('stage2'); makeConfetti(); }, 2500);
+  }
+
+  audio.addEventListener('timeupdate',()=>{
+    current.textContent=fmt(audio.currentTime);
+    if(!audio.duration) return;
+    const p = audio.currentTime/audio.duration;
+    fill.style.width=`${Math.min(100,p*100)}%`;
+
+    switchPhoto(p < .47 ? 1 : 2);
+
+    quotes.forEach(([at,text],i)=>{
+      if(p >= at && p < at+.055) showQuote(text,i);
     });
 
-    audio.addEventListener('loadedmetadata',()=>{
-      duration.textContent = fmt(audio.duration);
-    });
+    if(p >= .64 && p < .71) showSurprise();
+    if(p >= .96) beginEnding();
+  });
 
-    audio.addEventListener('play',()=>setPlayingUI(true));
-    audio.addEventListener('pause',()=>setPlayingUI(false));
+  audio.addEventListener('ended', beginEnding);
 
-    audio.addEventListener('timeupdate',()=>{
-      if(!audio.duration) return;
-      const p = audio.currentTime / audio.duration;
-      current.textContent = fmt(audio.currentTime);
-      duration.textContent = fmt(audio.duration);
-      fill.style.width = `${Math.min(100,p*100)}%`;
+  track.addEventListener('click',e=>{
+    if(!audio.duration) return;
+    const r=track.getBoundingClientRect();
+    audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration;
+  });
 
-      // 約 45% 時切換第二張圖
-      if(p >= .45 && !switched){
-        switched = true;
-        photo1.classList.remove('active');
-        photo2.classList.add('active');
-        bg.style.backgroundImage = `url("${MEDIA.image2}")`;
-      } else if(p < .45 && switched){
-        switched = false;
-        photo2.classList.remove('active');
-        photo1.classList.add('active');
-        bg.style.backgroundImage = `url("${MEDIA.image1}")`;
-      }
-
-      // 文字提示，每句顯示約 6% 音訊長度
-      let idx = -1;
-      for(let i=0;i<messages.length;i++){
-        if(p >= messages[i].p && p < messages[i].p + .06){ idx = i; break; }
-      }
-      if(idx !== -1){
-        if(shownMessage !== idx){
-          shownMessage = idx;
-          caption.textContent = messages[idx].text;
-        }
-        caption.classList.add('show');
-      }else{
-        caption.classList.remove('show');
-      }
-
-      // 最後約 3% 顯示生日結尾
-      if(p >= .97 && !endedShown){
-        endedShown = true;
-        showEnding();
-      }
-    });
-
-    track.addEventListener('click',(e)=>{
-      if(!audio.duration) return;
-      const rect = track.getBoundingClientRect();
-      const ratio = Math.min(1,Math.max(0,(e.clientX-rect.left)/rect.width));
-      audio.currentTime = ratio*audio.duration;
-    });
-
-    audio.addEventListener('ended',()=>{
-      setPlayingUI(false);
-      showEnding();
-    });
-
-    againBtn.addEventListener('click', async()=>{
-      ending.classList.add('hidden');
-      endedShown = false;
-      shownMessage = -1;
-      switched = false;
-      caption.classList.remove('show');
-      photo2.classList.remove('active');
-      photo1.classList.add('active');
-      bg.style.backgroundImage = `url("${MEDIA.image1}")`;
-      audio.currentTime = 0;
-      try{ await audio.play(); setPlayingUI(true); }catch(e){ console.warn(e); }
-    });
-
-    function showEnding(){
-      ending.classList.remove('hidden');
-      makeConfetti();
+  function makeConfetti(){
+    const box=$('#confetti');
+    if(box.childElementCount) return;
+    for(let i=0;i<64;i++){
+      const b=document.createElement('b');
+      b.style.left=Math.random()*100+'%';
+      b.style.setProperty('--h',Math.floor(Math.random()*360));
+      b.style.setProperty('--d',(5+Math.random()*4)+'s');
+      b.style.setProperty('--delay',(-Math.random()*5)+'s');
+      b.style.setProperty('--x',((-70+Math.random()*140))+'px');
+      b.style.setProperty('--r',(Math.random()*180)+'deg');
+      box.appendChild(b);
     }
+  }
 
-    function makeConfetti(){
-      const wrap = document.getElementById('confetti');
-      wrap.innerHTML = '';
-      const colors = ['#f2c14e','#f59ca9','#9cc5d8','#c9b6e4','#fff1c7'];
-      for(let i=0;i<48;i++){
-        const piece = document.createElement('i');
-        piece.style.left = Math.random()*100+'%';
-        piece.style.background = colors[Math.floor(Math.random()*colors.length)];
-        piece.style.animationDelay = (Math.random()*1.5)+'s';
-        piece.style.animationDuration = (4.4+Math.random()*2.6)+'s';
-        piece.style.setProperty('--drift', `${-70 + Math.random()*140}px`);
-        wrap.appendChild(piece);
-      }
-    }
-
-    // 背景微光粒子
-    for(let i=0;i<16;i++){
-      const s = document.createElement('span');
-      s.className='spark';
-      s.style.left=(5+Math.random()*90)+'%';
-      s.style.top=(25+Math.random()*65)+'%';
-      s.style.animationDelay=(Math.random()*8)+'s';
-      s.style.animationDuration=(7+Math.random()*7)+'s';
-      sparkles.appendChild(s);
-    }
-  </script>
+  replayBtn.addEventListener('click',async()=>{
+    endingStarted=false;
+    surpriseShown=false;
+    lastQuote=-1;
+    ending.className='ending';
+    $('#confetti').innerHTML='';
+    switchPhoto(1);
+    audio.currentTime=0;
+    try{ await audio.play(); }catch(e){ showError('無法重新播放音檔，請重新整理頁面後再試。'); }
+  });
+})();
+</script>
 </body>
 </html>
