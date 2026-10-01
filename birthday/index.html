@@ -1,499 +1,513 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<meta name="theme-color" content="#1c120e" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7efe2">
 <title>生日快樂</title>
 <style>
-:root{
-  --cream:#fff8ee;
-  --cream2:#ffe7bf;
-  --gold:#f4c777;
-  --gold2:#ffdca0;
-  --brown:#4a3025;
-  --glass:rgba(28,18,14,.42);
-  --line:rgba(255,255,255,.2);
-}
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#160e0b;color:white;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
-button{font:inherit}
-.app{position:relative;width:100%;height:100%;isolation:isolate;overflow:hidden;background:#160e0b}
-.bg,.scene,.veil,.cover,.playerPage,.ending,.particles,.petals{position:absolute;inset:0}
-.bg{z-index:-7;background-position:center;background-size:cover;filter:blur(30px) brightness(.5) saturate(1.08);transform:scale(1.16);transition:background-image 1.5s ease,filter 1.5s ease}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 26%,rgba(255,229,189,.2),transparent 42%),linear-gradient(180deg,rgba(14,9,7,.08),rgba(11,7,6,.58))}
-.scene{z-index:-5;display:grid;place-items:center;opacity:0;transition:opacity 1.9s ease;overflow:hidden;padding:clamp(10px,2.2vw,24px) clamp(8px,2vw,22px) clamp(92px,14vh,132px)}
-.scene.active{opacity:1}
-.scene img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:clamp(10px,2vw,22px);box-shadow:0 24px 80px rgba(0,0,0,.26);transform:scale(1.01);filter:blur(12px) brightness(.9);opacity:.76;transition:filter 2.2s ease,opacity 2.2s ease;animation:kenburns 28s ease-in-out infinite alternate;will-change:transform}
-.playerPage.show .scene.active img{filter:blur(0) brightness(1);opacity:1}
-@keyframes kenburns{0%{transform:scale(1.015) translate3d(-.8%,.45%,0)}100%{transform:scale(1.085) translate3d(.85%,-.55%,0)}}
-.veil{z-index:-3;pointer-events:none;background:linear-gradient(to bottom,rgba(7,4,3,.04),rgba(7,4,3,.07) 40%,rgba(7,4,3,.42) 77%,rgba(7,4,3,.68))}
+  :root{
+    --bg:#f8f2e8;
+    --ink:#5f4a38;
+    --muted:#8c7663;
+    --gold:#c9974c;
+    --glass:rgba(255,255,255,.78);
+    --line:rgba(111,82,49,.15);
+    --shadow:0 18px 60px rgba(84,58,34,.16);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  body{overflow:hidden}
+  button,input{font:inherit}
+  button{cursor:pointer}
 
-/* subtle golden light */
-.particles{z-index:-2;pointer-events:none;overflow:hidden}
-.particles i{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,243,201,.98) 0 18%,rgba(255,208,120,.55) 35%,rgba(255,193,98,0) 72%);filter:blur(.2px);opacity:0;animation:glowFloat var(--d) ease-in-out var(--delay) infinite}
-@keyframes glowFloat{0%,100%{opacity:0;transform:translate3d(0,18px,0) scale(.72)}25%{opacity:.75}55%{opacity:.45;transform:translate3d(var(--drift),-18px,0) scale(1.18)}82%{opacity:.2}}
-.petals{z-index:1;pointer-events:none;overflow:hidden}
-.petals b{position:absolute;top:-7vh;width:8px;height:13px;border-radius:2px;background:rgba(255,218,151,.82);opacity:.72;animation:petalFall var(--d) linear var(--delay) infinite;transform:rotate(var(--r))}
-.petals b:nth-child(3n){background:rgba(255,247,226,.72)}
-.petals b:nth-child(4n){background:rgba(255,197,150,.64)}
-@keyframes petalFall{to{transform:translate3d(var(--x),112vh,0) rotate(520deg)}}
+  .cover{
+    position:fixed;inset:0;z-index:50;
+    display:grid;place-items:center;padding:24px;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,225,164,.40), transparent 28%),
+      radial-gradient(circle at 80% 25%, rgba(240,186,124,.26), transparent 26%),
+      linear-gradient(145deg,#fbf5ec,#f4e5d1);
+    transition:opacity .9s ease, visibility .9s ease;
+  }
+  .cover.hide{opacity:0;visibility:hidden}
+  .cover-card{
+    width:min(92vw,520px);padding:42px 28px 34px;text-align:center;
+    border:1px solid rgba(255,255,255,.9);
+    background:rgba(255,255,255,.63);
+    backdrop-filter:blur(12px);border-radius:30px;box-shadow:var(--shadow);
+  }
+  .cover-icon{font-size:42px;margin-bottom:8px}
+  .cover h1{margin:0;font-size:clamp(34px,8vw,58px);letter-spacing:.08em;font-weight:800}
+  .cover p{margin:18px 0 5px;font-size:17px;line-height:1.9}
+  .headphone{font-size:14px;color:var(--muted);margin:7px 0 25px}
+  .start-btn{
+    border:0;border-radius:999px;padding:15px 27px;background:#6f523a;color:#fff;
+    font-weight:700;letter-spacing:.06em;box-shadow:0 10px 30px rgba(81,57,36,.24)
+  }
+  .start-error{min-height:22px;margin-top:14px;color:#a24b43;font-size:13px;line-height:1.6}
 
-.cover{z-index:30;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 26%,rgba(255,222,170,.22),transparent 38%),linear-gradient(180deg,rgba(26,15,11,.22),rgba(14,9,8,.7));transition:opacity .95s ease,visibility .95s ease}
-.cover.hide{opacity:0;visibility:hidden;pointer-events:none}
-.coverCard{width:min(92vw,530px);padding:33px 26px 29px;text-align:center;border:1px solid rgba(255,255,255,.22);border-radius:30px;background:rgba(50,31,24,.34);backdrop-filter:blur(18px) saturate(1.08);box-shadow:0 32px 90px rgba(0,0,0,.26)}
-.tiny{font-size:12px;letter-spacing:.2em;opacity:.68;text-transform:uppercase}
-.cover h1{margin:12px 0 9px;font-size:clamp(40px,10vw,68px);font-weight:760;letter-spacing:.055em;text-shadow:0 6px 28px rgba(0,0,0,.25)}
-.cover p{margin:0 auto 19px;max-width:390px;line-height:1.9;font-size:16px;color:rgba(255,255,255,.9)}
-.headphone{display:inline-flex;gap:8px;align-items:center;margin:3px 0 22px;padding:9px 14px;border-radius:999px;background:rgba(255,255,255,.09);font-size:13px;color:rgba(255,255,255,.88)}
-.openBtn,.replayBtn{border:0;border-radius:999px;padding:15px 25px;font-weight:750;letter-spacing:.04em;cursor:pointer;background:linear-gradient(135deg,#fff2d3,#ffd18d);color:#4a3025;box-shadow:0 12px 34px rgba(255,195,106,.24);transition:.18s transform,.18s filter}
-.openBtn:hover,.replayBtn:hover{filter:brightness(1.035)}
-.openBtn:active,.replayBtn:active{transform:scale(.98)}
-.status{min-height:18px;margin-top:12px;font-size:11px;color:rgba(255,232,202,.8);line-height:1.5}
+  .app{
+    position:fixed;inset:0;display:grid;grid-template-rows:1fr auto;
+    background:radial-gradient(circle at 50% 0%,#fffaf4 0,#f8f0e4 52%,#efe2cf 100%)
+  }
+  .stage{position:relative;overflow:hidden;display:grid;place-items:center;padding:22px 20px 10px}
+  .photo-wrap{
+    position:relative;width:min(94vw,980px);height:min(69vh,760px);
+    display:grid;place-items:center;cursor:pointer;user-select:none;touch-action:manipulation
+  }
+  .photo{
+    position:absolute;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+    border-radius:22px;box-shadow:0 22px 70px rgba(76,54,35,.17);
+    opacity:0;transform:scale(1.01) translate3d(0,0,0);
+    transition:opacity 1.5s ease;will-change:transform,opacity
+  }
+  .photo.active{opacity:1}
+  .photo.movie-a.active{animation:movieA 18s ease-in-out infinite alternate}
+  .photo.movie-b.active{animation:movieB 20s ease-in-out infinite alternate}
+  @keyframes movieA{
+    from{transform:scale(1.01) translate3d(-.5%,.2%,0)}
+    to{transform:scale(1.055) translate3d(.7%,-.4%,0)}
+  }
+  @keyframes movieB{
+    from{transform:scale(1.015) translate3d(.6%,.1%,0)}
+    to{transform:scale(1.05) translate3d(-.6%,-.3%,0)}
+  }
 
-.playerPage{z-index:5;opacity:0;pointer-events:none;transition:opacity 1s ease}
-.playerPage.show{opacity:1;pointer-events:auto}
-.topLabel{position:absolute;z-index:7;top:max(16px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);padding:8px 13px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(25,16,13,.26);backdrop-filter:blur(14px);font-size:11px;letter-spacing:.07em;color:rgba(255,255,255,.82);white-space:nowrap;transition:opacity .5s ease}
-.photoHint{position:absolute;z-index:7;top:max(57px,calc(env(safe-area-inset-top) + 42px));left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.04em;color:rgba(255,255,255,.72);text-shadow:0 2px 14px rgba(0,0,0,.5);animation:hintPulse 2.5s ease-in-out infinite;transition:.5s ease;white-space:nowrap}
-.photoHint.hide{opacity:0;transform:translate(-50%,-5px)}
-@keyframes hintPulse{50%{opacity:.48}}
-.photoTap{position:absolute;z-index:2;left:0;right:0;top:0;bottom:116px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .tap-hint{
+    position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:5;
+    padding:9px 14px;border-radius:999px;background:rgba(255,255,255,.72);
+    border:1px solid rgba(255,255,255,.9);color:#775e49;font-size:13px;
+    box-shadow:0 6px 24px rgba(83,59,40,.08);opacity:.9;transition:opacity .5s ease
+  }
+  .tap-hint.fade{opacity:0;pointer-events:none}
 
-.quote{position:absolute;z-index:8;left:50%;top:19%;transform:translate(-50%,12px);width:min(86vw,650px);text-align:center;font-size:clamp(18px,4.5vw,28px);font-weight:650;line-height:1.7;letter-spacing:.035em;text-shadow:0 5px 22px rgba(0,0,0,.52);opacity:0;transition:opacity .7s ease,transform .8s ease;pointer-events:none}
-.quote.show{opacity:1;transform:translate(-50%,0)}
+  .sparkles,.confetti-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  .spark{
+    position:absolute;width:6px;height:6px;border-radius:50%;
+    background:rgba(211,165,84,.55);box-shadow:0 0 12px rgba(226,183,103,.8);
+    animation:floatUp linear infinite
+  }
+  @keyframes floatUp{
+    from{transform:translateY(18px) scale(.7);opacity:0}
+    20%{opacity:.65}80%{opacity:.35}
+    to{transform:translateY(-90px) scale(1);opacity:0}
+  }
 
-/* blessing on photo tap */
-.blessing{position:absolute;z-index:12;left:50%;top:47%;transform:translate(-50%,-42%) scale(.94);width:min(84vw,480px);padding:20px 22px 21px;text-align:center;border:1px solid rgba(255,255,255,.28);border-radius:25px;background:linear-gradient(135deg,rgba(58,37,27,.55),rgba(30,20,17,.44));backdrop-filter:blur(18px) saturate(1.08);box-shadow:0 28px 80px rgba(0,0,0,.24);opacity:0;visibility:hidden;transition:.48s cubic-bezier(.2,.8,.2,1);pointer-events:none}
-.blessing.show{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1)}
-.blessing .spark{font-size:24px;display:block;margin-bottom:7px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.2))}
-.blessing .blessText{font-size:clamp(17px,4.4vw,23px);font-weight:700;line-height:1.65;letter-spacing:.03em;color:#fffaf4;text-shadow:0 3px 15px rgba(0,0,0,.34)}
-.tapSpark{position:absolute;z-index:11;width:7px;height:7px;border-radius:50%;background:#ffe6ad;box-shadow:0 0 18px rgba(255,217,145,.9);pointer-events:none;animation:sparkOut .85s ease-out forwards}
-@keyframes sparkOut{to{opacity:0;transform:translate(var(--sx),var(--sy)) scale(.2)}}
+  .caption{
+    position:absolute;left:50%;bottom:24px;transform:translate(-50%,16px);
+    width:min(88vw,720px);padding:13px 18px;text-align:center;color:#624b37;
+    background:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.95);
+    border-radius:18px;box-shadow:0 10px 30px rgba(75,53,35,.10);
+    opacity:0;transition:opacity .45s ease,transform .45s ease;z-index:6;
+    font-size:15px;line-height:1.7
+  }
+  .caption.show{opacity:1;transform:translate(-50%,0)}
 
-.surprise{position:absolute;z-index:10;left:50%;top:50%;transform:translate(-50%,-45%) scale(.92);width:min(84vw,430px);padding:22px 20px;text-align:center;border:1px solid rgba(255,255,255,.28);border-radius:25px;background:rgba(40,27,22,.5);backdrop-filter:blur(17px);box-shadow:0 26px 78px rgba(0,0,0,.24);opacity:0;visibility:hidden;transition:.6s ease;pointer-events:none}
-.surprise.show{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1)}
-.surprise .gift{font-size:36px;display:block;margin-bottom:7px;animation:float 1.8s ease-in-out infinite}
-.surprise strong{font-size:19px;display:block;margin-bottom:7px}
-.surprise span{font-size:14px;line-height:1.75;color:rgba(255,255,255,.86)}
-@keyframes float{50%{transform:translateY(-6px) rotate(2deg)}}
+  .blessing{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-42%) scale(.96);
+    z-index:15;width:min(82vw,540px);padding:26px 22px;text-align:center;
+    border-radius:24px;background:rgba(255,250,242,.94);
+    border:1px solid rgba(201,151,76,.24);box-shadow:0 20px 70px rgba(79,53,31,.18);
+    opacity:0;pointer-events:none;transition:opacity .28s ease,transform .28s ease
+  }
+  .blessing.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  .blessing .star{font-size:27px;margin-bottom:8px}
+  .blessing .text{font-size:20px;line-height:1.75;font-weight:700}
 
-/* elegant compact player */
-.player{position:absolute;z-index:15;left:50%;bottom:max(16px,calc(env(safe-area-inset-bottom) + 10px));transform:translateX(-50%);width:min(92vw,610px);padding:13px 15px 12px;border:1px solid rgba(255,255,255,.2);border-radius:24px;background:linear-gradient(135deg,rgba(42,28,23,.5),rgba(21,14,12,.38));backdrop-filter:blur(20px) saturate(1.12);box-shadow:0 20px 60px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.08)}
-.playerTop{display:flex;align-items:center;gap:11px}
-.audioOrb{position:relative;width:40px;height:40px;flex:0 0 40px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 34% 28%,#fff7e5 0 18%,#ffd99d 48%,#eab96d 100%);color:#513526;box-shadow:0 8px 24px rgba(244,199,119,.22);font-size:16px;overflow:hidden}
-.audioOrb::after{content:"";position:absolute;inset:-5px;border:1px solid rgba(255,219,158,.42);border-radius:50%;animation:orbPulse 2.2s ease-out infinite;opacity:0}
-.player.playing .audioOrb::after{opacity:1}
-@keyframes orbPulse{0%{transform:scale(.86);opacity:.55}75%,100%{transform:scale(1.42);opacity:0}}
-.meta{min-width:0;flex:1}
-.now{font-size:12.5px;font-weight:700;letter-spacing:.025em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(255,255,255,.95)}
-.subNow{margin-top:2px;font-size:10.5px;color:rgba(255,255,255,.58);letter-spacing:.02em}
-.wave{height:26px;width:62px;display:flex;align-items:center;justify-content:flex-end;gap:3px;opacity:.78}
-.wave i{display:block;width:2.5px;height:6px;border-radius:3px;background:linear-gradient(to top,#f1bd70,#ffe9bb);animation:wave 1.05s ease-in-out infinite;animation-play-state:paused}
-.player.playing .wave i{animation-play-state:running}
-.wave i:nth-child(2n){animation-delay:.12s}.wave i:nth-child(3n){animation-delay:.24s}.wave i:nth-child(5n){animation-delay:.36s}
-@keyframes wave{0%,100%{height:5px;opacity:.45}50%{height:22px;opacity:1}}
-.progressRow{display:flex;align-items:center;gap:9px;margin-top:10px}
-.time{font-variant-numeric:tabular-nums;font-size:10.5px;color:rgba(255,255,255,.68);width:34px}
-.time.end{text-align:right;width:34px}
-.track{position:relative;height:3px;flex:1;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden}
-.fill{position:absolute;inset:0 auto 0 0;width:0%;background:linear-gradient(90deg,#f3c57a,#ffe8b5);border-radius:inherit;box-shadow:0 0 12px rgba(255,214,147,.5)}
-.modeDot{width:5px;height:5px;border-radius:50%;background:#f6cf8c;box-shadow:0 0 10px rgba(246,207,140,.8);animation:modeDot 1.8s ease-in-out infinite}
-@keyframes modeDot{50%{opacity:.35}}
-/* hidden Drive audio fallback: audio still lives in customer's Drive, UI stays clean */
-.driveFallback{position:absolute;width:1px;height:1px;overflow:hidden;opacity:.001;pointer-events:none;left:-9999px;top:-9999px}
-.driveFallback iframe{width:420px;height:120px;border:0}
+  .surprise{
+    position:absolute;inset:0;z-index:18;display:grid;place-items:center;
+    padding:26px;background:rgba(67,48,32,.48);opacity:0;visibility:hidden;transition:.5s ease
+  }
+  .surprise.show{opacity:1;visibility:visible}
+  .surprise-card{
+    width:min(88vw,480px);text-align:center;padding:30px 24px;background:#fff9ef;
+    border-radius:28px;box-shadow:0 25px 80px rgba(38,24,14,.26)
+  }
+  .surprise-card .gift{font-size:42px}
+  .surprise-card h2{margin:8px 0 9px;font-size:24px}
+  .surprise-card p{margin:0;line-height:1.9;color:#7e6853}
 
-.ending{z-index:25;display:grid;place-items:center;padding:26px;text-align:center;background:rgba(10,7,6,.12);opacity:0;visibility:hidden;transition:opacity 1.2s ease,background 1.5s ease,visibility 1.2s}
-.ending.show{opacity:1;visibility:visible;background:rgba(10,7,6,.74)}
-.endInner{position:relative;z-index:3;max-width:720px}
-.lastLine{font-size:clamp(17px,4.3vw,24px);line-height:1.75;opacity:0;transform:translateY(12px);transition:.8s ease;color:rgba(255,255,255,.9)}
-.ending.stage1 .lastLine{opacity:1;transform:none}
-.birthday{margin:16px 0 12px;font-size:clamp(48px,13vw,92px);font-weight:800;letter-spacing:.04em;line-height:1.08;opacity:0;transform:scale(.92);text-shadow:0 8px 38px rgba(0,0,0,.32);transition:.8s cubic-bezier(.2,.9,.25,1.15)}
-.ending.stage2 .birthday{opacity:1;transform:scale(1)}
-.endSub{font-size:15px;line-height:1.8;color:rgba(255,255,255,.84);opacity:0;transition:.7s ease .2s}
-.ending.stage2 .endSub{opacity:1}
-.replayBtn{margin-top:25px;opacity:0;transform:translateY(8px);transition:.6s ease .45s}
-.ending.stage2 .replayBtn{opacity:1;transform:none}
-.confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.confetti b{position:absolute;top:-9vh;width:8px;height:13px;border-radius:2px;background:hsl(var(--h),78%,72%);opacity:.92;animation:fall var(--d) linear var(--delay) infinite;transform:rotate(var(--r))}
-@keyframes fall{to{transform:translate3d(var(--x),115vh,0) rotate(680deg)}}
+  .player-shell{padding:10px 16px max(16px,env(safe-area-inset-bottom));display:flex;justify-content:center}
+  .player{
+    width:min(94vw,900px);padding:13px 14px 12px;border:1px solid rgba(255,255,255,.92);
+    background:rgba(255,255,255,.80);box-shadow:0 14px 45px rgba(72,51,34,.13);
+    border-radius:24px;backdrop-filter:blur(12px)
+  }
+  .player-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .sound-badge{
+    width:42px;height:42px;flex:0 0 42px;border-radius:50%;display:grid;place-items:center;
+    background:#fff6e8;border:1px solid #f2ddbd;font-size:20px
+  }
+  .now{min-width:0;flex:1}
+  .now-title{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .now-sub{font-size:12px;color:var(--muted);margin-top:3px}
+  .wave{display:flex;align-items:center;gap:3px;height:26px}
+  .wave i{display:block;width:3px;border-radius:4px;background:var(--gold);height:7px;animation:wave 1s ease-in-out infinite}
+  .wave i:nth-child(2){animation-delay:.12s}.wave i:nth-child(3){animation-delay:.24s}.wave i:nth-child(4){animation-delay:.36s}.wave i:nth-child(5){animation-delay:.48s}
+  .paused .wave i{animation-play-state:paused}
+  @keyframes wave{50%{height:20px}}
 
-.errorToast{position:absolute;z-index:40;left:50%;bottom:22px;transform:translateX(-50%);width:min(90vw,560px);padding:13px 16px;background:rgba(74,25,20,.92);border:1px solid rgba(255,255,255,.2);border-radius:14px;text-align:center;font-size:13px;line-height:1.6;display:none}
-.errorToast.show{display:block}
+  .progress-row{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+  .time{font-variant-numeric:tabular-nums;font-size:12px;color:#806b58;min-width:38px;text-align:center}
+  .seek{width:100%;accent-color:#b98640;cursor:pointer}
+  .controls{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:9px}
+  .control{
+    border:0;background:#f5ead9;color:#6f523a;min-width:44px;height:40px;
+    border-radius:14px;padding:0 12px;font-weight:800
+  }
+  .control.main{
+    width:52px;height:52px;border-radius:50%;background:#6f523a;color:white;
+    font-size:20px;box-shadow:0 8px 22px rgba(81,58,39,.20)
+  }
+  .control.small{font-size:12px}
+  .volume-wrap{display:flex;align-items:center;gap:6px;margin-left:4px}
+  .volume{width:70px;accent-color:#b98640}
 
-@media(max-width:600px){
-  .scene{padding:8px 7px 102px}
-  .scene img{border-radius:12px}
-  .coverCard{padding:28px 20px 25px;border-radius:25px}
-  .quote{top:17%}
-  .player{width:calc(100vw - 20px);bottom:max(10px,calc(env(safe-area-inset-bottom) + 6px));padding:12px 13px 11px;border-radius:21px}
-  .audioOrb{width:36px;height:36px;flex-basis:36px}
-  .wave{width:52px}
-  .photoTap{bottom:102px}
-  .topLabel{font-size:10.5px}
-  .photoHint{top:max(54px,calc(env(safe-area-inset-top) + 39px));font-size:10.5px}
-}
-@media(prefers-reduced-motion:reduce){.scene img,.wave i,.audioOrb::after,.surprise .gift,.confetti b,.particles i,.petals b{animation:none!important}}
+  .ending{
+    position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:24px;
+    background:linear-gradient(150deg,#4b3524,#261c16);color:#fff;text-align:center;
+    opacity:0;visibility:hidden;transition:opacity 1s ease,visibility 1s ease
+  }
+  .ending.show{opacity:1;visibility:visible}
+  .ending-inner{position:relative;z-index:4;width:min(90vw,680px)}
+  .ending-small{font-size:16px;opacity:.8;letter-spacing:.04em}
+  .ending h2{font-size:clamp(40px,10vw,76px);margin:18px 0 10px;line-height:1.12;letter-spacing:.04em}
+  .ending p{margin:0 auto 24px;max-width:560px;line-height:1.9;color:#f0dfc7}
+  .replay{
+    border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.12);
+    color:#fff;padding:13px 22px;border-radius:999px;font-weight:700
+  }
+  .confetti{
+    position:absolute;top:-30px;width:9px;height:16px;border-radius:2px;
+    animation:fall linear forwards
+  }
+  @keyframes fall{
+    to{transform:translate3d(var(--dx),110vh,0) rotate(760deg);opacity:.85}
+  }
+
+  @media (max-width:680px){
+    .stage{padding:14px 10px 4px}
+    .photo-wrap{width:96vw;height:64vh}
+    .photo{border-radius:16px}
+    .caption{bottom:10px;font-size:14px}
+    .player-shell{padding-left:8px;padding-right:8px}
+    .player{width:98vw;border-radius:20px}
+    .volume-wrap{display:none}
+    .controls{gap:8px}
+    .control{min-width:42px;padding:0 10px}
+  }
 </style>
 </head>
 <body>
-<div class="app" id="app">
-  <div class="bg" id="bg"></div>
-  <div class="scene active" id="scene1"><img id="img1" alt="生日祝福圖片一"></div>
-  <div class="scene" id="scene2"><img id="img2" alt="生日祝福圖片二"></div>
-  <div class="veil"></div>
-  <div class="particles" id="particles"></div>
-  <div class="petals" id="petals"></div>
 
-  <section class="cover" id="cover">
-    <div class="coverCard">
-      <div class="tiny">A BIRTHDAY MESSAGE</div>
-      <h1>生日快樂</h1>
-      <p>有一份生日祝福，想讓你慢慢聽完。</p>
-      <div class="headphone">🎧 建議戴上耳機</div><br>
-      <button class="openBtn" id="openBtn">開啟生日祝福</button>
-      <div class="status" id="status">點一下後，語音會自動開始播放</div>
+<audio id="audio" src="./老虎.m4a" preload="metadata"></audio>
+
+<div id="cover" class="cover">
+  <div class="cover-card">
+    <div class="cover-icon">🎂</div>
+    <h1>生日快樂</h1>
+    <p>有一份生日祝福，想讓你慢慢聽完。</p>
+    <div class="headphone">🎧 建議戴上耳機，感受會更完整</div>
+    <button id="startBtn" class="start-btn">開啟生日祝福</button>
+    <div id="startError" class="start-error"></div>
+  </div>
+</div>
+
+<main class="app">
+  <section class="stage">
+    <div id="sparkles" class="sparkles"></div>
+
+    <div id="photoWrap" class="photo-wrap" aria-label="生日照片，點一下可收下祝福">
+      <div id="tapHint" class="tap-hint">點一下照片，收下一句生日祝福 ✨</div>
+      <img id="photo1" class="photo movie-a active" src="./生日快樂.png" alt="生日祝福圖片 1">
+      <img id="photo2" class="photo movie-b" src="./生日快樂.jpg" alt="生日祝福圖片 2">
+      <div id="caption" class="caption"></div>
+
+      <div id="blessing" class="blessing">
+        <div class="star">✨</div>
+        <div id="blessingText" class="text"></div>
+      </div>
+    </div>
+
+    <div id="surprise" class="surprise">
+      <div class="surprise-card">
+        <div class="gift">🎁</div>
+        <h2>偷偷送你一份生日好運</h2>
+        <p>願接下來的日子，多一點好運、多一點快樂，也多一點喜歡自己的時刻。</p>
+      </div>
     </div>
   </section>
 
-  <main class="playerPage" id="playerPage">
-    <div class="topLabel">🎧 正在播放一份給你的生日祝福</div>
-    <div class="photoHint" id="photoHint">點一下照片，收下一句生日祝福 ✨</div>
-    <div class="photoTap" id="photoTap" aria-label="點一下照片取得一句生日祝福"></div>
-
-    <div class="quote" id="quote"></div>
-
-    <div class="blessing" id="blessing">
-      <span class="spark">✨</span>
-      <div class="blessText" id="blessText"></div>
-    </div>
-
-    <div class="surprise" id="surprise">
-      <span class="gift">🎁</span>
-      <strong>偷偷送你一份生日好運</strong>
-      <span>願接下來的日子，多一點好運、多一點快樂，也多一點喜歡自己的時刻。</span>
-    </div>
-
-    <div class="player playing" id="player">
-      <div class="playerTop">
-        <div class="audioOrb" aria-hidden="true">♫</div>
-        <div class="meta">
-          <div class="now">🎧 正在播放一份給你的生日祝福</div>
-          <div class="subNow"><span class="modeDot" style="display:inline-block;margin-right:6px"></span>慢慢聽，這段時間只留給今天</div>
+  <section class="player-shell">
+    <div id="player" class="player paused">
+      <div class="player-top">
+        <div class="sound-badge">🎧</div>
+        <div class="now">
+          <div class="now-title">正在播放一份給你的生日祝福</div>
+          <div id="statusText" class="now-sub">準備播放</div>
         </div>
         <div class="wave" aria-hidden="true">
-          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i><i></i>
         </div>
       </div>
-      <div class="progressRow">
-        <span class="time" id="current">0:00</span>
-        <div class="track" id="track"><div class="fill" id="fill"></div></div>
-        <span class="time end" id="duration">8:34</span>
-      </div>
-      <div class="driveFallback" id="driveFallback"><iframe id="driveFrame" title="Google Drive 語音播放器" allow="autoplay"></iframe></div>
-    </div>
-  </main>
 
-  <section class="ending" id="ending">
-    <div class="confetti" id="confetti"></div>
-    <div class="endInner">
-      <div class="lastLine">最後，送你今天最重要的一句話。</div>
-      <div class="birthday">HAPPY<br>BIRTHDAY 🎂</div>
-      <div class="endSub">願這段祝福，陪你迎接新的一歲。</div>
-      <button class="replayBtn" id="replayBtn">↻ 再聽一次</button>
+      <div class="progress-row">
+        <div id="currentTime" class="time">0:00</div>
+        <input id="seek" class="seek" type="range" min="0" max="1000" value="0" aria-label="播放進度">
+        <div id="duration" class="time">--:--</div>
+      </div>
+
+      <div class="controls">
+        <button id="backBtn" class="control small" title="倒退 10 秒">↶ 10秒</button>
+        <button id="playBtn" class="control main" title="播放 / 暫停">▶</button>
+        <button id="forwardBtn" class="control small" title="快轉 10 秒">10秒 ↷</button>
+        <div class="volume-wrap">
+          <span>🔊</span>
+          <input id="volume" class="volume" type="range" min="0" max="1" step="0.01" value="1" aria-label="音量">
+        </div>
+      </div>
     </div>
   </section>
+</main>
 
-  <div class="errorToast" id="errorToast"></div>
-  <audio id="audio" preload="metadata" playsinline></audio>
-</div>
+<section id="ending" class="ending">
+  <div id="confettiLayer" class="confetti-layer"></div>
+  <div class="ending-inner">
+    <div class="ending-small">最後，送你今天最重要的一句話。</div>
+    <h2>HAPPY BIRTHDAY 🎂</h2>
+    <p>願這段祝福，陪你迎接新的一歲。願平安、快樂與值得期待的事情，都慢慢向你靠近。</p>
+    <button id="replayBtn" class="replay">↻ 再聽一次</button>
+  </div>
+</section>
+
 <script>
 (() => {
-  const DRIVE = {
-    image1: '1Y7KzoFhYW5VRgTulzJdeY5Jgv_5z7uS_',
-    image2: '1k6zrWmi5CMFw9GJ8goPyPS9R3Q_0Bns1',
-    audio:  '1-KSYEJsA1041b_q4fCIAAJm100Ulf8kU'
-  };
-  const FALLBACK_DURATION_SECONDS = 8 * 60 + 34;
+  const audio = document.getElementById('audio');
+  const cover = document.getElementById('cover');
+  const startBtn = document.getElementById('startBtn');
+  const startError = document.getElementById('startError');
+  const player = document.getElementById('player');
+  const playBtn = document.getElementById('playBtn');
+  const backBtn = document.getElementById('backBtn');
+  const forwardBtn = document.getElementById('forwardBtn');
+  const volume = document.getElementById('volume');
+  const seek = document.getElementById('seek');
+  const currentTimeEl = document.getElementById('currentTime');
+  const durationEl = document.getElementById('duration');
+  const statusText = document.getElementById('statusText');
+  const photoWrap = document.getElementById('photoWrap');
+  const photo1 = document.getElementById('photo1');
+  const photo2 = document.getElementById('photo2');
+  const caption = document.getElementById('caption');
+  const tapHint = document.getElementById('tapHint');
+  const blessing = document.getElementById('blessing');
+  const blessingText = document.getElementById('blessingText');
+  const surprise = document.getElementById('surprise');
+  const ending = document.getElementById('ending');
+  const replayBtn = document.getElementById('replayBtn');
+  const confettiLayer = document.getElementById('confettiLayer');
+  const sparkles = document.getElementById('sparkles');
 
-  const imageCandidates = id => [
-    `https://drive.google.com/thumbnail?id=${id}&sz=w2200`,
-    `https://lh3.googleusercontent.com/d/${id}=w2200`,
-    `https://drive.google.com/uc?export=view&id=${id}`
-  ];
-  const audioCandidates = id => [
-    `https://drive.google.com/uc?export=open&id=${id}`,
-    `https://docs.google.com/uc?export=open&id=${id}`,
-    `https://drive.usercontent.google.com/download?id=${id}&export=download&confirm=t`
-  ];
-
-  const $ = s => document.querySelector(s);
-  const audio = $('#audio');
-  const cover = $('#cover');
-  const openBtn = $('#openBtn');
-  const status = $('#status');
-  const playerPage = $('#playerPage');
-  const player = $('#player');
-  const fill = $('#fill');
-  const current = $('#current');
-  const duration = $('#duration');
-  const quote = $('#quote');
-  const surprise = $('#surprise');
-  const ending = $('#ending');
-  const replayBtn = $('#replayBtn');
-  const scene1 = $('#scene1');
-  const scene2 = $('#scene2');
-  const bg = $('#bg');
-  const driveFrame = $('#driveFrame');
-  const photoTap = $('#photoTap');
-  const photoHint = $('#photoHint');
-  const blessing = $('#blessing');
-  const blessText = $('#blessText');
-
-  let audioIndex = 0;
-  let directReady = false;
-  let mode = 'probing';
-  let started = false;
-  let endingStarted = false;
   let surpriseShown = false;
-  let quoteTimer = null;
-  let lastQuote = -1;
-  let fallbackStart = 0;
-  let fallbackRAF = 0;
+  let endingShown = false;
   let blessingTimer = null;
-  let lastBlessing = -1;
+  let lastCaptionIndex = -1;
 
-  function setImageWithFallback(img, id, onReady){
-    const urls = imageCandidates(id);
-    let i = 0;
-    const next = () => { if(i < urls.length) img.src = urls[i++]; };
-    img.onload = () => onReady?.(img.currentSrc || img.src);
-    img.onerror = next;
-    next();
-  }
-  setImageWithFallback($('#img1'), DRIVE.image1, src => { bg.style.backgroundImage = `url("${src}")`; });
-  setImageWithFallback($('#img2'), DRIVE.image2);
-
-  function fmt(sec){
-    if(!Number.isFinite(sec)) return '--:--';
-    const m = Math.floor(sec/60), s = Math.floor(sec%60);
-    return `${m}:${String(s).padStart(2,'0')}`;
-  }
-
-  function setAudioSource(index){
-    const urls = audioCandidates(DRIVE.audio);
-    audioIndex = index;
-    directReady = false;
-    if(index >= urls.length){ mode = 'fallback'; return; }
-    audio.src = urls[index];
-    audio.load();
-  }
-  audio.addEventListener('loadedmetadata',()=>{
-    directReady = true; mode = 'direct';
-    if(Number.isFinite(audio.duration)) duration.textContent = fmt(audio.duration);
-  });
-  audio.addEventListener('canplay',()=>{ directReady = true; mode = 'direct'; });
-  audio.addEventListener('error',()=>{ if(!started && mode !== 'fallback') setAudioSource(audioIndex + 1); });
-  setAudioSource(0);
-  setTimeout(()=>{ if(!directReady && !started) mode = 'fallback'; }, 3500);
-
-  const quotes = [
-    [0.10,'今天，請把一些時間留給自己。'],
-    [0.29,'願接下來的日子，有更多值得期待的事情。'],
-    [0.55,'新的一歲，也要記得好好照顧自己。'],
-    [0.78,'願你被溫柔對待，也保有喜歡生活的方式。'],
-    [0.90,'最後一點點了，繼續聽下去吧。']
-  ];
   const blessings = [
     '願新的一歲，平安順心，好運常在。',
     '願每個平凡的日子，都藏著小小驚喜。',
-    '願你想做的事，都一步一步靠近。',
     '願笑容比煩惱多，期待比遺憾多。',
-    '願你被溫柔以待，也記得好好照顧自己。',
-    '願好事發生，快樂如期而至。',
-    '願新的一歲，自由、明亮、自在。',
-    '願所有真心的願望，都慢慢有回音。'
+    '願想做的事情，都一步一步靠近。',
+    '願生活有光，心裡有暖，身邊有值得珍惜的人事物。',
+    '願新的這一歲，比去年多一點自在，也多一點快樂。',
+    '願所有努力，都在適合的時候開花結果。',
+    '願今天收到的祝福，陪你很久很久。'
   ];
 
-  function showQuote(text,index){
-    if(index === lastQuote) return;
-    lastQuote = index;
-    clearTimeout(quoteTimer);
-    quote.classList.remove('show');
-    setTimeout(()=>{ quote.textContent = text; quote.classList.add('show'); },160);
-    quoteTimer = setTimeout(()=>quote.classList.remove('show'),5000);
+  const captions = [
+    {from:.07, to:.12, text:'今天，請把一些時間留給自己。'},
+    {from:.24, to:.30, text:'願接下來的日子，有更多值得期待的事情。'},
+    {from:.43, to:.49, text:'新的一歲，也要記得好好照顧自己。'},
+    {from:.76, to:.82, text:'願笑容比煩惱多，喜歡的事情也越來越多。'}
+  ];
+
+  function formatTime(sec){
+    if(!Number.isFinite(sec)) return '--:--';
+    sec = Math.max(0, Math.floor(sec));
+    const m = Math.floor(sec/60), s = sec%60;
+    return `${m}:${String(s).padStart(2,'0')}`;
   }
 
-  function switchPhoto(which){
-    const use2 = which === 2;
-    scene1.classList.toggle('active',!use2);
-    scene2.classList.toggle('active',use2);
-    const src = use2 ? $('#img2').src : $('#img1').src;
-    if(src) bg.style.backgroundImage = `url("${src}")`;
+  function setPlayingUI(){
+    const playing = !audio.paused && !audio.ended;
+    player.classList.toggle('paused', !playing);
+    playBtn.textContent = playing ? 'Ⅱ' : '▶';
+    statusText.textContent = playing ? '播放中 · 可拖曳進度或倒退 10 秒' : '已暫停 · 想重聽可直接拖曳';
   }
 
-  function showSurprise(){
-    if(surpriseShown) return;
-    surpriseShown = true;
-    surprise.classList.add('show');
-    setTimeout(()=>surprise.classList.remove('show'),5600);
-  }
+  function syncByProgress(p){
+    const useSecond = p >= .50;
+    photo1.classList.toggle('active', !useSecond);
+    photo2.classList.toggle('active', useSecond);
 
-  function beginEnding(){
-    if(endingStarted) return;
-    endingStarted = true;
-    quote.classList.remove('show');
-    blessing.classList.remove('show');
-    surprise.classList.remove('show');
-    ending.classList.add('show','stage1');
-    setTimeout(()=>{ ending.classList.add('stage2'); makeConfetti(); },2200);
-  }
-
-  function updateVisuals(sec,total){
-    current.textContent = fmt(sec);
-    duration.textContent = fmt(total);
-    if(!total) return;
-    const p = Math.max(0,Math.min(1,sec/total));
-    fill.style.width = `${p*100}%`;
-    switchPhoto(p < .48 ? 1 : 2);
-    quotes.forEach(([at,text],i)=>{ if(p >= at && p < at+.05) showQuote(text,i); });
-    if(p >= .65 && p < .71) showSurprise();
-    if(p >= .965) beginEnding();
-  }
-
-  audio.addEventListener('timeupdate',()=>{ if(mode==='direct') updateVisuals(audio.currentTime,audio.duration || FALLBACK_DURATION_SECONDS); });
-  audio.addEventListener('ended',beginEnding);
-
-  function startFallbackVisualClock(){
-    cancelAnimationFrame(fallbackRAF);
-    fallbackStart = performance.now();
-    const tick = now => {
-      if(mode !== 'fallback' || endingStarted) return;
-      const sec = Math.min(FALLBACK_DURATION_SECONDS,(now-fallbackStart)/1000);
-      updateVisuals(sec,FALLBACK_DURATION_SECONDS);
-      if(sec < FALLBACK_DURATION_SECONDS) fallbackRAF = requestAnimationFrame(tick);
-      else beginEnding();
-    };
-    fallbackRAF = requestAnimationFrame(tick);
-  }
-
-  function activateFallback(){
-    mode = 'fallback';
-    player.classList.add('playing');
-    // The iframe is intentionally hidden. It only supplies the audio from the customer's Drive.
-    // Because this is called directly from the user's click, browsers that allow Drive autoplay can start immediately.
-    driveFrame.src = `https://drive.google.com/file/d/${DRIVE.audio}/preview?autoplay=1`;
-    startFallbackVisualClock();
-  }
-
-  function startExperience(){
-    openBtn.disabled = true;
-    status.textContent = '正在打開祝福…';
-    cover.classList.add('hide');
-    playerPage.classList.add('show');
-    started = true;
-    makeAmbient();
-
-    // Keep this function synchronous until play() / iframe src is triggered so the browser still sees a user gesture.
-    if(mode === 'direct' && directReady){
-      const playPromise = audio.play();
-      if(playPromise && typeof playPromise.catch === 'function'){
-        playPromise.catch(()=>activateFallback());
-      }
-      player.classList.add('playing');
-    }else{
-      activateFallback();
+    let matched = -1;
+    for(let i=0;i<captions.length;i++){
+      if(p >= captions[i].from && p <= captions[i].to){ matched = i; break; }
     }
-  }
-  openBtn.addEventListener('click',startExperience);
+    if(matched !== lastCaptionIndex){
+      lastCaptionIndex = matched;
+      if(matched >= 0){
+        caption.textContent = captions[matched].text;
+        caption.classList.add('show');
+      }else caption.classList.remove('show');
+    }
 
-  function showBlessing(e){
-    photoHint.classList.add('hide');
-    let idx;
-    do{ idx = Math.floor(Math.random()*blessings.length); }while(idx === lastBlessing && blessings.length > 1);
-    lastBlessing = idx;
-    blessText.textContent = blessings[idx];
-    clearTimeout(blessingTimer);
-    blessing.classList.remove('show');
-    requestAnimationFrame(()=>blessing.classList.add('show'));
-    blessingTimer = setTimeout(()=>blessing.classList.remove('show'),3900);
-    makeTapSparkles(e.clientX,e.clientY);
-  }
-  photoTap.addEventListener('click',showBlessing);
+    if(p >= .64 && p < .72 && !surpriseShown){
+      surpriseShown = true;
+      surprise.classList.add('show');
+      setTimeout(()=>surprise.classList.remove('show'), 4200);
+    }
 
-  function makeTapSparkles(x,y){
-    for(let i=0;i<9;i++){
-      const s=document.createElement('span');
-      s.className='tapSpark';
-      const a=(Math.PI*2*i/9)+(Math.random()*.35);
-      const d=30+Math.random()*46;
-      s.style.left=(x-3)+'px'; s.style.top=(y-3)+'px';
-      s.style.setProperty('--sx',(Math.cos(a)*d)+'px');
-      s.style.setProperty('--sy',(Math.sin(a)*d)+'px');
-      playerPage.appendChild(s);
-      setTimeout(()=>s.remove(),900);
+    if(audio.duration){
+      const remain = audio.duration - audio.currentTime;
+      if((remain <= 18 || p >= .965) && !endingShown && audio.currentTime > 0) showEnding();
     }
   }
 
-  function makeAmbient(){
-    const p=$('#particles');
-    if(!p.childElementCount){
-      for(let i=0;i<28;i++){
-        const d=document.createElement('i');
-        const size=5+Math.random()*15;
-        d.style.width=size+'px';d.style.height=size+'px';
-        d.style.left=(Math.random()*100)+'%';d.style.top=(8+Math.random()*74)+'%';
-        d.style.setProperty('--d',(5+Math.random()*6)+'s');
-        d.style.setProperty('--delay',(-Math.random()*8)+'s');
-        d.style.setProperty('--drift',((-20+Math.random()*40))+'px');
-        p.appendChild(d);
-      }
-    }
-    const petals=$('#petals');
-    if(!petals.childElementCount){
-      for(let i=0;i<12;i++){
-        const b=document.createElement('b');
-        b.style.left=(Math.random()*100)+'%';
-        b.style.setProperty('--d',(10+Math.random()*8)+'s');
-        b.style.setProperty('--delay',(-Math.random()*16)+'s');
-        b.style.setProperty('--x',((-80+Math.random()*160))+'px');
-        b.style.setProperty('--r',(Math.random()*180)+'deg');
-        petals.appendChild(b);
-      }
+  function updateUI(){
+    const d = audio.duration, t = audio.currentTime;
+    currentTimeEl.textContent = formatTime(t);
+    durationEl.textContent = formatTime(d);
+    if(Number.isFinite(d) && d > 0){
+      const p = t/d;
+      seek.value = Math.round(p*1000);
+      syncByProgress(p);
     }
   }
 
-  function makeConfetti(){
-    const box=$('#confetti');
-    if(box.childElementCount) return;
-    for(let i=0;i<58;i++){
-      const b=document.createElement('b');
-      b.style.left=Math.random()*100+'%';
-      b.style.setProperty('--h',Math.floor(Math.random()*360));
-      b.style.setProperty('--d',(5+Math.random()*4)+'s');
-      b.style.setProperty('--delay',(-Math.random()*5)+'s');
-      b.style.setProperty('--x',((-70+Math.random()*140))+'px');
-      b.style.setProperty('--r',(Math.random()*180)+'deg');
-      box.appendChild(b);
+  async function playAudio(){
+    audio.muted = false;
+    audio.volume = Number(volume.value);
+    try{
+      await audio.play();
+      setPlayingUI();
+      startError.textContent = '';
+    }catch(err){
+      setPlayingUI();
+      startError.textContent = '音檔無法播放。請確認「老虎.m4a」與 index.html 位於同一個 GitHub 資料夾，且檔名完全一致。';
+      throw err;
     }
   }
 
-  replayBtn.addEventListener('click',()=>{
-    endingStarted=false; surpriseShown=false; lastQuote=-1;
-    ending.className='ending'; $('#confetti').innerHTML=''; switchPhoto(1);
-    blessing.classList.remove('show');
-    fill.style.width='0%'; current.textContent='0:00';
-    if(mode==='direct'){
-      audio.currentTime=0;
-      const p=audio.play();
-      if(p && typeof p.catch==='function') p.catch(()=>activateFallback());
-    }else{
-      driveFrame.src='about:blank';
-      // replay is also a user gesture, so request autoplay again immediately
-      driveFrame.src=`https://drive.google.com/file/d/${DRIVE.audio}/preview?autoplay=1`;
-      startFallbackVisualClock();
+  startBtn.addEventListener('click', async () => {
+    startBtn.disabled = true;
+    startBtn.textContent = '正在開啟…';
+    try{
+      await playAudio();
+      cover.classList.add('hide');
+      setTimeout(()=>tapHint.classList.add('fade'), 6500);
+    }catch(e){
+      startBtn.disabled = false;
+      startBtn.textContent = '開啟生日祝福';
     }
   });
+
+  playBtn.addEventListener('click', async () => {
+    if(audio.paused){ try{ await playAudio(); }catch(e){} }
+    else audio.pause();
+  });
+
+  backBtn.addEventListener('click', () => {
+    audio.currentTime = Math.max(0, audio.currentTime - 10); updateUI();
+  });
+
+  forwardBtn.addEventListener('click', () => {
+    if(Number.isFinite(audio.duration)){
+      audio.currentTime = Math.min(audio.duration, audio.currentTime + 10); updateUI();
+    }
+  });
+
+  seek.addEventListener('input', () => {
+    if(Number.isFinite(audio.duration)){
+      audio.currentTime = (Number(seek.value)/1000) * audio.duration; updateUI();
+    }
+  });
+
+  volume.addEventListener('input', () => {
+    audio.volume = Number(volume.value); audio.muted = audio.volume === 0;
+  });
+
+  audio.addEventListener('loadedmetadata', () => durationEl.textContent = formatTime(audio.duration));
+  audio.addEventListener('timeupdate', updateUI);
+  audio.addEventListener('play', setPlayingUI);
+  audio.addEventListener('pause', setPlayingUI);
+  audio.addEventListener('ended', showEnding);
+  audio.addEventListener('error', () => {
+    startError.textContent = '找不到音檔「老虎.m4a」。請確認它和 index.html 位於同一個 GitHub 資料夾。';
+  });
+
+  function showBlessing(){
+    tapHint.classList.add('fade');
+    clearTimeout(blessingTimer);
+    blessingText.textContent = blessings[Math.floor(Math.random()*blessings.length)];
+    blessing.classList.add('show');
+    blessingTimer = setTimeout(()=>blessing.classList.remove('show'), 3200);
+  }
+
+  photoWrap.addEventListener('click', (e) => {
+    if(e.target.closest('.caption') || e.target.closest('.blessing')) return;
+    showBlessing();
+  });
+
+  function showEnding(){
+    if(endingShown) return;
+    endingShown = true;
+    ending.classList.add('show');
+    makeConfetti(46);
+  }
+
+  replayBtn.addEventListener('click', async () => {
+    ending.classList.remove('show');
+    confettiLayer.innerHTML = '';
+    endingShown = false;
+    surpriseShown = false;
+    audio.currentTime = 0;
+    seek.value = 0;
+    photo1.classList.add('active');
+    photo2.classList.remove('active');
+    try{ await playAudio(); }catch(e){}
+  });
+
+  function makeConfetti(count){
+    const colors = ['#f7d36b','#f0b36d','#f7a3b8','#fff1c7','#e8a8a0','#b6d3c2'];
+    for(let i=0;i<count;i++){
+      const el = document.createElement('i');
+      el.className = 'confetti';
+      el.style.left = Math.random()*100 + 'vw';
+      el.style.background = colors[Math.floor(Math.random()*colors.length)];
+      el.style.setProperty('--dx', (Math.random()*160-80) + 'px');
+      el.style.animationDuration = (4.8 + Math.random()*3.2) + 's';
+      el.style.animationDelay = (Math.random()*1.8) + 's';
+      confettiLayer.appendChild(el);
+    }
+  }
+
+  function makeSparkles(){
+    for(let i=0;i<18;i++){
+      const s = document.createElement('i');
+      s.className = 'spark';
+      s.style.left = (4 + Math.random()*92) + '%';
+      s.style.top = (12 + Math.random()*82) + '%';
+      s.style.animationDuration = (6 + Math.random()*8) + 's';
+      s.style.animationDelay = (-Math.random()*10) + 's';
+      s.style.opacity = (.18 + Math.random()*.36).toFixed(2);
+      sparkles.appendChild(s);
+    }
+  }
+
+  makeSparkles();
+  setPlayingUI();
 })();
 </script>
 </body>
